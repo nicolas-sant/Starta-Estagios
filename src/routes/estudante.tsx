@@ -1,0 +1,95 @@
+import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { Bell, Eye, Home, LayoutList, LogOut, Menu, MessageCircle, Search, Settings, User, X } from "lucide-react";
+import { Logo } from "@/components/starta/ui";
+import { setState, useStore } from "@/lib/store";
+import { cn } from "@/lib/utils";
+
+export const Route = createFileRoute("/estudante")({
+  component: StudentLayout,
+});
+
+const NAV = [
+  { to: "/estudante", label: "Feed", icon: Home, exact: true },
+  { to: "/estudante/buscar", label: "Buscar", icon: Search },
+  { to: "/estudante/painel", label: "Painel", icon: LayoutList },
+  { to: "/estudante/mensagens", label: "Mensagens", icon: MessageCircle },
+  { to: "/estudante/perfil", label: "Perfil", icon: User },
+] as const;
+
+function StudentLayout() {
+  const [open, setOpen] = useState(false);
+  const nav = useNavigate();
+  const views = useStore((s) => s.student.cvViews7d);
+  const notifs = useStore((s) => s.notifications);
+  const settings = useStore((s) => s.settings);
+  const unread = notifs.filter((n) => !n.read).length;
+
+  return (
+    <div className={cn("min-h-screen bg-background pb-20", settings.largeText && "text-[17px]")}>
+      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card/95 px-2 backdrop-blur">
+        <button onClick={() => setOpen(true)} aria-label="Abrir menu" className="flex h-12 w-12 items-center justify-center rounded-xl hover:bg-mint">
+          <Menu className="h-6 w-6 text-deep-space" />
+        </button>
+        <Logo />
+        <Link to="/estudante/painel" aria-label="Notificações" className="relative flex h-12 w-12 items-center justify-center rounded-xl hover:bg-mint">
+          <Bell className="h-6 w-6 text-deep-space" />
+          {unread > 0 && <span className="absolute right-2 top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">{unread}</span>}
+        </Link>
+      </header>
+
+      {/* Drawer */}
+      <div className={cn("fixed inset-0 z-40 bg-deep-space/40 transition-opacity", open ? "opacity-100" : "pointer-events-none opacity-0")} onClick={() => setOpen(false)} />
+      <aside className={cn("fixed inset-y-0 left-0 z-50 flex w-80 max-w-[85vw] flex-col bg-sidebar p-4 text-sidebar-foreground transition-transform", open ? "translate-x-0" : "-translate-x-full")}>
+        <div className="flex h-12 items-center justify-between">
+          <Logo light />
+          <button onClick={() => setOpen(false)} aria-label="Fechar menu" className="flex h-12 w-12 items-center justify-center rounded-xl hover:bg-sidebar-accent">
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+        <nav className="mt-6 space-y-2">
+          <Link to="/estudante/perfil" hash="configuracoes" onClick={() => setOpen(false)} className="flex h-12 items-center gap-3 rounded-xl px-3 hover:bg-sidebar-accent">
+            <Settings className="h-5 w-5" /> Configurações
+          </Link>
+          <div className="flex items-center gap-3 rounded-xl bg-sidebar-accent px-3 py-3">
+            <Eye className="h-5 w-5 shrink-0 text-moss" />
+            <span className="text-sm">
+              Currículo visualizado <strong className="text-lemon">{views} vezes</strong> nos últimos 7 dias
+            </span>
+          </div>
+          <button
+            onClick={() => {
+              setState((s) => ({ ...s, role: null }));
+              nav({ to: "/" });
+            }}
+            className="flex h-12 w-full items-center gap-3 rounded-xl px-3 text-left hover:bg-sidebar-accent"
+          >
+            <LogOut className="h-5 w-5" /> Logoff
+          </button>
+        </nav>
+      </aside>
+
+      <main className="mx-auto max-w-2xl px-4 py-6">
+        <Outlet />
+      </main>
+
+      <nav className="fixed inset-x-0 bottom-0 z-30 h-16 border-t border-border bg-card">
+        <ul className="mx-auto flex h-full max-w-2xl justify-around">
+          {NAV.map((n) => (
+            <li key={n.to} className="flex-1">
+              <Link
+                to={n.to}
+                activeOptions={{ exact: "exact" in n }}
+                className="flex h-full min-w-12 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-muted-foreground"
+                activeProps={{ className: "text-primary" }}
+              >
+                <n.icon className="h-6 w-6" strokeWidth={1.8} />
+                {n.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  );
+}

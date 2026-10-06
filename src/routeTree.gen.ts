@@ -10,33 +10,196 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EmpresaCadastroRouteImport } from './routes/empresa-cadastro'
+import { Route as EstudanteRouteImport } from './routes/estudante'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as PerfilSetupRouteImport } from './routes/perfil-setup'
+import { Route as VerificacaoRouteImport } from './routes/verificacao'
+import { Route as EstudanteIndexRouteImport } from './routes/estudante.index'
+import { Route as EstudanteBuscarRouteImport } from './routes/estudante.buscar'
+import { Route as EstudanteMensagensRouteImport } from './routes/estudante.mensagens'
+import { Route as EstudantePainelRouteImport } from './routes/estudante.painel'
+import { Route as EstudantePerfilRouteImport } from './routes/estudante.perfil'
+import { Route as EstudanteCandidaturaIdRouteImport } from './routes/estudante.candidatura.$id'
+import { Route as EstudanteEmpresaIdRouteImport } from './routes/estudante.empresa.$id'
+import { Route as EstudanteVagaIdRouteImport } from './routes/estudante.vaga.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EmpresaCadastroRoute = EmpresaCadastroRouteImport.update({
+  id: '/empresa-cadastro',
+  path: '/empresa-cadastro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EstudanteRoute = EstudanteRouteImport.update({
+  id: '/estudante',
+  path: '/estudante',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PerfilSetupRoute = PerfilSetupRouteImport.update({
+  id: '/perfil-setup',
+  path: '/perfil-setup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerificacaoRoute = VerificacaoRouteImport.update({
+  id: '/verificacao',
+  path: '/verificacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EstudanteIndexRoute = EstudanteIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EstudanteRoute,
+} as any)
+const EstudanteBuscarRoute = EstudanteBuscarRouteImport.update({
+  id: '/buscar',
+  path: '/buscar',
+  getParentRoute: () => EstudanteRoute,
+} as any)
+const EstudanteMensagensRoute = EstudanteMensagensRouteImport.update({
+  id: '/mensagens',
+  path: '/mensagens',
+  getParentRoute: () => EstudanteRoute,
+} as any)
+const EstudantePainelRoute = EstudantePainelRouteImport.update({
+  id: '/painel',
+  path: '/painel',
+  getParentRoute: () => EstudanteRoute,
+} as any)
+const EstudantePerfilRoute = EstudantePerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => EstudanteRoute,
+} as any)
+const EstudanteCandidaturaIdRoute = EstudanteCandidaturaIdRouteImport.update({
+  id: '/candidatura/$id',
+  path: '/candidatura/$id',
+  getParentRoute: () => EstudanteRoute,
+} as any)
+const EstudanteEmpresaIdRoute = EstudanteEmpresaIdRouteImport.update({
+  id: '/empresa/$id',
+  path: '/empresa/$id',
+  getParentRoute: () => EstudanteRoute,
+} as any)
+const EstudanteVagaIdRoute = EstudanteVagaIdRouteImport.update({
+  id: '/vaga/$id',
+  path: '/vaga/$id',
+  getParentRoute: () => EstudanteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/empresa-cadastro': typeof EmpresaCadastroRoute
+  '/estudante': typeof EstudanteRouteWithChildren
+  '/onboarding': typeof OnboardingRoute
+  '/perfil-setup': typeof PerfilSetupRoute
+  '/verificacao': typeof VerificacaoRoute
+  '/estudante/buscar': typeof EstudanteBuscarRoute
+  '/estudante/mensagens': typeof EstudanteMensagensRoute
+  '/estudante/painel': typeof EstudantePainelRoute
+  '/estudante/perfil': typeof EstudantePerfilRoute
+  '/estudante/': typeof EstudanteIndexRoute
+  '/estudante/candidatura/$id': typeof EstudanteCandidaturaIdRoute
+  '/estudante/empresa/$id': typeof EstudanteEmpresaIdRoute
+  '/estudante/vaga/$id': typeof EstudanteVagaIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/empresa-cadastro': typeof EmpresaCadastroRoute
+  '/onboarding': typeof OnboardingRoute
+  '/perfil-setup': typeof PerfilSetupRoute
+  '/verificacao': typeof VerificacaoRoute
+  '/estudante/buscar': typeof EstudanteBuscarRoute
+  '/estudante/mensagens': typeof EstudanteMensagensRoute
+  '/estudante/painel': typeof EstudantePainelRoute
+  '/estudante/perfil': typeof EstudantePerfilRoute
+  '/estudante': typeof EstudanteIndexRoute
+  '/estudante/candidatura/$id': typeof EstudanteCandidaturaIdRoute
+  '/estudante/empresa/$id': typeof EstudanteEmpresaIdRoute
+  '/estudante/vaga/$id': typeof EstudanteVagaIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/empresa-cadastro': typeof EmpresaCadastroRoute
+  '/estudante': typeof EstudanteRouteWithChildren
+  '/onboarding': typeof OnboardingRoute
+  '/perfil-setup': typeof PerfilSetupRoute
+  '/verificacao': typeof VerificacaoRoute
+  '/estudante/buscar': typeof EstudanteBuscarRoute
+  '/estudante/mensagens': typeof EstudanteMensagensRoute
+  '/estudante/painel': typeof EstudantePainelRoute
+  '/estudante/perfil': typeof EstudantePerfilRoute
+  '/estudante/': typeof EstudanteIndexRoute
+  '/estudante/candidatura/$id': typeof EstudanteCandidaturaIdRoute
+  '/estudante/empresa/$id': typeof EstudanteEmpresaIdRoute
+  '/estudante/vaga/$id': typeof EstudanteVagaIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/empresa-cadastro'
+    | '/estudante'
+    | '/onboarding'
+    | '/perfil-setup'
+    | '/verificacao'
+    | '/estudante/buscar'
+    | '/estudante/mensagens'
+    | '/estudante/painel'
+    | '/estudante/perfil'
+    | '/estudante/'
+    | '/estudante/candidatura/$id'
+    | '/estudante/empresa/$id'
+    | '/estudante/vaga/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/empresa-cadastro'
+    | '/onboarding'
+    | '/perfil-setup'
+    | '/verificacao'
+    | '/estudante/buscar'
+    | '/estudante/mensagens'
+    | '/estudante/painel'
+    | '/estudante/perfil'
+    | '/estudante'
+    | '/estudante/candidatura/$id'
+    | '/estudante/empresa/$id'
+    | '/estudante/vaga/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/empresa-cadastro'
+    | '/estudante'
+    | '/onboarding'
+    | '/perfil-setup'
+    | '/verificacao'
+    | '/estudante/buscar'
+    | '/estudante/mensagens'
+    | '/estudante/painel'
+    | '/estudante/perfil'
+    | '/estudante/'
+    | '/estudante/candidatura/$id'
+    | '/estudante/empresa/$id'
+    | '/estudante/vaga/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EmpresaCadastroRoute: typeof EmpresaCadastroRoute
+  EstudanteRoute: typeof EstudanteRouteWithChildren
+  OnboardingRoute: typeof OnboardingRoute
+  PerfilSetupRoute: typeof PerfilSetupRoute
+  VerificacaoRoute: typeof VerificacaoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +211,133 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/empresa-cadastro': {
+      id: '/empresa-cadastro'
+      path: '/empresa-cadastro'
+      fullPath: '/empresa-cadastro'
+      preLoaderRoute: typeof EmpresaCadastroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/estudante': {
+      id: '/estudante'
+      path: '/estudante'
+      fullPath: '/estudante'
+      preLoaderRoute: typeof EstudanteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/perfil-setup': {
+      id: '/perfil-setup'
+      path: '/perfil-setup'
+      fullPath: '/perfil-setup'
+      preLoaderRoute: typeof PerfilSetupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verificacao': {
+      id: '/verificacao'
+      path: '/verificacao'
+      fullPath: '/verificacao'
+      preLoaderRoute: typeof VerificacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/estudante/': {
+      id: '/estudante/'
+      path: '/'
+      fullPath: '/estudante/'
+      preLoaderRoute: typeof EstudanteIndexRouteImport
+      parentRoute: typeof EstudanteRoute
+    }
+    '/estudante/buscar': {
+      id: '/estudante/buscar'
+      path: '/buscar'
+      fullPath: '/estudante/buscar'
+      preLoaderRoute: typeof EstudanteBuscarRouteImport
+      parentRoute: typeof EstudanteRoute
+    }
+    '/estudante/mensagens': {
+      id: '/estudante/mensagens'
+      path: '/mensagens'
+      fullPath: '/estudante/mensagens'
+      preLoaderRoute: typeof EstudanteMensagensRouteImport
+      parentRoute: typeof EstudanteRoute
+    }
+    '/estudante/painel': {
+      id: '/estudante/painel'
+      path: '/painel'
+      fullPath: '/estudante/painel'
+      preLoaderRoute: typeof EstudantePainelRouteImport
+      parentRoute: typeof EstudanteRoute
+    }
+    '/estudante/perfil': {
+      id: '/estudante/perfil'
+      path: '/perfil'
+      fullPath: '/estudante/perfil'
+      preLoaderRoute: typeof EstudantePerfilRouteImport
+      parentRoute: typeof EstudanteRoute
+    }
+    '/estudante/candidatura/$id': {
+      id: '/estudante/candidatura/$id'
+      path: '/candidatura/$id'
+      fullPath: '/estudante/candidatura/$id'
+      preLoaderRoute: typeof EstudanteCandidaturaIdRouteImport
+      parentRoute: typeof EstudanteRoute
+    }
+    '/estudante/empresa/$id': {
+      id: '/estudante/empresa/$id'
+      path: '/empresa/$id'
+      fullPath: '/estudante/empresa/$id'
+      preLoaderRoute: typeof EstudanteEmpresaIdRouteImport
+      parentRoute: typeof EstudanteRoute
+    }
+    '/estudante/vaga/$id': {
+      id: '/estudante/vaga/$id'
+      path: '/vaga/$id'
+      fullPath: '/estudante/vaga/$id'
+      preLoaderRoute: typeof EstudanteVagaIdRouteImport
+      parentRoute: typeof EstudanteRoute
+    }
   }
 }
 
+interface EstudanteRouteChildren {
+  EstudanteBuscarRoute: typeof EstudanteBuscarRoute
+  EstudanteMensagensRoute: typeof EstudanteMensagensRoute
+  EstudantePainelRoute: typeof EstudantePainelRoute
+  EstudantePerfilRoute: typeof EstudantePerfilRoute
+  EstudanteIndexRoute: typeof EstudanteIndexRoute
+  EstudanteCandidaturaIdRoute: typeof EstudanteCandidaturaIdRoute
+  EstudanteEmpresaIdRoute: typeof EstudanteEmpresaIdRoute
+  EstudanteVagaIdRoute: typeof EstudanteVagaIdRoute
+}
+
+const EstudanteRouteChildren: EstudanteRouteChildren = {
+  EstudanteBuscarRoute: EstudanteBuscarRoute,
+  EstudanteMensagensRoute: EstudanteMensagensRoute,
+  EstudantePainelRoute: EstudantePainelRoute,
+  EstudantePerfilRoute: EstudantePerfilRoute,
+  EstudanteIndexRoute: EstudanteIndexRoute,
+  EstudanteCandidaturaIdRoute: EstudanteCandidaturaIdRoute,
+  EstudanteEmpresaIdRoute: EstudanteEmpresaIdRoute,
+  EstudanteVagaIdRoute: EstudanteVagaIdRoute,
+}
+
+const EstudanteRouteWithChildren = EstudanteRoute._addFileChildren(
+  EstudanteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EmpresaCadastroRoute: EmpresaCadastroRoute,
+  EstudanteRoute: EstudanteRouteWithChildren,
+  OnboardingRoute: OnboardingRoute,
+  PerfilSetupRoute: PerfilSetupRoute,
+  VerificacaoRoute: VerificacaoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
