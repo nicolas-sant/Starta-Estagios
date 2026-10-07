@@ -10,6 +10,8 @@ export const Route = createFileRoute("/recrutador")({
       { name: "description", content: "Pipeline Kanban de candidatos para recrutadores." },
       { property: "og:title", content: "Painel do recrutador — Starta" },
       { property: "og:description", content: "Gerencie candidatos com agilidade." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Recrutador,
@@ -18,13 +20,14 @@ export const Route = createFileRoute("/recrutador")({
 function Recrutador() {
   const cands = useStore((s) => s.candidates);
   const company = useStore((s) => s.company);
-  const move = (id: string, dir: number) =>
+  const move = (id: string, dir: -1 | 1) =>
     setState((s) => ({
       ...s,
       candidates: s.candidates.map((c) => {
         if (c.id !== id) return c;
         const i = Math.min(Math.max(STAGES.indexOf(c.stage) + dir, 0), STAGES.length - 1);
-        return { ...c, stage: STAGES[i] };
+        const stage = STAGES[i] ?? c.stage;
+        return { ...c, stage };
       }),
     }));
   return (
