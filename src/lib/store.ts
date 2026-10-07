@@ -5,6 +5,7 @@ export type VerificationStatus = "vazio" | "enviado" | "analise" | "aprovado" | 
 
 export type Doc = { id: string; title: string; area: string };
 export type Application = {
+  candidateId?: string;
   jobId: string;
   step: number; // 0 Inscrição, 1 Triagem, 2 Entrevista, 3 Resultado
   result?: "aprovado" | "recusado";
@@ -19,6 +20,11 @@ export type ChatMessage = { from: "me" | "them"; text: string; at: string };
 export type Thread = { id: string; jobId: string; with: string; messages: ChatMessage[] };
 
 export type Candidate = {
+  experience?: string;
+  skills?: string[];
+  bio?: string;
+  email?: string;
+  studentLinked?: boolean;
   id: string;
   name: string;
   course: string;
@@ -34,7 +40,7 @@ export type Candidate = {
   chat: ChatMessage[];
 };
 
-export type RecruiterJob = Job & { published: boolean };
+export type RecruiterJob = Job & { published: boolean; status?: "published" | "filled" | "deleted"; courses?: string; semesterMin?: number; semesterMax?: number; deadline?: string; openings?: number };
 
 export type State = {
   role: "estudante" | "recrutador" | null;
@@ -174,7 +180,10 @@ function load() {
   loaded = true;
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) state = { ...initialState, ...JSON.parse(raw) };
+    if (raw) {
+      const saved = JSON.parse(raw);
+      state = { ...initialState, ...saved, student: { ...initialState.student, ...saved.student }, company: { ...initialState.company, ...saved.company } };
+    }
   } catch {
     /* ignore */
   }
@@ -222,8 +231,8 @@ export function useHydrated() {
 }
 
 export function allJobs(s: State): Job[] {
-  const extra = s.recruiterJobs.filter((j) => j.published && !JOBS.some((b) => b.id === j.id));
-  return [...JOBS, ...extra];
+  const managedIds = new Set(s.recruiterJobs.map((j) => j.id));
+  return [...JOBS.filter((j) => !managedIds.has(j.id)), ...s.recruiterJobs.filter((j) => j.published && (!j.status || j.status === "published"))];
 }
 
 export { defaultValidUntil };
