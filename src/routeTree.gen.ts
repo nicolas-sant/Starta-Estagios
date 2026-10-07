@@ -16,6 +16,7 @@ import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as PerfilSetupRouteImport } from './routes/perfil-setup'
 import { Route as RecrutadorRouteImport } from './routes/recrutador'
 import { Route as VerificacaoRouteImport } from './routes/verificacao'
+import { Route as ApiInterviewRouteImport } from './routes/api.interview'
 import { Route as EstudanteIndexRouteImport } from './routes/estudante.index'
 import { Route as EstudanteBuscarRouteImport } from './routes/estudante.buscar'
 import { Route as EstudanteMensagensRouteImport } from './routes/estudante.mensagens'
@@ -58,6 +59,11 @@ const RecrutadorRoute = RecrutadorRouteImport.update({
 const VerificacaoRoute = VerificacaoRouteImport.update({
   id: '/verificacao',
   path: '/verificacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiInterviewRoute = ApiInterviewRouteImport.update({
+  id: '/api/interview',
+  path: '/api/interview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EstudanteIndexRoute = EstudanteIndexRouteImport.update({
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/perfil-setup': typeof PerfilSetupRoute
   '/recrutador': typeof RecrutadorRoute
   '/verificacao': typeof VerificacaoRoute
+  '/api/interview': typeof ApiInterviewRoute
   '/estudante/buscar': typeof EstudanteBuscarRoute
   '/estudante/mensagens': typeof EstudanteMensagensRoute
   '/estudante/painel': typeof EstudantePainelRoute
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/perfil-setup': typeof PerfilSetupRoute
   '/recrutador': typeof RecrutadorRoute
   '/verificacao': typeof VerificacaoRoute
+  '/api/interview': typeof ApiInterviewRoute
   '/estudante/buscar': typeof EstudanteBuscarRoute
   '/estudante/mensagens': typeof EstudanteMensagensRoute
   '/estudante/painel': typeof EstudantePainelRoute
@@ -143,6 +151,7 @@ export interface FileRoutesById {
   '/perfil-setup': typeof PerfilSetupRoute
   '/recrutador': typeof RecrutadorRoute
   '/verificacao': typeof VerificacaoRoute
+  '/api/interview': typeof ApiInterviewRoute
   '/estudante/buscar': typeof EstudanteBuscarRoute
   '/estudante/mensagens': typeof EstudanteMensagensRoute
   '/estudante/painel': typeof EstudantePainelRoute
@@ -162,6 +171,7 @@ export interface FileRouteTypes {
     | '/perfil-setup'
     | '/recrutador'
     | '/verificacao'
+    | '/api/interview'
     | '/estudante/buscar'
     | '/estudante/mensagens'
     | '/estudante/painel'
@@ -178,6 +188,7 @@ export interface FileRouteTypes {
     | '/perfil-setup'
     | '/recrutador'
     | '/verificacao'
+    | '/api/interview'
     | '/estudante/buscar'
     | '/estudante/mensagens'
     | '/estudante/painel'
@@ -195,6 +206,7 @@ export interface FileRouteTypes {
     | '/perfil-setup'
     | '/recrutador'
     | '/verificacao'
+    | '/api/interview'
     | '/estudante/buscar'
     | '/estudante/mensagens'
     | '/estudante/painel'
@@ -213,6 +225,7 @@ export interface RootRouteChildren {
   PerfilSetupRoute: typeof PerfilSetupRoute
   RecrutadorRoute: typeof RecrutadorRoute
   VerificacaoRoute: typeof VerificacaoRoute
+  ApiInterviewRoute: typeof ApiInterviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -264,6 +277,13 @@ declare module '@tanstack/react-router' {
       path: '/verificacao'
       fullPath: '/verificacao'
       preLoaderRoute: typeof VerificacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/interview': {
+      id: '/api/interview'
+      path: '/api/interview'
+      fullPath: '/api/interview'
+      preLoaderRoute: typeof ApiInterviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/estudante/': {
@@ -359,6 +379,7 @@ const rootRouteChildren: RootRouteChildren = {
   PerfilSetupRoute: PerfilSetupRoute,
   RecrutadorRoute: RecrutadorRoute,
   VerificacaoRoute: VerificacaoRoute,
+  ApiInterviewRoute: ApiInterviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
