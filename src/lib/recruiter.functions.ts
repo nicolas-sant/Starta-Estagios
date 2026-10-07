@@ -14,7 +14,7 @@ export const persistWorkspace = createServerFn({ method: "POST" }).middleware([r
     const { error } = await context.supabase.from("recruiter_workspaces").upsert({ owner_id: context.userId, state: JSON.parse(JSON.stringify(data.state)), updated_at: new Date().toISOString() });
     if (error) throw new Error(error.message);
     if (data.jobs.length) {
-      const { error: jobError } = await context.supabase.from("recruiter_public_jobs").upsert(data.jobs.map((j) => ({ id: j.id, owner_id: context.userId, company_id: j.companyId, status: j.status, job: JSON.parse(JSON.stringify(j.job)) })));
+      const { error: jobError } = await context.supabase.from("recruiter_public_jobs").upsert(data.jobs.map((j) => ({ id: `${context.userId}:${j.id}`, owner_id: context.userId, company_id: j.companyId, status: j.status, job: JSON.parse(JSON.stringify(j.job)) })));
       if (jobError) throw new Error(jobError.message);
     }
     return { ok: true };
