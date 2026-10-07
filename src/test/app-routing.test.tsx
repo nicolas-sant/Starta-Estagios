@@ -8,7 +8,7 @@ import { routeTree } from "@/routeTree.gen";
 
 function renderAt(path: string) {
   // A document shell cannot mount inside Testing Library's div container.
-  routeTree.options.shellComponent = ({ children }: { children: ReactNode }) => <>{children}</>;
+  Object.assign(routeTree.options, { shellComponent: ({ children }: { children: ReactNode }) => <>{children}</> });
   const queryClient = new QueryClient();
   const router = createRouter({
     routeTree,

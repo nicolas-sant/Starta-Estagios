@@ -28,7 +28,8 @@ function StudentLayout() {
     const loaded = publicJobs.flatMap((row) => {
       if (!row.job || typeof row.job !== "object" || Array.isArray(row.job)) return [];
       const job = row.job as unknown as RecruiterJob;
-      return typeof job.id === "string" && Array.isArray(job.skills) ? [{ ...job, status: row.status as RecruiterJob["status"], published: row.status === "published" }] : [];
+      const status = row.status === "filled" ? "filled" as const : row.status === "deleted" ? "deleted" as const : "published" as const;
+      return typeof job.id === "string" && Array.isArray(job.skills) ? [{ ...job, status, published: status === "published" }] : [];
     });
     setState((s) => ({ ...s, recruiterJobs: [...s.recruiterJobs.filter((j) => !loaded.some((r) => r.id === j.id)), ...loaded] }));
   }, [publicJobs]);
