@@ -7,6 +7,8 @@ import { allJobs, getState, daysUntil, useStore } from "@/lib/store";
 export const Route = createFileRoute("/estudante/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Feed de vagas — Starta" },
       { name: "description", content: "Vagas de estágio com bolsa, requisitos e selo de confiança, ranqueadas para você." },
       { property: "og:title", content: "Feed de vagas — Starta" },

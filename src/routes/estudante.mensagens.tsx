@@ -11,6 +11,8 @@ export const Route = createFileRoute("/estudante/mensagens")({
   validateSearch: z.object({ t: z.string().optional() }),
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Mensagens — Starta" },
       { name: "description", content: "Converse com recrutadores sobre suas candidaturas." },
       { property: "og:title", content: "Mensagens — Starta" },

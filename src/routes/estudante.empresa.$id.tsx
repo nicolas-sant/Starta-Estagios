@@ -9,7 +9,7 @@ export const Route = createFileRoute("/estudante/empresa/$id")({
     const c = COMPANIES.find((x) => x.id === params.id);
     const t = c ? `${c.name} — vagas na Starta` : "Empresa — Starta";
     const d = c?.about ?? "Perfil da empresa.";
-    return { meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }] };
+    return { meta: [{ property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }] };
   },
   component: EmpresaPage,
   notFoundComponent: () => <p className="p-6 text-center">Empresa não encontrada.</p>,

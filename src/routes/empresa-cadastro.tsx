@@ -8,6 +8,8 @@ import { SetupShell } from "./onboarding";
 export const Route = createFileRoute("/empresa-cadastro")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Cadastro da empresa — Starta" },
       { name: "description", content: "Cadastre e verifique sua empresa para publicar vagas de estágio." },
       { property: "og:title", content: "Cadastro da empresa — Starta" },

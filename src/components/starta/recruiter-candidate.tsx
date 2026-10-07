@@ -10,7 +10,7 @@ import { useStore, type Candidate } from "@/lib/store";
 import { STAGES, type Job, type Stage } from "@/lib/data";
 import { toast } from "sonner";
 
-export function CandidateDetails({ candidate, job, onClose }: { candidate?: Candidate; job?: Job; onClose: () => void }) {
+export function CandidateDetails({ candidate, job, onClose }: { candidate: Candidate | undefined; job: Job | undefined; onClose: () => void }) {
   const [tab, setTab] = useState("perfil"); const [message, setMessage] = useState("");
   const candidates = useStore((s) => s.candidates);
   const current = candidates.find((c) => c.id === candidate?.id);

@@ -10,6 +10,8 @@ import { submitStudentDoc } from "../routes/verificacao";
 export const Route = createFileRoute("/estudante/perfil")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Meu perfil — Starta" },
       { name: "description", content: "Dados da conta, currículos por tipo de vaga, verificação e configurações." },
       { property: "og:title", content: "Meu perfil — Starta" },

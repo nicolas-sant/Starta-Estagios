@@ -37,7 +37,7 @@ function VagaPage() {
 
   const closed = recruiterJobs.some((j) => j.id === id && (!j.published || j.status === "filled" || j.status === "deleted"));
   const send = () => {
-    if (closed) return toast.error("Esta vaga foi encerrada.");
+    if (closed) { toast.error("Esta vaga foi encerrada."); return; }
     const candidateId = crypto.randomUUID();
     if (!docId) { toast.error("Anexe um currículo."); return; }
     const myStrengths = job.skills.filter((s) => s.level === "essencial").map((s) => s.name);

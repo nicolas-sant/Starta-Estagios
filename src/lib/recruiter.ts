@@ -18,7 +18,12 @@ export function advanceCandidate(id: string, stage?: Stage) {
     if (!STAGES.includes(next)) return s;
     const linked = candidate.studentLinked;
     return { ...s, candidates: s.candidates.map((c) => c.id === id ? { ...c, stage: next } : c),
-      applications: s.applications.map((a) => linked && a.jobId === candidate.jobId ? { ...a, step: next === "Recebido" ? 0 : next === "Triagem" ? 1 : next === "Entrevista" ? 2 : 3, result: next === "Aprovado" ? "aprovado" : next === "Recusado" ? "recusado" : undefined } : a),
+      applications: s.applications.map((a) => {
+        if (!linked || a.jobId !== candidate.jobId) return a;
+        const { result: _oldResult, ...application } = a;
+        const step = next === "Recebido" ? 0 : next === "Triagem" ? 1 : next === "Entrevista" ? 2 : 3;
+        return { ...application, step, ...(next === "Aprovado" ? { result: "aprovado" as const } : next === "Recusado" ? { result: "recusado" as const } : {}) };
+      }),
       notifications: linked ? [{ id: crypto.randomUUID(), text: `Sua candidatura foi atualizada para ${next}.`, at: new Date().toISOString(), read: false }, ...s.notifications] : s.notifications };
   });
 }
