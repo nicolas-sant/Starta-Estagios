@@ -12,7 +12,7 @@ export const Route = createFileRoute("/estudante/vaga/$id")({
     const j = JOBS.find((x) => x.id === params.id);
     const t = j ? `${j.title} — Starta` : "Vaga — Starta";
     const d = j?.summary ?? "Detalhes da vaga de estágio.";
-    return { meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }] };
+    return { meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] };
   },
   component: VagaPage,
   notFoundComponent: () => <p className="p-6 text-center">Vaga não encontrada.</p>,
