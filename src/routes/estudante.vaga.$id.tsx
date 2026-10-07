@@ -36,7 +36,7 @@ function VagaPage() {
   const sorted = [...job.skills].sort((a) => (a.level === "essencial" ? -1 : 1));
 
   const send = () => {
-    if (!docId) return toast.error("Anexe um currículo.");
+    if (!docId) { toast.error("Anexe um currículo."); return; }
     const myStrengths = job.skills.filter((s) => s.level === "essencial").map((s) => s.name);
     setState((s) => ({
       ...s,
