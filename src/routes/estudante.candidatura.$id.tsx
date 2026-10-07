@@ -7,6 +7,8 @@ import { useStore } from "@/lib/store";
 export const Route = createFileRoute("/estudante/candidatura/$id")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Progresso da candidatura — Starta" },
       { name: "description", content: "Detalhes, etapas do processo seletivo e retorno do recrutador." },
       { property: "og:title", content: "Progresso da candidatura — Starta" },
@@ -23,7 +25,7 @@ function Candidatura() {
   const threads = useStore((s) => s.threads);
   const extra = useStore((s) => s.recruiterJobs);
   const a = apps.find((x) => x.jobId === id);
-  const j = JOBS.find((x) => x.id === id) ?? extra.find((x) => x.id === id);
+  const j = extra.find((x) => x.id === id) ?? JOBS.find((x) => x.id === id);
   if (!a || !j) return <p className="p-6 text-center text-muted-foreground">Candidatura não encontrada.</p>;
   const c = getCompany(j.companyId);
   const doc = docs.find((d) => d.id === a.docId);

@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Starta — Entrar ou criar conta" },
       { name: "description", content: "Entre na Starta: estágios com bolsa visível, progresso do processo seletivo e retorno garantido." },
       { property: "og:title", content: "Starta — Entrar ou criar conta" },

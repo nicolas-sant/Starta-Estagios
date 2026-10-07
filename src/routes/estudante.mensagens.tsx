@@ -11,6 +11,8 @@ export const Route = createFileRoute("/estudante/mensagens")({
   validateSearch: z.object({ t: z.string().optional() }),
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Mensagens — Starta" },
       { name: "description", content: "Converse com recrutadores sobre suas candidaturas." },
       { property: "og:title", content: "Mensagens — Starta" },
@@ -24,12 +26,14 @@ function Mensagens() {
   const { t } = Route.useSearch();
   const nav = useNavigate();
   const threads = useStore((s) => s.threads);
+  const managed = useStore((s) => s.recruiterJobs);
+  const jobs = [...managed, ...JOBS.filter((j) => !managed.some((m) => m.id === j.id))];
   const [text, setText] = useState("");
 
   let active = threads.find((x) => x.id === t);
   if (!active && t?.startsWith("new-")) {
     const jobId = t.slice(4);
-    const j = JOBS.find((x) => x.id === jobId);
+    const j = jobs.find((x) => x.id === jobId);
     active = { id: t, jobId, with: `Recrutador · ${getCompany(j?.companyId ?? "")?.name ?? ""}`, messages: [] };
   }
 
@@ -40,13 +44,13 @@ function Mensagens() {
     setState((s) => {
       const exists = s.threads.some((x) => x.id === th.id);
       const msg = { from: "me" as const, text: v, at: new Date().toISOString() };
-      return { ...s, threads: exists ? s.threads.map((x) => (x.id === th.id ? { ...x, messages: [...x.messages, msg] } : x)) : [{ ...th, messages: [msg] }, ...s.threads] };
+      return { ...s, candidates: s.candidates.map((c) => c.studentLinked && c.jobId === th.jobId ? { ...c, chat: [...c.chat, { ...msg, from: "them" as const }] } : c), threads: exists ? s.threads.map((x) => (x.id === th.id ? { ...x, messages: [...x.messages, msg] } : x)) : [{ ...th, messages: [msg] }, ...s.threads] };
     });
     setText("");
   };
 
   if (active) {
-    const j = JOBS.find((x) => x.id === active!.jobId);
+    const j = jobs.find((x) => x.id === active.jobId);
     return (
       <div className="flex min-h-[calc(100vh-12rem)] flex-col">
         <div className="flex items-center gap-2 border-b border-border pb-3">
@@ -80,7 +84,7 @@ function Mensagens() {
       <h1 className="text-2xl text-deep-space">Mensagens</h1>
       <ul className="space-y-2">
         {threads.map((th) => {
-          const j = JOBS.find((x) => x.id === th.jobId);
+          const j = jobs.find((x) => x.id === th.jobId);
           const c = getCompany(j?.companyId ?? "");
           const last = th.messages[th.messages.length - 1];
           return (

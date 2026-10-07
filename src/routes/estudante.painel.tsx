@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/estudante/painel")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Minhas candidaturas — Starta" },
       { name: "description", content: "Acompanhe todos os seus processos seletivos em um só lugar." },
       { property: "og:title", content: "Minhas candidaturas — Starta" },
@@ -21,7 +23,7 @@ function Painel() {
   const apps = useStore((s) => s.applications);
   const notifs = useStore((s) => s.notifications);
   const extra = useStore((s) => s.recruiterJobs);
-  const findJob = (id: string) => JOBS.find((j) => j.id === id) ?? extra.find((j) => j.id === id);
+  const findJob = (id: string) => extra.find((j) => j.id === id) ?? JOBS.find((j) => j.id === id);
 
   return (
     <div className="space-y-6">

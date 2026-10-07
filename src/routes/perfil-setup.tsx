@@ -8,6 +8,8 @@ import { SetupShell } from "./onboarding";
 export const Route = createFileRoute("/perfil-setup")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Configuração de perfil — Starta" },
       { name: "description", content: "Complete seu perfil com nome, foto, instituição, curso e semestre." },
       { property: "og:title", content: "Configuração de perfil — Starta" },

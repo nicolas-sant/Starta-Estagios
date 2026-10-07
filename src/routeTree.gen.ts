@@ -16,14 +16,19 @@ import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as PerfilSetupRouteImport } from './routes/perfil-setup'
 import { Route as RecrutadorRouteImport } from './routes/recrutador'
 import { Route as VerificacaoRouteImport } from './routes/verificacao'
+import { Route as ApiInterviewRouteImport } from './routes/api.interview'
 import { Route as EstudanteIndexRouteImport } from './routes/estudante.index'
 import { Route as EstudanteBuscarRouteImport } from './routes/estudante.buscar'
 import { Route as EstudanteMensagensRouteImport } from './routes/estudante.mensagens'
 import { Route as EstudantePainelRouteImport } from './routes/estudante.painel'
 import { Route as EstudantePerfilRouteImport } from './routes/estudante.perfil'
+import { Route as RecrutadorIndexRouteImport } from './routes/recrutador.index'
+import { Route as RecrutadorMensagensRouteImport } from './routes/recrutador.mensagens'
 import { Route as EstudanteCandidaturaIdRouteImport } from './routes/estudante.candidatura.$id'
 import { Route as EstudanteEmpresaIdRouteImport } from './routes/estudante.empresa.$id'
 import { Route as EstudanteVagaIdRouteImport } from './routes/estudante.vaga.$id'
+import { Route as RecrutadorVagasIdRouteImport } from './routes/recrutador.vagas.$id'
+import { Route as RecrutadorVagasNovaRouteImport } from './routes/recrutador.vagas.nova'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -60,6 +65,11 @@ const VerificacaoRoute = VerificacaoRouteImport.update({
   path: '/verificacao',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiInterviewRoute = ApiInterviewRouteImport.update({
+  id: '/api/interview',
+  path: '/api/interview',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EstudanteIndexRoute = EstudanteIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -85,6 +95,16 @@ const EstudantePerfilRoute = EstudantePerfilRouteImport.update({
   path: '/perfil',
   getParentRoute: () => EstudanteRoute,
 } as any)
+const RecrutadorIndexRoute = RecrutadorIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RecrutadorRoute,
+} as any)
+const RecrutadorMensagensRoute = RecrutadorMensagensRouteImport.update({
+  id: '/mensagens',
+  path: '/mensagens',
+  getParentRoute: () => RecrutadorRoute,
+} as any)
 const EstudanteCandidaturaIdRoute = EstudanteCandidaturaIdRouteImport.update({
   id: '/candidatura/$id',
   path: '/candidatura/$id',
@@ -100,6 +120,16 @@ const EstudanteVagaIdRoute = EstudanteVagaIdRouteImport.update({
   path: '/vaga/$id',
   getParentRoute: () => EstudanteRoute,
 } as any)
+const RecrutadorVagasIdRoute = RecrutadorVagasIdRouteImport.update({
+  id: '/vagas/$id',
+  path: '/vagas/$id',
+  getParentRoute: () => RecrutadorRoute,
+} as any)
+const RecrutadorVagasNovaRoute = RecrutadorVagasNovaRouteImport.update({
+  id: '/vagas/nova',
+  path: '/vagas/nova',
+  getParentRoute: () => RecrutadorRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -107,32 +137,41 @@ export interface FileRoutesByFullPath {
   '/estudante': typeof EstudanteRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/perfil-setup': typeof PerfilSetupRoute
-  '/recrutador': typeof RecrutadorRoute
+  '/recrutador': typeof RecrutadorRouteWithChildren
   '/verificacao': typeof VerificacaoRoute
+  '/api/interview': typeof ApiInterviewRoute
   '/estudante/buscar': typeof EstudanteBuscarRoute
   '/estudante/mensagens': typeof EstudanteMensagensRoute
   '/estudante/painel': typeof EstudantePainelRoute
   '/estudante/perfil': typeof EstudantePerfilRoute
+  '/recrutador/mensagens': typeof RecrutadorMensagensRoute
   '/estudante/': typeof EstudanteIndexRoute
+  '/recrutador/': typeof RecrutadorIndexRoute
   '/estudante/candidatura/$id': typeof EstudanteCandidaturaIdRoute
   '/estudante/empresa/$id': typeof EstudanteEmpresaIdRoute
   '/estudante/vaga/$id': typeof EstudanteVagaIdRoute
+  '/recrutador/vagas/$id': typeof RecrutadorVagasIdRoute
+  '/recrutador/vagas/nova': typeof RecrutadorVagasNovaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/empresa-cadastro': typeof EmpresaCadastroRoute
   '/onboarding': typeof OnboardingRoute
   '/perfil-setup': typeof PerfilSetupRoute
-  '/recrutador': typeof RecrutadorRoute
   '/verificacao': typeof VerificacaoRoute
+  '/api/interview': typeof ApiInterviewRoute
   '/estudante/buscar': typeof EstudanteBuscarRoute
   '/estudante/mensagens': typeof EstudanteMensagensRoute
   '/estudante/painel': typeof EstudantePainelRoute
   '/estudante/perfil': typeof EstudantePerfilRoute
+  '/recrutador/mensagens': typeof RecrutadorMensagensRoute
   '/estudante': typeof EstudanteIndexRoute
+  '/recrutador': typeof RecrutadorIndexRoute
   '/estudante/candidatura/$id': typeof EstudanteCandidaturaIdRoute
   '/estudante/empresa/$id': typeof EstudanteEmpresaIdRoute
   '/estudante/vaga/$id': typeof EstudanteVagaIdRoute
+  '/recrutador/vagas/$id': typeof RecrutadorVagasIdRoute
+  '/recrutador/vagas/nova': typeof RecrutadorVagasNovaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -141,16 +180,21 @@ export interface FileRoutesById {
   '/estudante': typeof EstudanteRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/perfil-setup': typeof PerfilSetupRoute
-  '/recrutador': typeof RecrutadorRoute
+  '/recrutador': typeof RecrutadorRouteWithChildren
   '/verificacao': typeof VerificacaoRoute
+  '/api/interview': typeof ApiInterviewRoute
   '/estudante/buscar': typeof EstudanteBuscarRoute
   '/estudante/mensagens': typeof EstudanteMensagensRoute
   '/estudante/painel': typeof EstudantePainelRoute
   '/estudante/perfil': typeof EstudantePerfilRoute
+  '/recrutador/mensagens': typeof RecrutadorMensagensRoute
   '/estudante/': typeof EstudanteIndexRoute
+  '/recrutador/': typeof RecrutadorIndexRoute
   '/estudante/candidatura/$id': typeof EstudanteCandidaturaIdRoute
   '/estudante/empresa/$id': typeof EstudanteEmpresaIdRoute
   '/estudante/vaga/$id': typeof EstudanteVagaIdRoute
+  '/recrutador/vagas/$id': typeof RecrutadorVagasIdRoute
+  '/recrutador/vagas/nova': typeof RecrutadorVagasNovaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -162,30 +206,39 @@ export interface FileRouteTypes {
     | '/perfil-setup'
     | '/recrutador'
     | '/verificacao'
+    | '/api/interview'
     | '/estudante/buscar'
     | '/estudante/mensagens'
     | '/estudante/painel'
     | '/estudante/perfil'
+    | '/recrutador/mensagens'
     | '/estudante/'
+    | '/recrutador/'
     | '/estudante/candidatura/$id'
     | '/estudante/empresa/$id'
     | '/estudante/vaga/$id'
+    | '/recrutador/vagas/$id'
+    | '/recrutador/vagas/nova'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/empresa-cadastro'
     | '/onboarding'
     | '/perfil-setup'
-    | '/recrutador'
     | '/verificacao'
+    | '/api/interview'
     | '/estudante/buscar'
     | '/estudante/mensagens'
     | '/estudante/painel'
     | '/estudante/perfil'
+    | '/recrutador/mensagens'
     | '/estudante'
+    | '/recrutador'
     | '/estudante/candidatura/$id'
     | '/estudante/empresa/$id'
     | '/estudante/vaga/$id'
+    | '/recrutador/vagas/$id'
+    | '/recrutador/vagas/nova'
   id:
     | '__root__'
     | '/'
@@ -195,14 +248,19 @@ export interface FileRouteTypes {
     | '/perfil-setup'
     | '/recrutador'
     | '/verificacao'
+    | '/api/interview'
     | '/estudante/buscar'
     | '/estudante/mensagens'
     | '/estudante/painel'
     | '/estudante/perfil'
+    | '/recrutador/mensagens'
     | '/estudante/'
+    | '/recrutador/'
     | '/estudante/candidatura/$id'
     | '/estudante/empresa/$id'
     | '/estudante/vaga/$id'
+    | '/recrutador/vagas/$id'
+    | '/recrutador/vagas/nova'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -211,8 +269,9 @@ export interface RootRouteChildren {
   EstudanteRoute: typeof EstudanteRouteWithChildren
   OnboardingRoute: typeof OnboardingRoute
   PerfilSetupRoute: typeof PerfilSetupRoute
-  RecrutadorRoute: typeof RecrutadorRoute
+  RecrutadorRoute: typeof RecrutadorRouteWithChildren
   VerificacaoRoute: typeof VerificacaoRoute
+  ApiInterviewRoute: typeof ApiInterviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -266,6 +325,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerificacaoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/interview': {
+      id: '/api/interview'
+      path: '/api/interview'
+      fullPath: '/api/interview'
+      preLoaderRoute: typeof ApiInterviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/estudante/': {
       id: '/estudante/'
       path: '/'
@@ -301,6 +367,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EstudantePerfilRouteImport
       parentRoute: typeof EstudanteRoute
     }
+    '/recrutador/': {
+      id: '/recrutador/'
+      path: '/'
+      fullPath: '/recrutador/'
+      preLoaderRoute: typeof RecrutadorIndexRouteImport
+      parentRoute: typeof RecrutadorRoute
+    }
+    '/recrutador/mensagens': {
+      id: '/recrutador/mensagens'
+      path: '/mensagens'
+      fullPath: '/recrutador/mensagens'
+      preLoaderRoute: typeof RecrutadorMensagensRouteImport
+      parentRoute: typeof RecrutadorRoute
+    }
     '/estudante/candidatura/$id': {
       id: '/estudante/candidatura/$id'
       path: '/candidatura/$id'
@@ -321,6 +401,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/estudante/vaga/$id'
       preLoaderRoute: typeof EstudanteVagaIdRouteImport
       parentRoute: typeof EstudanteRoute
+    }
+    '/recrutador/vagas/$id': {
+      id: '/recrutador/vagas/$id'
+      path: '/vagas/$id'
+      fullPath: '/recrutador/vagas/$id'
+      preLoaderRoute: typeof RecrutadorVagasIdRouteImport
+      parentRoute: typeof RecrutadorRoute
+    }
+    '/recrutador/vagas/nova': {
+      id: '/recrutador/vagas/nova'
+      path: '/vagas/nova'
+      fullPath: '/recrutador/vagas/nova'
+      preLoaderRoute: typeof RecrutadorVagasNovaRouteImport
+      parentRoute: typeof RecrutadorRoute
     }
   }
 }
@@ -351,14 +445,33 @@ const EstudanteRouteWithChildren = EstudanteRoute._addFileChildren(
   EstudanteRouteChildren,
 )
 
+interface RecrutadorRouteChildren {
+  RecrutadorMensagensRoute: typeof RecrutadorMensagensRoute
+  RecrutadorIndexRoute: typeof RecrutadorIndexRoute
+  RecrutadorVagasIdRoute: typeof RecrutadorVagasIdRoute
+  RecrutadorVagasNovaRoute: typeof RecrutadorVagasNovaRoute
+}
+
+const RecrutadorRouteChildren: RecrutadorRouteChildren = {
+  RecrutadorMensagensRoute: RecrutadorMensagensRoute,
+  RecrutadorIndexRoute: RecrutadorIndexRoute,
+  RecrutadorVagasIdRoute: RecrutadorVagasIdRoute,
+  RecrutadorVagasNovaRoute: RecrutadorVagasNovaRoute,
+}
+
+const RecrutadorRouteWithChildren = RecrutadorRoute._addFileChildren(
+  RecrutadorRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EmpresaCadastroRoute: EmpresaCadastroRoute,
   EstudanteRoute: EstudanteRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
   PerfilSetupRoute: PerfilSetupRoute,
-  RecrutadorRoute: RecrutadorRoute,
+  RecrutadorRoute: RecrutadorRouteWithChildren,
   VerificacaoRoute: VerificacaoRoute,
+  ApiInterviewRoute: ApiInterviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

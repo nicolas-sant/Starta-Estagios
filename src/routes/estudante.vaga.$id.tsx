@@ -12,7 +12,7 @@ export const Route = createFileRoute("/estudante/vaga/$id")({
     const j = JOBS.find((x) => x.id === params.id);
     const t = j ? `${j.title} — Starta` : "Vaga — Starta";
     const d = j?.summary ?? "Detalhes da vaga de estágio.";
-    return { meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }] };
+    return { meta: [{ title: t }, { name: "description", content: d }, { property: "og:title", content: t }, { property: "og:description", content: d }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] };
   },
   component: VagaPage,
   notFoundComponent: () => <p className="p-6 text-center">Vaga não encontrada.</p>,
@@ -25,7 +25,7 @@ function VagaPage() {
   const apps = useStore((s) => s.applications);
   const docs = useStore((s) => s.docs);
   const student = useStore((s) => s.student);
-  const job: Job | undefined = JOBS.find((j) => j.id === id) ?? recruiterJobs.find((j) => j.id === id);
+  const job: Job | undefined = recruiterJobs.find((j) => j.id === id) ?? JOBS.find((j) => j.id === id);
   const [sheet, setSheet] = useState(false);
   const [docId, setDocId] = useState("");
   const [msg, setMsg] = useState("");
@@ -35,13 +35,17 @@ function VagaPage() {
   const seal = hasTrustSeal(job);
   const sorted = [...job.skills].sort((a) => (a.level === "essencial" ? -1 : 1));
 
+  const closed = recruiterJobs.some((j) => j.id === id && (!j.published || j.status === "filled" || j.status === "deleted"));
   const send = () => {
+    if (closed) { toast.error("Esta vaga foi encerrada."); return; }
+    const candidateId = crypto.randomUUID();
     if (!docId) { toast.error("Anexe um currículo."); return; }
     const myStrengths = job.skills.filter((s) => s.level === "essencial").map((s) => s.name);
     setState((s) => ({
       ...s,
+      candidates: [...s.candidates, { id: candidateId, name: s.student.name || "Estudante", course: s.student.course, institution: s.student.institution, semester: Number(s.student.semester) || 1, city: s.student.city, jobId: job.id, stage: "Recebido", verified: s.student.verification === "aprovado", match: 0, docTitle: s.docs.find((d) => d.id === docId)?.title || "Currículo", studentLinked: true, chat: [], bio: msg.trim(), skills: [] }],
       applications: [
-        { jobId: job.id, step: 0, appliedAt: new Date().toISOString(), message: msg.trim().slice(0, 500), docId, strengths: myStrengths.slice(0, 2), toDevelop: job.skills.filter((x) => x.level === "recomendado").map((x) => x.name) },
+        { candidateId, jobId: job.id, step: 0, appliedAt: new Date().toISOString(), message: msg.trim().slice(0, 500), docId, strengths: myStrengths.slice(0, 2), toDevelop: job.skills.filter((x) => x.level === "recomendado").map((x) => x.name) },
         ...s.applications,
       ],
       notifications: [{ id: crypto.randomUUID(), text: `Candidatura enviada: ${job.title}. Você verá cada etapa aqui.`, at: new Date().toISOString(), read: false }, ...s.notifications],
@@ -115,7 +119,7 @@ function VagaPage() {
 
       <div className="fixed inset-x-0 bottom-16 z-20 border-t border-border bg-card p-3">
         <div className="mx-auto max-w-2xl">
-          {applied ? (
+          {closed ? <p className="text-center font-semibold text-muted-foreground">Vaga encerrada · novas candidaturas indisponíveis</p> : applied ? (
             <Link to="/estudante/candidatura/$id" params={{ id: job.id }} className="flex h-12 items-center justify-center rounded-[10px] bg-recommended font-semibold text-recommended-foreground">
               ✓ Candidatado · ver progresso
             </Link>

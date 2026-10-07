@@ -1,0 +1,15 @@
+CREATE TABLE public.recruiter_workspaces (owner_id uuid PRIMARY KEY, state jsonb NOT NULL DEFAULT '{}'::jsonb, updated_at timestamptz NOT NULL DEFAULT now());
+GRANT SELECT,INSERT,UPDATE,DELETE ON public.recruiter_workspaces TO authenticated;
+GRANT ALL ON public.recruiter_workspaces TO service_role;
+ALTER TABLE public.recruiter_workspaces ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Owner workspace" ON public.recruiter_workspaces FOR ALL TO authenticated USING (owner_id=auth.uid()) WITH CHECK (owner_id=auth.uid());
+CREATE TABLE public.recruiter_public_jobs (id text PRIMARY KEY, owner_id uuid NOT NULL, company_id text NOT NULL, status text NOT NULL DEFAULT 'published', job jsonb NOT NULL DEFAULT '{}'::jsonb);
+GRANT SELECT ON public.recruiter_public_jobs TO anon;
+GRANT SELECT,INSERT,UPDATE,DELETE ON public.recruiter_public_jobs TO authenticated;
+GRANT ALL ON public.recruiter_public_jobs TO service_role;
+ALTER TABLE public.recruiter_public_jobs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public safe job listing" ON public.recruiter_public_jobs FOR SELECT TO anon,authenticated USING (true);
+CREATE POLICY "Owner job write" ON public.recruiter_public_jobs FOR ALL TO authenticated USING (owner_id=auth.uid()) WITH CHECK (owner_id=auth.uid());
+CREATE TABLE public.ai_access_blocks (id text PRIMARY KEY DEFAULT 'interview', message text NOT NULL, status integer NOT NULL DEFAULT 403);
+GRANT ALL ON public.ai_access_blocks TO service_role;
+ALTER TABLE public.ai_access_blocks ENABLE ROW LEVEL SECURITY;

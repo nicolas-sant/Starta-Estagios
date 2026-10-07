@@ -1,0 +1,18 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { RecruiterJobForm } from "@/components/starta/recruiter-job-form";
+export const Route = createFileRoute("/recrutador/vagas/nova")({
+  head: () => ({
+    meta: [
+      { title: "Publicar vaga — Starta" },
+      {
+        name: "description",
+        content: "Publique uma vaga de estágio com bolsa, benefícios e habilidades.",
+      },
+      { property: "og:title", content: "Publicar vaga — Starta" },
+      { property: "og:description", content: "Crie uma oportunidade transparente de estágio." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
+  component: () => <RecruiterJobForm />,
+});

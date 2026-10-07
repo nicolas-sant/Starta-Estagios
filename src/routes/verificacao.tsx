@@ -7,6 +7,8 @@ import { SetupShell } from "./onboarding";
 export const Route = createFileRoute("/verificacao")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Verificação do estudante — Starta" },
       { name: "description", content: "Envie seu comprovante de matrícula em PDF para verificar seu perfil de estudante." },
       { property: "og:title", content: "Verificação do estudante — Starta" },

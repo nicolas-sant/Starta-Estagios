@@ -1,11 +1,15 @@
 import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bell, Eye, Home, LayoutList, LogOut, Menu, MessageCircle, Search, Settings, User, X } from "lucide-react";
 import { Logo } from "@/components/starta/ui";
-import { setState, useStore } from "@/lib/store";
+import { setState, useStore, type RecruiterJob } from "@/lib/store";
+import { listPublicJobs } from "@/lib/public-jobs.functions";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/estudante")({
+  loader: () => listPublicJobs(),
+  errorComponent: () => <p className="p-6">Não foi possível carregar as vagas. Atualize a página para tentar novamente.</p>,
+  notFoundComponent: () => <p className="p-6">Página não encontrada.</p>,
   component: StudentLayout,
 });
 
@@ -18,6 +22,17 @@ const NAV = [
 ] as const;
 
 function StudentLayout() {
+  const publicJobs = Route.useLoaderData();
+  useEffect(() => {
+    if (!publicJobs.length) return;
+    const loaded = publicJobs.flatMap((row) => {
+      if (!row.job || typeof row.job !== "object" || Array.isArray(row.job)) return [];
+      const job = row.job as unknown as RecruiterJob;
+      const status = row.status === "filled" ? "filled" as const : row.status === "deleted" ? "deleted" as const : "published" as const;
+      return typeof job.id === "string" && Array.isArray(job.skills) ? [{ ...job, status, published: status === "published" }] : [];
+    });
+    setState((s) => ({ ...s, recruiterJobs: [...s.recruiterJobs.filter((j) => !loaded.some((r) => r.id === j.id)), ...loaded] }));
+  }, [publicJobs]);
   const [open, setOpen] = useState(false);
   const nav = useNavigate();
   const views = useStore((s) => s.student.cvViews7d);

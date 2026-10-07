@@ -1,4 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 import { createMemoryHistory, createRouter, RouterProvider } from "@tanstack/react-router";
 import { cleanup, render, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -6,6 +7,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { routeTree } from "@/routeTree.gen";
 
 function renderAt(path: string) {
+  // A document shell cannot mount inside Testing Library's div container.
+  Object.assign(routeTree.options, { shellComponent: ({ children }: { children: ReactNode }) => <>{children}</> });
   const queryClient = new QueryClient();
   const router = createRouter({
     routeTree,
