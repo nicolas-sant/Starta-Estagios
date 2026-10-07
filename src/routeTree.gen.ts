@@ -14,6 +14,7 @@ import { Route as EmpresaCadastroRouteImport } from './routes/empresa-cadastro'
 import { Route as EstudanteRouteImport } from './routes/estudante'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as PerfilSetupRouteImport } from './routes/perfil-setup'
+import { Route as RecrutadorRouteImport } from './routes/recrutador'
 import { Route as VerificacaoRouteImport } from './routes/verificacao'
 import { Route as EstudanteIndexRouteImport } from './routes/estudante.index'
 import { Route as EstudanteBuscarRouteImport } from './routes/estudante.buscar'
@@ -47,6 +48,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
 const PerfilSetupRoute = PerfilSetupRouteImport.update({
   id: '/perfil-setup',
   path: '/perfil-setup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecrutadorRoute = RecrutadorRouteImport.update({
+  id: '/recrutador',
+  path: '/recrutador',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VerificacaoRoute = VerificacaoRouteImport.update({
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/estudante': typeof EstudanteRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/perfil-setup': typeof PerfilSetupRoute
+  '/recrutador': typeof RecrutadorRoute
   '/verificacao': typeof VerificacaoRoute
   '/estudante/buscar': typeof EstudanteBuscarRoute
   '/estudante/mensagens': typeof EstudanteMensagensRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/empresa-cadastro': typeof EmpresaCadastroRoute
   '/onboarding': typeof OnboardingRoute
   '/perfil-setup': typeof PerfilSetupRoute
+  '/recrutador': typeof RecrutadorRoute
   '/verificacao': typeof VerificacaoRoute
   '/estudante/buscar': typeof EstudanteBuscarRoute
   '/estudante/mensagens': typeof EstudanteMensagensRoute
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/estudante': typeof EstudanteRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/perfil-setup': typeof PerfilSetupRoute
+  '/recrutador': typeof RecrutadorRoute
   '/verificacao': typeof VerificacaoRoute
   '/estudante/buscar': typeof EstudanteBuscarRoute
   '/estudante/mensagens': typeof EstudanteMensagensRoute
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/estudante'
     | '/onboarding'
     | '/perfil-setup'
+    | '/recrutador'
     | '/verificacao'
     | '/estudante/buscar'
     | '/estudante/mensagens'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/empresa-cadastro'
     | '/onboarding'
     | '/perfil-setup'
+    | '/recrutador'
     | '/verificacao'
     | '/estudante/buscar'
     | '/estudante/mensagens'
@@ -182,6 +193,7 @@ export interface FileRouteTypes {
     | '/estudante'
     | '/onboarding'
     | '/perfil-setup'
+    | '/recrutador'
     | '/verificacao'
     | '/estudante/buscar'
     | '/estudante/mensagens'
@@ -199,6 +211,7 @@ export interface RootRouteChildren {
   EstudanteRoute: typeof EstudanteRouteWithChildren
   OnboardingRoute: typeof OnboardingRoute
   PerfilSetupRoute: typeof PerfilSetupRoute
+  RecrutadorRoute: typeof RecrutadorRoute
   VerificacaoRoute: typeof VerificacaoRoute
 }
 
@@ -237,6 +250,13 @@ declare module '@tanstack/react-router' {
       path: '/perfil-setup'
       fullPath: '/perfil-setup'
       preLoaderRoute: typeof PerfilSetupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recrutador': {
+      id: '/recrutador'
+      path: '/recrutador'
+      fullPath: '/recrutador'
+      preLoaderRoute: typeof RecrutadorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verificacao': {
@@ -337,6 +357,7 @@ const rootRouteChildren: RootRouteChildren = {
   EstudanteRoute: EstudanteRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
   PerfilSetupRoute: PerfilSetupRoute,
+  RecrutadorRoute: RecrutadorRoute,
   VerificacaoRoute: VerificacaoRoute,
 }
 export const routeTree = rootRouteImport
