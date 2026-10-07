@@ -14,7 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ai_access_blocks: {
+        Row: {
+          id: string
+          message: string
+          status: number
+        }
+        Insert: {
+          id?: string
+          message: string
+          status?: number
+        }
+        Update: {
+          id?: string
+          message?: string
+          status?: number
+        }
+        Relationships: []
+      }
+      recruiter_public_jobs: {
+        Row: {
+          company_id: string
+          id: string
+          job: Json
+          owner_id: string
+          status: string
+        }
+        Insert: {
+          company_id: string
+          id: string
+          job?: Json
+          owner_id: string
+          status?: string
+        }
+        Update: {
+          company_id?: string
+          id?: string
+          job?: Json
+          owner_id?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      recruiter_workspaces: {
+        Row: {
+          owner_id: string
+          state: Json
+          updated_at: string
+        }
+        Insert: {
+          owner_id: string
+          state?: Json
+          updated_at?: string
+        }
+        Update: {
+          owner_id?: string
+          state?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
