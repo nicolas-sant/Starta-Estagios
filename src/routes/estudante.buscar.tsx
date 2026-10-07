@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { JobCard } from "@/components/starta/ui";
 import { AREAS, JOBS, hasTrustSeal, rankScore, type Modality } from "@/lib/data";
-import { useStore } from "@/lib/store";
+import { allJobs, getState, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/estudante/buscar")({
@@ -36,7 +36,7 @@ function Buscar() {
   const [onlySeal, setOnlySeal] = useState(false);
   const [showFilters, setShow] = useState(true);
 
-  const jobs = [...JOBS, ...extra.filter((j) => j.published && !JOBS.some((b) => b.id === j.id))]
+  const jobs = allJobs({ ...getState(), recruiterJobs: extra })
     .filter((j) => (q ? (j.title + j.summary + j.skills.map((s) => s.name).join(" ")).toLowerCase().includes(q.toLowerCase()) : true))
     .filter((j) => (area ? j.area === area : true))
     .filter((j) => (mod ? j.modality === mod : true))

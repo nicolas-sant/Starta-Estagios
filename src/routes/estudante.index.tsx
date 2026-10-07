@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { AlertTriangle, ShieldCheck } from "lucide-react";
 import { JobCard, SectionTitle } from "@/components/starta/ui";
 import { JOBS, rankScore } from "@/lib/data";
-import { daysUntil, useStore } from "@/lib/store";
+import { allJobs, getState, daysUntil, useStore } from "@/lib/store";
 
 export const Route = createFileRoute("/estudante/")({
   head: () => ({
@@ -20,7 +20,7 @@ function Feed() {
   const st = useStore((s) => s.student);
   const apps = useStore((s) => s.applications);
   const extra = useStore((s) => s.recruiterJobs);
-  const jobs = [...JOBS, ...extra.filter((j) => j.published && !JOBS.some((b) => b.id === j.id))];
+  const jobs = allJobs({ ...getState(), recruiterJobs: extra });
   const sorted = [...jobs].sort((a, b) => {
     const ia = st.interests.includes(a.area) ? 30 : 0;
     const ib = st.interests.includes(b.area) ? 30 : 0;

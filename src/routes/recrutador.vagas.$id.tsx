@@ -1,0 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { RecruiterJobForm } from "@/components/starta/recruiter-job-form";
+export const Route = createFileRoute("/recrutador/vagas/$id")({ head: () => ({ meta: [{ title: "Editar vaga — Starta" }, { name: "description", content: "Atualize os requisitos e as condições da vaga publicada." }, { property: "og:title", content: "Editar vaga — Starta" }, { property: "og:description", content: "Gerencie informações da sua vaga." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: EditJob });
+function EditJob() { const { id } = Route.useParams(); return <RecruiterJobForm key={id} id={id} />; }

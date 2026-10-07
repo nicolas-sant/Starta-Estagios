@@ -1,7 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Logo, StageTag, VerifiedSeal } from "@/components/starta/ui";
-import { STAGES } from "@/lib/data";
-import { setState, useStore } from "@/lib/store";
+import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
+import { Logo, VerifiedSeal } from "@/components/starta/ui";
+import { useStore } from "@/lib/store";
+import { Briefcase, LayoutDashboard, MessageSquare, LogOut, ChevronRight } from "lucide-react";
+import { RecruiterCloud } from "@/components/starta/recruiter-cloud";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/recrutador")({
   head: () => ({
@@ -18,51 +20,12 @@ export const Route = createFileRoute("/recrutador")({
 });
 
 function Recrutador() {
-  const cands = useStore((s) => s.candidates);
   const company = useStore((s) => s.company);
-  const move = (id: string, dir: -1 | 1) =>
-    setState((s) => ({
-      ...s,
-      candidates: s.candidates.map((c) => {
-        if (c.id !== id) return c;
-        const i = Math.min(Math.max(STAGES.indexOf(c.stage) + dir, 0), STAGES.length - 1);
-        const stage = STAGES[i] ?? c.stage;
-        return { ...c, stage };
-      }),
-    }));
+  const path = useLocation().pathname;
   return (
-    <div className="min-h-screen bg-background">
-      <header className="flex h-16 items-center justify-between border-b border-border bg-card px-4">
-        <Logo />
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-deep-space">{company.name}</span>
-          {company.verification === "aprovado" && <VerifiedSeal small />}
-          <Link to="/" className="ml-2 text-sm font-semibold text-primary">Sair</Link>
-        </div>
-      </header>
-      <main className="p-4">
-        <h1 className="mb-4 text-2xl text-deep-space">Pipeline de candidatos</h1>
-        <div className="grid gap-3 overflow-x-auto md:grid-cols-5">
-          {STAGES.map((st) => (
-            <section key={st} className="min-w-56 rounded-2xl bg-neutral-tag/60 p-3">
-              <div className="mb-2 flex justify-between"><StageTag stage={st} /><span className="label-mono">{cands.filter((c) => c.stage === st).length}</span></div>
-              <div className="space-y-2">
-                {cands.filter((c) => c.stage === st).map((c) => (
-                  <div key={c.id} className="rounded-xl bg-card p-3 shadow-[var(--shadow-card)]">
-                    <p className="font-display font-bold text-deep-space">{c.name}</p>
-                    <p className="text-xs text-muted-foreground">{c.course} · {c.institution}</p>
-                    <p className="label-mono mt-1 text-primary">{c.match}% match</p>
-                    <div className="mt-2 flex gap-2">
-                      <button className="h-9 flex-1 rounded-lg border border-border text-sm" onClick={() => move(c.id, -1)}>←</button>
-                      <button className="h-9 flex-1 rounded-lg bg-primary text-sm text-primary-foreground" onClick={() => move(c.id, 1)}>Avançar</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      </main>
+    <div className="min-h-screen bg-background lg:grid lg:grid-cols-[220px_1fr]">
+      <aside className="flex flex-col border-b border-border bg-card p-5 lg:sticky lg:top-0 lg:h-screen lg:border-b-0 lg:border-r"><Logo /><p className="mt-1 text-xs text-muted-foreground">Área do recrutador</p><div className="mt-7 flex items-center gap-3 border-y border-border py-5"><span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-deep-space font-bold text-primary-foreground">ML</span><div className="min-w-0"><p className="truncate text-sm font-semibold">{company.name}</p><p className="mt-1 text-xs text-muted-foreground">Porto Digital · Recife</p></div></div><nav className="mt-5 flex gap-2 lg:flex-col"><Link to="/recrutador" className={cn("flex items-center gap-3 rounded-md px-3 py-3 text-sm font-semibold", !path.includes("mensagens") ? "bg-essential text-primary" : "text-muted-foreground")}><LayoutDashboard className="size-4" />Recrutamento</Link><Link to="/recrutador/mensagens" className={cn("flex items-center gap-3 rounded-md px-3 py-3 text-sm font-semibold", path.includes("mensagens") ? "bg-essential text-primary" : "text-muted-foreground")}><MessageSquare className="size-4" />Mensagens</Link></nav><div className="mt-auto hidden border-t border-border pt-5 lg:block"><p className="text-sm font-semibold">Rafael Nogueira</p><p className="mb-3 mt-1 text-xs text-muted-foreground">Analista de R&S</p><Link to="/" className="flex items-center gap-2 text-sm text-muted-foreground"><LogOut className="size-4" />Sair</Link></div></aside>
+      <div className="min-w-0"><header className="flex min-h-20 flex-wrap items-center justify-between gap-3 border-b border-border bg-card px-5 py-4 lg:px-8"><div className="flex items-center gap-2 text-sm text-muted-foreground"><Briefcase className="size-4" />Empresa<ChevronRight className="size-3" /><span className="text-foreground">{path.includes("mensagens") ? "Mensagens" : "Recrutamento"}</span></div><div className="flex items-center gap-3">{company.verification === "aprovado" && <VerifiedSeal small />}<RecruiterCloud /></div></header><main className="p-5 lg:p-8"><Outlet /></main></div>
     </div>
   );
 }

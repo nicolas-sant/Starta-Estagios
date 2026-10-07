@@ -2,7 +2,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { ArrowLeft, AlertTriangle, MapPin, Building2 } from "lucide-react";
 import { CompanyAvatar, JobCard, NeutralTag, VerifiedSeal } from "@/components/starta/ui";
 import { COMPANIES, JOBS, hasReachPenalty } from "@/lib/data";
-import { useStore } from "@/lib/store";
+import { allJobs, getState, useStore } from "@/lib/store";
 
 export const Route = createFileRoute("/estudante/empresa/$id")({
   head: ({ params }) => {
@@ -21,7 +21,7 @@ function EmpresaPage() {
   const extra = useStore((s) => s.recruiterJobs);
   const c = COMPANIES.find((x) => x.id === id);
   if (!c) throw notFound();
-  const jobs = [...JOBS, ...extra.filter((j) => j.published && !JOBS.some((b) => b.id === j.id))].filter((j) => j.companyId === c.id);
+  const jobs = allJobs({ ...getState(), recruiterJobs: extra }).filter((j) => j.companyId === c.id);
 
   return (
     <div className="space-y-4">
