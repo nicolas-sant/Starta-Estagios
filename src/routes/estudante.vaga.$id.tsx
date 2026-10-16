@@ -117,7 +117,7 @@ function VagaPage() {
         )}
       </Card>
 
-      <div className="fixed inset-x-0 bottom-16 z-20 border-t border-border bg-card p-3">
+      <div className="fixed inset-x-0 bottom-16 z-20 border-t border-border bg-card p-3 lg:bottom-0 lg:left-[240px]">
         <div className="mx-auto max-w-2xl">
           {closed ? <p className="text-center font-semibold text-muted-foreground">Vaga encerrada · novas candidaturas indisponíveis</p> : applied ? (
             <Link to="/estudante/candidatura/$id" params={{ id: job.id }} className="flex h-12 items-center justify-center rounded-[10px] bg-recommended font-semibold text-recommended-foreground">
