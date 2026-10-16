@@ -63,6 +63,11 @@ function StudentLayout() {
           </button>
         </div>
         <nav className="mt-6 space-y-2">
+          {NAV.map((n) => (
+            <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="flex h-12 items-center gap-3 rounded-xl px-3 hover:bg-sidebar-accent">
+              <n.icon className="h-5 w-5" /> {n.label}
+            </Link>
+          ))}
           <Link to="/estudante/perfil" hash="configuracoes" onClick={() => setOpen(false)} className="flex h-12 items-center gap-3 rounded-xl px-3 hover:bg-sidebar-accent">
             <Settings className="h-5 w-5" /> Configurações
           </Link>
