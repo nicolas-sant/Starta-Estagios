@@ -106,7 +106,7 @@ function RecruiterCRM() {
             {visibleJobs.filter((j) => j.published).length} publicadas
           </span>
         </div>
-        <div className="flex gap-3 overflow-x-auto pb-2">
+        <div className="flex gap-3 overflow-x-auto pb-2 xl:flex-wrap xl:overflow-visible">
           {visibleJobs.map((j) => (
             <Button
               key={j.id}

@@ -56,7 +56,7 @@ function VagaPage() {
   };
 
   return (
-    <div className="space-y-4 pb-24">
+    <div className="mx-auto max-w-3xl space-y-4 pb-24">
       <button onClick={() => history.back()} className="flex h-11 items-center gap-1 text-sm font-semibold text-primary"><ArrowLeft className="h-5 w-5" /> Voltar</button>
 
       <Card>
@@ -64,7 +64,7 @@ function VagaPage() {
           <CompanyAvatar initials={c?.initials ?? "?"} size={56} />
           {seal ? <VerifiedSeal label="Vaga confiável" /> : <NeutralTag>Sem selo de confiança</NeutralTag>}
         </div>
-        <h1 className="mt-4 text-2xl text-deep-space">{job.title}</h1>
+        <h1 className="mt-4 text-2xl text-deep-space lg:text-3xl">{job.title}</h1>
         {c && (
           <Link to="/estudante/empresa/$id" params={{ id: c.id }} className="mt-1 inline-flex items-center gap-2 font-semibold text-primary hover:underline">
             {c.name} {c.verified && <VerifiedSeal small />}
@@ -117,7 +117,7 @@ function VagaPage() {
         )}
       </Card>
 
-      <div className="fixed inset-x-0 bottom-16 z-20 border-t border-border bg-card p-3">
+      <div className="fixed inset-x-0 bottom-16 z-20 border-t border-border bg-card p-3 lg:bottom-0 lg:left-[240px]">
         <div className="mx-auto max-w-2xl">
           {closed ? <p className="text-center font-semibold text-muted-foreground">Vaga encerrada · novas candidaturas indisponíveis</p> : applied ? (
             <Link to="/estudante/candidatura/$id" params={{ id: job.id }} className="flex h-12 items-center justify-center rounded-[10px] bg-recommended font-semibold text-recommended-foreground">

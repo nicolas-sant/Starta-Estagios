@@ -30,11 +30,11 @@ function Painel() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl text-deep-space">Painel</h1>
+      <h1 className="text-2xl text-deep-space lg:text-3xl">Painel</h1>
 
       <section>
         <SectionTitle action={<span className="label-mono text-muted-foreground">{apps.length} total</span>}>Vagas candidatadas</SectionTitle>
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {apps.map((a) => {
             const j = findJob(a.jobId);
             if (!j) return null;
@@ -60,7 +60,7 @@ function Painel() {
               </Link>
             );
           })}
-          {!apps.length && <p className="rounded-2xl bg-card p-6 text-center text-muted-foreground">Você ainda não se candidatou. Explore o feed!</p>}
+          {!apps.length && <p className="lg:col-span-2 rounded-2xl bg-card p-6 text-center text-muted-foreground">Você ainda não se candidatou. Explore o feed!</p>}
         </div>
       </section>
 

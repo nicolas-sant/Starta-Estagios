@@ -81,7 +81,7 @@ function Mensagens() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl text-deep-space">Mensagens</h1>
+      <h1 className="text-2xl text-deep-space lg:text-3xl">Mensagens</h1>
       <ul className="space-y-2">
         {threads.map((th) => {
           const j = jobs.find((x) => x.id === th.jobId);
