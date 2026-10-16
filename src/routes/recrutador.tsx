@@ -83,7 +83,9 @@ function Recrutador() {
           </div>
         </header>
         <main className="p-5 lg:p-8">
-          <Outlet />
+          <div className="xl:mx-auto xl:max-w-[1400px]">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

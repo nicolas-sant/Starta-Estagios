@@ -39,7 +39,7 @@ function Candidatura() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="mx-auto max-w-3xl space-y-4">
       <Link to="/estudante/painel" className="flex h-11 items-center gap-1 text-sm font-semibold text-primary"><ArrowLeft className="h-5 w-5" /> Painel</Link>
       <Card>
         <div className="flex items-center gap-3">

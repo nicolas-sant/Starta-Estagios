@@ -35,7 +35,7 @@ function Feed() {
     <div className="space-y-6">
       <div>
         <p className="label-mono text-muted-foreground">{st.city || "Brasil"}</p>
-        <h1 className="text-2xl text-deep-space">Olá{st.name ? `, ${st.name.split(" ")[0]}` : ""}!</h1>
+        <h1 className="text-2xl text-deep-space lg:text-3xl">Olá{st.name ? `, ${st.name.split(" ")[0]}` : ""}!</h1>
       </div>
 
       {(!st.profileDone || st.verification !== "aprovado") && (
@@ -51,13 +51,13 @@ function Feed() {
         </Link>
       )}
 
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-2 lg:gap-4">
         {[
           [apps.length, "candidaturas"],
           [apps.filter((a) => !a.result).length, "em andamento"],
           [apps.filter((a) => a.feedback || a.step > 0).length, "com retorno"],
         ].map(([n, l]) => (
-          <div key={l as string} className="rounded-2xl bg-card p-3 text-center shadow-[var(--shadow-card)]">
+          <div key={l as string} className="rounded-2xl bg-card p-3 text-center lg:p-5 shadow-[var(--shadow-card)]">
             <p className="font-display text-2xl font-extrabold text-primary">{n}</p>
             <p className="label-mono text-muted-foreground">{l}</p>
           </div>
@@ -66,7 +66,7 @@ function Feed() {
 
       <section>
         <SectionTitle action={<span className="label-mono text-muted-foreground">{sorted.length} vagas</span>}>Para você</SectionTitle>
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
           {sorted.map((j) => (
             <JobCard key={j.id} job={j} applied={apps.some((a) => a.jobId === j.id)} />
           ))}

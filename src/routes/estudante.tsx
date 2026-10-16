@@ -41,8 +41,8 @@ function StudentLayout() {
   const unread = notifs.filter((n) => !n.read).length;
 
   return (
-    <div className={cn("min-h-screen bg-background pb-20", settings.largeText && "text-[17px]")}>
-      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card/95 px-2 backdrop-blur">
+    <div className={cn("min-h-screen bg-background pb-20 lg:grid lg:grid-cols-[240px_1fr] lg:pb-0", settings.largeText && "text-[17px]")}>
+      <header className="sticky top-0 z-30 flex h-16 lg:hidden items-center justify-between border-b border-border bg-card/95 px-2 backdrop-blur">
         <button onClick={() => setOpen(true)} aria-label="Abrir menu" className="flex h-12 w-12 items-center justify-center rounded-xl hover:bg-mint">
           <Menu className="h-6 w-6 text-deep-space" />
         </button>
@@ -54,20 +54,21 @@ function StudentLayout() {
       </header>
 
       {/* Drawer */}
-      <div className={cn("fixed inset-0 z-40 bg-deep-space/40 transition-opacity", open ? "opacity-100" : "pointer-events-none opacity-0")} onClick={() => setOpen(false)} />
-      <aside className={cn("fixed inset-y-0 left-0 z-50 flex w-80 max-w-[85vw] flex-col bg-sidebar p-4 text-sidebar-foreground transition-transform", open ? "translate-x-0" : "-translate-x-full")}>
+      <div className={cn("fixed inset-0 z-40 bg-deep-space/40 transition-opacity lg:hidden", open ? "opacity-100" : "pointer-events-none opacity-0")} onClick={() => setOpen(false)} />
+      <aside className={cn("fixed inset-y-0 left-0 z-50 flex w-80 max-w-[85vw] flex-col bg-sidebar p-4 text-sidebar-foreground transition-transform lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:w-auto lg:max-w-none lg:translate-x-0 lg:border-r lg:border-border lg:transition-none", open ? "translate-x-0" : "-translate-x-full")}>
         <div className="flex h-12 items-center justify-between">
           <Logo light />
-          <button onClick={() => setOpen(false)} aria-label="Fechar menu" className="flex h-12 w-12 items-center justify-center rounded-xl hover:bg-sidebar-accent">
+          <button onClick={() => setOpen(false)} aria-label="Fechar menu" className="lg:hidden flex h-12 w-12 items-center justify-center rounded-xl hover:bg-sidebar-accent">
             <X className="h-6 w-6" />
           </button>
         </div>
-        <nav className="mt-6 space-y-2">
+        <nav className="mt-6 flex flex-1 flex-col gap-2">
           {NAV.map((n) => (
             <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="flex h-12 items-center gap-3 rounded-xl px-3 hover:bg-sidebar-accent">
               <n.icon className="h-5 w-5" /> {n.label}
             </Link>
           ))}
+          <div className="mt-auto" />
           <Link to="/estudante/perfil" hash="configuracoes" onClick={() => setOpen(false)} className="flex h-12 items-center gap-3 rounded-xl px-3 hover:bg-sidebar-accent">
             <Settings className="h-5 w-5" /> Configurações
           </Link>
@@ -89,11 +90,11 @@ function StudentLayout() {
         </nav>
       </aside>
 
-      <main className="mx-auto max-w-2xl px-4 py-6">
+      <main className="mx-auto w-full min-w-0 max-w-2xl px-4 py-6 lg:max-w-none lg:px-8 lg:py-8">
         <Outlet />
       </main>
 
-      <nav className="fixed inset-x-0 bottom-0 z-30 h-16 border-t border-border bg-card">
+      <nav className="fixed inset-x-0 bottom-0 z-30 h-16 lg:hidden border-t border-border bg-card">
         <ul className="mx-auto flex h-full max-w-2xl justify-around">
           {NAV.map((n) => (
             <li key={n.to} className="flex-1">
