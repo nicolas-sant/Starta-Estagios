@@ -20,10 +20,13 @@ export const Route = createFileRoute("/estudante/painel")({
 });
 
 function Painel() {
-  const apps = useStore((s) => s.applications);
-  const notifs = useStore((s) => s.notifications);
-  const extra = useStore((s) => s.recruiterJobs);
-  const findJob = (id: string) => extra.find((j) => j.id === id) ?? JOBS.find((j) => j.id === id);
+  const rawApps = useStore((s) => s.applications);
+  const rawNotifs = useStore((s) => s.notifications);
+  const rawExtra = useStore((s) => s.recruiterJobs);
+  const apps = (Array.isArray(rawApps) ? rawApps : []).filter((a) => a && typeof a.jobId === "string").map((a) => ({ ...a, step: Math.min(Math.max(Number(a.step) || 0, 0), STUDENT_STEPS.length - 1) }));
+  const notifs = Array.isArray(rawNotifs) ? rawNotifs : [];
+  const extra = Array.isArray(rawExtra) ? rawExtra : [];
+  const findJob = (id: string) => extra.find((j) => j?.id === id) ?? JOBS.find((j) => j.id === id);
 
   return (
     <div className="space-y-6">
