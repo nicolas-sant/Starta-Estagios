@@ -5,3 +5,13 @@
 - [x] Perguntas personalizadas com AI Gateway, proteção e persistência Cloud.
 - [x] Verificar navegação, ações e chamada real de IA.
 - [ ] Verificar salvamento e IA com uma conta confirmada — aguarda primeiro cadastro e confirmação de e-mail.
+## Usabilidade do estudante (testes com estudantes)
+- [x] Candidatar-se leva à verificação quando não verificado
+- [x] Onboarding com botões em posição fixa
+- [x] Verificação com prazo, desfechos e andamento não clicável
+- [x] Busca com cidade, habilidades e limpar filtros
+- [x] Perfil editável, links e bloco de verificação correto
+- [x] Painel com notificações ordenadas e destacadas
+- [x] Candidatura com datas, entrevista e etiquetas de habilidade
+- [x] Vaga com "Como é o processo" e explicação do retorno
+- [x] Mensagens com horário e não lidas; feed com "Combina com você"
