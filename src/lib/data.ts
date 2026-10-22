@@ -32,7 +32,11 @@ export type Job = {
   postedDaysAgo: number;
   applicants: number;
   filledFields: number; // 0-100 completude -> selo de confiança
+  /** etapas do processo seletivo; padrão = etapas da plataforma, sem teste técnico */
+  process?: { steps: string[]; technicalTest: boolean };
 };
+
+export const DEFAULT_PROCESS = { steps: ["Inscrição", "Triagem de currículo", "Entrevista", "Resultado"], technicalTest: false };
 
 export const AREAS = [
   "Administração",
@@ -290,7 +294,7 @@ export const PREDEFINED_FEEDBACK = [
   "Seu perfil é muito promissor! Vamos avançar para a próxima etapa.",
   "Gostamos do seu currículo, mas buscamos alguém com mais domínio dos requisitos essenciais.",
   "A vaga foi preenchida. Manteremos seu perfil em nosso banco para próximas oportunidades.",
-  "Recomendamos desenvolver as habilidades recomendadas e se candidatar novamente.",
+  "Recomendamos desenvolver as habilidades listadas em \"A desenvolver\" e se candidatar novamente.",
 ];
 
 export function getCompany(id: string) {

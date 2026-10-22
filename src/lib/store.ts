@@ -15,9 +15,16 @@ export type Application = {
   feedback?: string;
   strengths: string[];
   toDevelop: string[];
+  /** data em que cada etapa (índice = step) foi concluída/alcançada */
+  stepDates?: string[];
+  interview?: Interview;
 };
+export type Interview = { date: string; time: string; place: string; link?: string };
+export type StudentLinks = { github: string; portfolio: string; linkedin: string };
+export type NotificationKind = "etapa" | "retorno" | "vaga" | "mensagem" | "candidatura";
+export type AppNotification = { id: string; text: string; at: string; read: boolean; kind?: NotificationKind };
 export type ChatMessage = { from: "me" | "them"; text: string; at: string };
-export type Thread = { id: string; jobId: string; with: string; messages: ChatMessage[] };
+export type Thread = { id: string; jobId: string; with: string; messages: ChatMessage[]; readAt?: string };
 
 export type Candidate = {
   experience?: string;
@@ -38,6 +45,7 @@ export type Candidate = {
   docTitle: string;
   feedback?: string;
   chat: ChatMessage[];
+  links?: StudentLinks;
 };
 
 export type RecruiterJob = Job & { published: boolean; status?: "published" | "filled" | "deleted"; courses?: string; semesterMin?: number; semesterMax?: number; deadline?: string; openings?: number };
@@ -60,16 +68,26 @@ export type State = {
     onboardingDone: boolean;
     profileDone: boolean;
     cvViews7d: number;
+    links: StudentLinks;
+    skills: string[];
   };
   docs: Doc[];
   applications: Application[];
   threads: Thread[];
-  notifications: { id: string; text: string; at: string; read: boolean }[];
+  notifications: AppNotification[];
   company: { verification: VerificationStatus; cnpj: string; fileName: string; name: string };
   recruiterJobs: RecruiterJob[];
   candidates: Candidate[];
   settings: { notifications: boolean; highContrast: boolean; largeText: boolean; profilePublic: boolean };
 };
+
+const day = 864e5;
+const ago = (d: number) => new Date(Date.now() - d * day).toISOString();
+function nextThursday() {
+  const d = new Date();
+  d.setDate(d.getDate() + (((4 - d.getDay() + 7) % 7) || 7));
+  return d.toISOString().slice(0, 10);
+}
 
 function defaultValidUntil() {
   const now = new Date();
@@ -112,14 +130,16 @@ export const initialState: State = {
     fileName: "",
     refuseReason: "",
     validUntil: "",
-    name: "",
+    name: "Beatriz Ramos",
     photo: "",
-    institution: "",
-    course: "",
-    semester: "",
+    institution: "UFPE",
+    course: "Administração",
+    semester: "6",
     onboardingDone: false,
     profileDone: false,
     cvViews7d: 12,
+    links: { github: "", portfolio: "", linkedin: "" },
+    skills: ["Excel intermediário", "Comunicação", "Organização", "Pacote Office"],
   },
   docs: [
     { id: "d1", title: "Currículo Geral.pdf", area: "Geral" },
@@ -129,20 +149,23 @@ export const initialState: State = {
     {
       jobId: "rh-ml",
       step: 2,
-      appliedAt: new Date(Date.now() - 9 * 864e5).toISOString(),
+      appliedAt: ago(9),
       message: "Tenho muito interesse em People.",
       docId: "d1",
       strengths: ["Comunicação", "Organização"],
       toDevelop: ["Pacote Office"],
+      stepDates: [ago(9), ago(6), ago(2)],
+      interview: { date: nextThursday(), time: "14:00", place: "Online · Google Meet", link: "https://meet.google.com/" },
     },
     {
       jobId: "mkt-frevo",
       step: 3,
       result: "recusado",
-      appliedAt: new Date(Date.now() - 20 * 864e5).toISOString(),
+      appliedAt: ago(20),
       message: "",
       docId: "d1",
-      feedback: "Recomendamos desenvolver as habilidades recomendadas e se candidatar novamente.",
+      feedback: "Gostamos da sua redação. Para uma próxima vaga, recomendamos desenvolver Redes sociais (habilidade essencial nesta vaga) e Canva (recomendada) e se candidatar novamente.",
+      stepDates: [ago(20), ago(16), ago(11), ago(5)],
       strengths: ["Redação"],
       toDevelop: ["Redes sociais", "Canva"],
     },
@@ -160,9 +183,9 @@ export const initialState: State = {
     },
   ],
   notifications: [
-    { id: "n1", text: "Mangue Labs moveu sua candidatura para Entrevista.", at: new Date(Date.now() - 2 * 864e5).toISOString(), read: false },
-    { id: "n2", text: "Nova vaga em Administração em Recife: Banco Sertão.", at: new Date(Date.now() - 864e5).toISOString(), read: false },
-    { id: "n3", text: "Frevo Comunicação enviou o retorno da sua candidatura.", at: new Date(Date.now() - 5 * 864e5).toISOString(), read: true },
+    { id: "n1", text: "Mangue Labs moveu sua candidatura para Entrevista.", at: new Date(Date.now() - 2 * 864e5).toISOString(), read: false, kind: "etapa" },
+    { id: "n2", text: "Nova vaga em Administração em Recife: Banco Sertão.", at: new Date(Date.now() - 864e5).toISOString(), read: false, kind: "vaga" },
+    { id: "n3", text: "Frevo Comunicação enviou o retorno da sua candidatura.", at: new Date(Date.now() - 5 * 864e5).toISOString(), read: true, kind: "retorno" },
   ],
   company: { verification: "aprovado", cnpj: "12.345.678/0001-90", fileName: "cartao-cnpj.pdf", name: "Mangue Labs" },
   recruiterJobs: JOBS.filter((j) => j.companyId === "porto-digital").map((j) => ({ ...j, published: true })),
@@ -182,7 +205,25 @@ function load() {
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const saved = JSON.parse(raw);
-      state = { ...initialState, ...saved, student: { ...initialState.student, ...saved.student }, company: { ...initialState.company, ...saved.company } };
+      const student = { ...initialState.student, ...saved.student };
+      // dados de exemplo para perfis salvos antes de existirem esses campos
+      for (const k of ["name", "course", "institution", "semester"] as const) if (!student[k]) student[k] = initialState.student[k];
+      if (!student.links || typeof student.links !== "object") student.links = { ...initialState.student.links };
+      if (!Array.isArray(student.skills)) student.skills = [...initialState.student.skills];
+      const seedApps = initialState.applications;
+      const applications = Array.isArray(saved.applications)
+        ? saved.applications.map((a: Application) => {
+            const seed = seedApps.find((x) => x.jobId === a?.jobId && !a.candidateId);
+            if (!seed) return a;
+            return {
+              ...a,
+              stepDates: a.stepDates ?? seed.stepDates,
+              interview: a.interview ?? seed.interview,
+              feedback: a.feedback && /habilidades recomendadas/i.test(a.feedback) ? seed.feedback : a.feedback,
+            };
+          })
+        : initialState.applications;
+      state = { ...initialState, ...saved, applications, student, company: { ...initialState.company, ...saved.company } };
     }
   } catch {
     /* ignore */
@@ -241,6 +282,40 @@ export { defaultValidUntil };
 export function daysUntil(iso: string) {
   if (!iso) return 0;
   return Math.ceil((new Date(iso).getTime() - Date.now()) / 864e5);
+}
+
+/** Notificações sempre da mais recente para a mais antiga */
+export function sortNotifications<T extends { at: string }>(list: T[]): T[] {
+  return [...list].sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
+}
+
+export function notificationKind(n: AppNotification): NotificationKind {
+  if (n.kind) return n.kind;
+  if (/retorno|preenchida|encerrada/i.test(n.text)) return "retorno";
+  if (/nova vaga/i.test(n.text)) return "vaga";
+  if (/mensagem/i.test(n.text)) return "mensagem";
+  if (/enviada/i.test(n.text)) return "candidatura";
+  return "etapa";
+}
+
+export const NOTIFICATION_LABEL: Record<NotificationKind, string> = {
+  etapa: "Mudança de etapa",
+  retorno: "Retorno recebido",
+  vaga: "Nova vaga",
+  mensagem: "Nova mensagem",
+  candidatura: "Candidatura enviada",
+};
+
+export function threadUnread(t: Thread) {
+  const last = t.messages[t.messages.length - 1];
+  return !!last && last.from === "them" && (!t.readAt || new Date(last.at) > new Date(t.readAt));
+}
+
+/** Datas de cada etapa concluída (até `step`), usando as registradas ou estimando a partir da inscrição */
+export function stepDatesFor(a: Application): string[] {
+  const out: string[] = [];
+  for (let i = 0; i <= a.step; i++) out.push(a.stepDates?.[i] ?? out[i - 1] ?? a.appliedAt);
+  return out;
 }
 
 export function fmtDate(iso: string) {
