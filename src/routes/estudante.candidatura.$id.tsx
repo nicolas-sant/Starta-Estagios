@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, MessageCircle, TrendingUp, Sparkles } from "lucide-react";
+import { ArrowLeft, MessageCircle, TrendingUp, Sparkles, CalendarDays, Clock, MapPin, Video, Megaphone } from "lucide-react";
 import { Card, CompanyAvatar, DocChip, Stepper } from "@/components/starta/ui";
 import { JOBS, STUDENT_STEPS, getCompany } from "@/lib/data";
-import { useStore } from "@/lib/store";
+import { stepDatesFor, useStore } from "@/lib/store";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/estudante/candidatura/$id")({
   head: () => ({
@@ -31,12 +32,26 @@ function Candidatura() {
   const doc = docs.find((d) => d.id === a.docId);
   const thread = threads.find((t) => t.jobId === id);
 
+  const dates = stepDatesFor(a);
   const timeline = [
-    { t: "Candidatura enviada", d: a.appliedAt, done: true },
-    { t: "Currículo em triagem", done: a.step >= 1 },
-    { t: "Entrevista", done: a.step >= 2 },
-    { t: a.result === "recusado" ? "Não selecionado" : a.result === "aprovado" ? "Aprovado" : "Resultado", done: a.step >= 3 },
+    { t: "Candidatura enviada", d: dates[0], done: true },
+    { t: "Currículo em triagem", d: dates[1], done: a.step >= 1 },
+    { t: "Entrevista", d: dates[2], done: a.step >= 2 },
+    { t: a.result === "recusado" ? "Não selecionado" : a.result === "aprovado" ? "Aprovado" : "Resultado", d: dates[3], done: a.step >= 3 },
   ];
+  const levelOf = (name: string) => j.skills.find((k) => k.name.toLowerCase() === name.toLowerCase())?.level;
+  const devEssential = a.toDevelop.filter((n) => levelOf(n) === "essencial");
+  // texto do retorno nunca pode chamar de "recomendadas" habilidades que são essenciais na vaga
+  const feedback = a.feedback && devEssential.length && /habilidades recomendadas/i.test(a.feedback)
+    ? a.feedback.replace(/as habilidades recomendadas/i, "as habilidades listadas em \"A desenvolver\" (incluindo as essenciais)")
+    : a.feedback;
+  const resultOut = a.step >= 3 && !!a.result;
+  const interview = a.step === 2 && !a.result ? a.interview : undefined;
+  const LevelTag = ({ name }: { name: string }) => {
+    const lv = levelOf(name);
+    if (!lv) return null;
+    return <span className={cn("rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide", lv === "essencial" ? "bg-essential-foreground text-essential" : "bg-recommended-foreground text-recommended")}>{lv === "essencial" ? "Essencial" : "Recomendado"}</span>;
+  };
 
   return (
     <div className="mx-auto max-w-3xl space-y-4">
@@ -52,21 +67,45 @@ function Candidatura() {
         <div className="mt-5"><Stepper steps={STUDENT_STEPS} current={a.step} failed={a.result === "recusado"} /></div>
       </Card>
 
-      {a.feedback && (
-        <Card className={a.result === "recusado" ? "border-destructive/30" : "border-moss"}>
-          <p className="label-mono text-muted-foreground">Retorno do recrutador</p>
-          <p className="mt-2 text-deep-space">"{a.feedback}"</p>
-        </Card>
+      {feedback && (
+        <section className={cn("rounded-2xl border-2 p-5 shadow-[var(--shadow-card)]", a.result === "recusado" ? "border-destructive bg-card" : a.result === "aprovado" ? "border-moss bg-recommended" : "border-primary bg-essential")}>
+          <p className="flex items-center gap-2 font-display text-lg font-extrabold text-deep-space">
+            <Megaphone className={cn("h-6 w-6", a.result === "recusado" ? "text-destructive" : "text-primary")} />
+            {resultOut ? (a.result === "aprovado" ? "Você foi aprovado! Retorno do recrutador" : "Resultado: retorno do recrutador") : "Retorno do recrutador"}
+          </p>
+          <p className="mt-3 text-[17px] leading-relaxed text-deep-space">"{feedback}"</p>
+        </section>
+      )}
+
+      {a.step === 2 && !a.result && (
+        <section className="rounded-2xl border-2 border-deep-space bg-lemon p-5 text-deep-space shadow-[var(--shadow-card)]">
+          <p className="label-mono">Sua entrevista</p>
+          {interview ? (
+            <>
+              <p className="mt-1 font-display text-xl font-extrabold">{new Date(interview.date + "T12:00:00").toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" })}</p>
+              <ul className="mt-3 space-y-2 text-[15px] font-medium">
+                <li className="flex items-center gap-2"><CalendarDays className="h-5 w-5" /> {new Date(interview.date + "T12:00:00").toLocaleDateString("pt-BR")}</li>
+                <li className="flex items-center gap-2"><Clock className="h-5 w-5" /> {interview.time}</li>
+                <li className="flex items-center gap-2">{interview.link ? <Video className="h-5 w-5" /> : <MapPin className="h-5 w-5" />} {interview.place}</li>
+              </ul>
+              {interview.link && (
+                <a href={interview.link} target="_blank" rel="noopener noreferrer" className="mt-4 flex h-12 items-center justify-center rounded-[10px] bg-deep-space font-semibold text-primary-foreground">Abrir link da entrevista</a>
+              )}
+            </>
+          ) : (
+            <p className="mt-1 text-[15px]">A empresa ainda não informou dia, horário e local. Você será avisado aqui assim que for marcado.</p>
+          )}
+        </section>
       )}
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Card>
           <p className="flex items-center gap-2 font-display font-bold text-deep-space"><Sparkles className="h-5 w-5 text-recommended-foreground" /> Pontos fortes</p>
-          <div className="mt-2 flex flex-wrap gap-2">{a.strengths.map((s) => <span key={s} className="rounded-full bg-recommended px-3 py-1 text-xs font-semibold text-recommended-foreground">{s}</span>)}</div>
+          <div className="mt-2 flex flex-wrap gap-2">{a.strengths.map((s) => <span key={s} className="inline-flex items-center gap-1.5 rounded-full bg-recommended py-1 pl-3 pr-1 text-xs font-semibold text-recommended-foreground">{s}<LevelTag name={s} /></span>)}</div>
         </Card>
         <Card>
           <p className="flex items-center gap-2 font-display font-bold text-deep-space"><TrendingUp className="h-5 w-5 text-primary" /> A desenvolver</p>
-          <div className="mt-2 flex flex-wrap gap-2">{a.toDevelop.map((s) => <span key={s} className="rounded-full bg-essential px-3 py-1 text-xs font-semibold text-essential-foreground">{s}</span>)}</div>
+          <div className="mt-2 flex flex-wrap gap-2">{a.toDevelop.map((s) => <span key={s} className="inline-flex items-center gap-1.5 rounded-full bg-essential py-1 pl-3 pr-1 text-xs font-semibold text-essential-foreground">{s}<LevelTag name={s} /></span>)}</div>
         </Card>
       </div>
 
@@ -77,7 +116,7 @@ function Candidatura() {
             <li key={t.t} className="relative">
               <span className={`absolute -left-[23px] top-1 h-3 w-3 rounded-full ${t.done ? "bg-moss" : "bg-neutral-tag"}`} />
               <p className={t.done ? "font-medium text-deep-space" : "text-muted-foreground"}>{t.t}</p>
-              {t.d && <p className="label-mono text-muted-foreground">{new Date(t.d).toLocaleDateString("pt-BR")}</p>}
+              {t.done && t.d && <p className="label-mono text-muted-foreground">{new Date(t.d).toLocaleDateString("pt-BR")}</p>}
             </li>
           ))}
         </ol>
