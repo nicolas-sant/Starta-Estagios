@@ -40,7 +40,7 @@ function Onboarding() {
         <>
           <h1 className="text-2xl text-deep-space">Que tipo de vaga te interessa?</h1>
           <p className="mt-1 text-muted-foreground">Escolha uma ou mais áreas.</p>
-          <div className="mt-6 grid grid-cols-2 gap-2">
+          <div className="mt-6 grid min-h-[364px] grid-cols-2 content-start gap-2">
             {AREAS.map((a) => {
               const on = interests.includes(a);
               return (
@@ -55,9 +55,12 @@ function Onboarding() {
               );
             })}
           </div>
-          <PrimaryButton className="mt-8 w-full" disabled={!interests.length} onClick={() => setStep(2)}>
-            Continuar
-          </PrimaryButton>
+          <div className="mt-8 flex gap-3">
+            <GhostButton className="invisible" aria-hidden tabIndex={-1}>Voltar</GhostButton>
+            <PrimaryButton className="flex-1" disabled={!interests.length} onClick={() => setStep(2)}>
+              Continuar
+            </PrimaryButton>
+          </div>
         </>
       ) : (
         <>
@@ -75,7 +78,9 @@ function Onboarding() {
               className="h-12 w-full rounded-[10px] border border-border bg-card pl-12 pr-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
-          <ul className="mt-3 space-y-1">
+          <p className="mt-3 h-5 text-sm font-semibold text-primary">{city ? `Selecionada: ${city}` : ""}</p>
+          <ul className="mt-1 h-[288px] space-y-1 overflow-y-auto">
+            {!results.length && <li className="p-3 text-sm text-muted-foreground">Nenhuma cidade encontrada.</li>}
             {results.map((c) => (
               <li key={c}>
                 <button
