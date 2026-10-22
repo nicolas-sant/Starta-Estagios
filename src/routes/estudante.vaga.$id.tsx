@@ -1,9 +1,9 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, Clock, Laptop, MapPin, Wallet, X, Users, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Clock, Laptop, MapPin, Wallet, X, Users, AlertTriangle, ShieldAlert, ListChecks, Info } from "lucide-react";
 import { Card, CompanyAvatar, DocChip, NeutralTag, PrimaryButton, SkillTag, VerifiedSeal } from "@/components/starta/ui";
-import { JOBS, brl, getCompany, hasReachPenalty, hasTrustSeal, type Job } from "@/lib/data";
+import { DEFAULT_PROCESS, JOBS, brl, getCompany, hasReachPenalty, hasTrustSeal, type Job } from "@/lib/data";
 import { getState, setState, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
@@ -35,6 +35,8 @@ function VagaPage() {
   const seal = hasTrustSeal(job);
   const sorted = [...job.skills].sort((a) => (a.level === "essencial" ? -1 : 1));
 
+  const process = job.process ?? DEFAULT_PROCESS;
+  const verified = student.verification === "aprovado" || getState().student.verification === "aprovado";
   const closed = recruiterJobs.some((j) => j.id === id && (!j.published || j.status === "filled" || j.status === "deleted"));
   const send = () => {
     if (closed) { toast.error("Esta vaga foi encerrada."); return; }
@@ -43,12 +45,12 @@ function VagaPage() {
     const myStrengths = job.skills.filter((s) => s.level === "essencial").map((s) => s.name);
     setState((s) => ({
       ...s,
-      candidates: [...s.candidates, { id: candidateId, name: s.student.name || "Estudante", course: s.student.course, institution: s.student.institution, semester: Number(s.student.semester) || 1, city: s.student.city, jobId: job.id, stage: "Recebido", verified: s.student.verification === "aprovado", match: 0, docTitle: s.docs.find((d) => d.id === docId)?.title || "Currículo", studentLinked: true, chat: [], bio: msg.trim(), skills: [] }],
+      candidates: [...s.candidates, { id: candidateId, name: s.student.name || "Estudante", course: s.student.course, institution: s.student.institution, semester: Number(s.student.semester) || 1, city: s.student.city, jobId: job.id, stage: "Recebido", verified: s.student.verification === "aprovado", match: 0, docTitle: s.docs.find((d) => d.id === docId)?.title || "Currículo", links: s.student.links, studentLinked: true, chat: [], bio: msg.trim(), skills: [] }],
       applications: [
-        { candidateId, jobId: job.id, step: 0, appliedAt: new Date().toISOString(), message: msg.trim().slice(0, 500), docId, strengths: myStrengths.slice(0, 2), toDevelop: job.skills.filter((x) => x.level === "recomendado").map((x) => x.name) },
+        { candidateId, jobId: job.id, step: 0, appliedAt: new Date().toISOString(), message: msg.trim().slice(0, 500), docId, strengths: myStrengths.slice(0, 2), toDevelop: job.skills.filter((x) => x.level === "recomendado").map((x) => x.name), stepDates: [new Date().toISOString()] },
         ...s.applications,
       ],
-      notifications: [{ id: crypto.randomUUID(), text: `Candidatura enviada: ${job.title}. Você verá cada etapa aqui.`, at: new Date().toISOString(), read: false }, ...s.notifications],
+      notifications: [{ id: crypto.randomUUID(), text: `Candidatura enviada: ${job.title}. Você verá cada etapa aqui.`, at: new Date().toISOString(), read: false, kind: "candidatura" as const }, ...s.notifications],
     }));
     setSheet(false);
     toast.success("Candidatura enviada!");
@@ -56,7 +58,7 @@ function VagaPage() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl space-y-4 pb-24">
+    <div className="mx-auto max-w-3xl space-y-4 pb-40">
       <button onClick={() => history.back()} className="flex h-11 items-center gap-1 text-sm font-semibold text-primary"><ArrowLeft className="h-5 w-5" /> Voltar</button>
 
       <Card>
@@ -91,11 +93,29 @@ function VagaPage() {
           <span>Retorno médio: {c?.avgResponseDays} dias</span>
           <span>{c?.responseRate}% recebem resposta</span>
         </div>
+        <p className="mt-1.5 flex items-start gap-1.5 text-xs text-muted-foreground">
+          <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" /> "{c?.responseRate}% recebem resposta" é a proporção de candidatos que receberam algum retorno desta empresa no Starta, aprovados ou não.
+        </p>
         {hasReachPenalty(job.companyId) && (
           <p className="mt-3 flex items-start gap-2 rounded-xl bg-destructive/10 p-3 text-sm text-destructive">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" /> Esta empresa responde poucos candidatos. Alcance reduzido no feed.
           </p>
         )}
+      </Card>
+
+      <Card>
+        <h2 className="flex items-center gap-2 text-lg text-deep-space"><ListChecks className="h-5 w-5 text-primary" /> Como é o processo</h2>
+        <p className="text-sm text-muted-foreground">{process.steps.length} etapas · {process.technicalTest ? "inclui teste técnico" : "sem teste técnico"}</p>
+        <ol className="mt-3 grid gap-2 sm:grid-cols-4">
+          {process.steps.map((p, i) => (
+            <li key={p} className="flex items-center gap-2 rounded-xl bg-mint p-3 text-sm font-semibold text-deep-space">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">{i + 1}</span>{p}
+            </li>
+          ))}
+        </ol>
+        <p className="mt-3 text-sm text-deep-space">
+          {process.technicalTest ? "Há um teste técnico no processo. Você será avisado antes dele." : "Não há teste técnico: nenhuma etapa extra será adicionada no meio do processo."}
+        </p>
       </Card>
 
       <Card>
@@ -123,10 +143,19 @@ function VagaPage() {
             <Link to="/estudante/candidatura/$id" params={{ id: job.id }} className="flex h-12 items-center justify-center rounded-[10px] bg-recommended font-semibold text-recommended-foreground">
               ✓ Candidatado · ver progresso
             </Link>
-          ) : (
-            <PrimaryButton className="w-full" onClick={() => (student.verification === "aprovado" || getState().student.verification === "aprovado" ? setSheet(true) : toast.error("Verifique sua matrícula antes de se candidatar."))}>
+          ) : verified ? (
+            <PrimaryButton className="w-full" onClick={() => setSheet(true)}>
               Candidatar-se
             </PrimaryButton>
+          ) : (
+            <div className="space-y-2">
+              <p className="flex items-start gap-2 rounded-xl bg-lemon p-3 text-sm font-medium text-deep-space">
+                <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" /> Você precisa verificar sua matrícula antes de se candidatar. Leva menos de 2 minutos.
+              </p>
+              <PrimaryButton className="w-full" onClick={() => nav({ to: "/verificacao" })}>
+                Verificar matrícula para se candidatar
+              </PrimaryButton>
+            </div>
           )}
         </div>
       </div>
