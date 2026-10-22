@@ -1,10 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, Send } from "lucide-react";
 import { z } from "zod";
 import { CompanyAvatar } from "@/components/starta/ui";
 import { JOBS, getCompany } from "@/lib/data";
-import { setState, useStore } from "@/lib/store";
+import { setState, threadUnread, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/estudante/mensagens")({
@@ -36,6 +36,20 @@ function Mensagens() {
     const j = jobs.find((x) => x.id === jobId);
     active = { id: t, jobId, with: `Recrutador · ${getCompany(j?.companyId ?? "")?.name ?? ""}`, messages: [] };
   }
+
+  const activeId = active?.id;
+  const activeLast = active?.messages[active.messages.length - 1]?.at;
+  useEffect(() => {
+    if (!activeId) return;
+    setState((s) => (s.threads.some((x) => x.id === activeId && threadUnread(x)) ? { ...s, threads: s.threads.map((x) => (x.id === activeId ? { ...x, readAt: new Date().toISOString() } : x)) } : s));
+  }, [activeId, activeLast]);
+  const lastAt = (th: (typeof threads)[number]) => th.messages[th.messages.length - 1]?.at ?? "";
+  const ordered = [...threads].sort((a, b) => lastAt(b).localeCompare(lastAt(a)));
+  const fmtWhen = (iso: string) => {
+    const d = new Date(iso);
+    const today = new Date().toDateString() === d.toDateString();
+    return today ? d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : d.toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+  };
 
   const send = () => {
     const v = text.trim().slice(0, 1000);
@@ -83,17 +97,26 @@ function Mensagens() {
     <div className="space-y-4">
       <h1 className="text-2xl text-deep-space lg:text-3xl">Mensagens</h1>
       <ul className="space-y-2">
-        {threads.map((th) => {
+        {ordered.map((th) => {
           const j = jobs.find((x) => x.id === th.jobId);
           const c = getCompany(j?.companyId ?? "");
           const last = th.messages[th.messages.length - 1];
+          const unread = threadUnread(th);
           return (
             <li key={th.id}>
-              <Link to="/estudante/mensagens" search={{ t: th.id }} className="flex items-center gap-3 rounded-2xl bg-card p-3 shadow-[var(--shadow-card)]">
+              <Link to="/estudante/mensagens" search={{ t: th.id }} className={cn("relative flex items-center gap-3 overflow-hidden rounded-2xl border p-3 shadow-[var(--shadow-card)]", unread ? "border-primary/40 bg-essential" : "border-border bg-card")}>
+                {unread && <span aria-hidden className="absolute inset-y-0 left-0 w-1.5 bg-primary" />}
                 <CompanyAvatar initials={c?.initials ?? "?"} size={44} />
                 <div className="min-w-0 flex-1">
-                  <p className="font-display font-bold text-deep-space">{th.with}</p>
-                  <p className="truncate text-sm text-muted-foreground">{last?.text}</p>
+                  <div className="flex items-baseline justify-between gap-2">
+                    <p className={cn("truncate font-display text-deep-space", unread ? "font-extrabold" : "font-bold")}>{th.with}</p>
+                    {last && <span className={cn("shrink-0 text-xs", unread ? "font-bold text-primary" : "text-muted-foreground")}>{fmtWhen(last.at)}</span>}
+                  </div>
+                  {j && <p className="truncate text-xs text-muted-foreground">{j.title}</p>}
+                  <div className="flex items-center gap-2">
+                    <p className={cn("min-w-0 flex-1 truncate text-sm", unread ? "font-semibold text-deep-space" : "text-muted-foreground")}>{last ? `${last.from === "me" ? "Você: " : ""}${last.text}` : ""}</p>
+                    {unread && <span className="shrink-0 rounded-full bg-primary px-2 py-0.5 text-[11px] font-bold text-primary-foreground">Nova</span>}
+                  </div>
                 </div>
               </Link>
             </li>

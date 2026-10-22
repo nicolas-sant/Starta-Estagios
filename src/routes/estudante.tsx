@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-rout
 import { useEffect, useState } from "react";
 import { Bell, Eye, Home, LayoutList, LogOut, Menu, MessageCircle, Search, Settings, User, X } from "lucide-react";
 import { Logo } from "@/components/starta/ui";
-import { setState, useStore, type RecruiterJob } from "@/lib/store";
+import { setState, threadUnread, useStore, type RecruiterJob } from "@/lib/store";
 import { listPublicJobs } from "@/lib/public-jobs.functions";
 import { cn } from "@/lib/utils";
 
@@ -39,6 +39,9 @@ function StudentLayout() {
   const notifs = useStore((s) => s.notifications);
   const settings = useStore((s) => s.settings);
   const unread = notifs.filter((n) => !n.read).length;
+  const threads = useStore((s) => s.threads);
+  const unreadMsgs = threads.filter(threadUnread).length;
+  const badge = (to: string) => (to === "/estudante/painel" ? unread : to === "/estudante/mensagens" ? unreadMsgs : 0);
 
   return (
     <div className={cn("min-h-screen bg-background pb-20 lg:grid lg:grid-cols-[240px_1fr] lg:pb-0", settings.largeText && "text-[17px]")}>
@@ -66,6 +69,7 @@ function StudentLayout() {
           {NAV.map((n) => (
             <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="flex h-12 items-center gap-3 rounded-xl px-3 hover:bg-sidebar-accent">
               <n.icon className="h-5 w-5" /> {n.label}
+              {badge(n.to) > 0 && <span className="ml-auto flex h-6 min-w-6 items-center justify-center rounded-full bg-lemon px-1.5 text-xs font-bold text-deep-space" aria-label={`${badge(n.to)} novidades`}>{badge(n.to)}</span>}
             </Link>
           ))}
           <div className="mt-auto" />
@@ -101,10 +105,11 @@ function StudentLayout() {
               <Link
                 to={n.to}
                 activeOptions={{ exact: "exact" in n }}
-                className="flex h-full min-w-12 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-muted-foreground"
+                className="relative flex h-full min-w-12 flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-muted-foreground"
                 activeProps={{ className: "text-primary" }}
               >
                 <n.icon className="h-6 w-6" strokeWidth={1.8} />
+                {badge(n.to) > 0 && <span className="absolute left-1/2 top-1.5 ml-1.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-card" aria-hidden />}
                 {n.label}
               </Link>
             </li>

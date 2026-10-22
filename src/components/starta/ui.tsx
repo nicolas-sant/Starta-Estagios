@@ -150,11 +150,18 @@ export function CompanyAvatar({ initials, size = 40 }: { initials: string; size?
   );
 }
 
-export function JobCard({ job, applied }: { job: Job; applied?: boolean }) {
+export function JobCard({ job, applied, match }: { job: Job; applied?: boolean; match?: string[] }) {
   const c = getCompany(job.companyId);
   const seal = hasTrustSeal(job);
+  const matched = !!match?.length;
   return (
-    <article className="relative rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] transition hover:border-primary/40">
+    <article className={cn("relative rounded-2xl border bg-card p-4 shadow-[var(--shadow-card)] transition hover:border-primary/40", matched ? "border-2 border-moss" : "border-border")}>
+      {matched && (
+        <p className="-mx-4 -mt-4 mb-3 flex flex-wrap items-center gap-x-2 rounded-t-[14px] bg-recommended px-4 py-2 text-xs font-bold text-recommended-foreground">
+          <CheckCircle2 className="h-4 w-4" /> Combina com você
+          <span className="font-medium">· {match!.join(" · ")}</span>
+        </p>
+      )}
       <div className="flex items-start gap-3">
         <CompanyAvatar initials={c?.initials ?? "?"} />
         <div className="min-w-0 flex-1 pr-20">
@@ -167,7 +174,7 @@ export function JobCard({ job, applied }: { job: Job; applied?: boolean }) {
             </Link>
           )}
         </div>
-        <div className="absolute right-4 top-4">{seal ? <VerifiedSeal small label="Confiável" /> : <NeutralTag>Sem selo</NeutralTag>}</div>
+        <div className={cn("absolute right-4", matched ? "top-14" : "top-4")}>{seal ? <VerifiedSeal small label="Confiável" /> : <NeutralTag>Sem selo</NeutralTag>}</div>
       </div>
       <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{job.summary}</p>
       <div className="mt-3 flex flex-wrap gap-2">
@@ -287,18 +294,7 @@ export function UploadArea({
         <span className="text-sm text-muted-foreground">{status === "vazio" ? "Apenas PDF · até 5 MB" : status === "recusado" ? "Toque para enviar outro arquivo" : fileName ? "PDF" : ""}</span>
       </button>
       <input ref={ref} type="file" accept="application/pdf,.pdf" className="hidden" onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])} />
-      <div className="mt-4 grid grid-cols-4 gap-2">
-        {(["enviado", "analise", "aprovado"] as const).map((k, i) => {
-          const order = ["vazio", "enviado", "analise", "aprovado", "recusado"];
-          const reached = status === "recusado" ? i < 2 : order.indexOf(status) >= i + 1;
-          return (
-            <div key={k} className={cn("rounded-lg px-2 py-2 text-center label-mono", reached ? "bg-recommended text-recommended-foreground" : "bg-neutral-tag text-muted-foreground")}>
-              {states[k].label}
-            </div>
-          );
-        })}
-        <div className={cn("rounded-lg px-2 py-2 text-center label-mono", status === "recusado" ? "bg-destructive/10 text-destructive" : "bg-neutral-tag text-muted-foreground")}>Recusado</div>
-      </div>
+      <VerificationProgress status={status} />
       {status === "recusado" && refuseReason && (
         <p className="mt-3 rounded-xl bg-destructive/10 p-3 text-sm text-destructive">
           <strong>Motivo:</strong> {refuseReason}
@@ -319,4 +315,43 @@ export function SectionTitle({ children, action }: { children: ReactNode; action
 
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
   return <div className={cn("rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)]", className)}>{children}</div>;
+}
+
+/** Indicador de progresso (não clicável) da verificação de matrícula */
+export function VerificationProgress({ status }: { status: VerificationStatus }) {
+  const last = status === "recusado" ? "Recusado" : "Aprovado";
+  const steps = ["Enviado", "Em análise", last];
+  const idx = status === "vazio" ? -1 : status === "enviado" ? 0 : status === "analise" ? 1 : 2;
+  return (
+    <div className="mt-4" role="group" aria-label="Andamento da verificação">
+      <p className="label-mono mb-2 text-muted-foreground">Andamento</p>
+      <ol className="flex items-start">
+        {steps.map((s, i) => {
+          const done = i < idx;
+          const current = i === idx;
+          const bad = current && status === "recusado";
+          return (
+            <li key={s} aria-current={current ? "step" : undefined} className="flex flex-1 flex-col items-start last:w-24 last:flex-none last:items-end">
+              <div className={cn("flex w-full items-center", i === steps.length - 1 && "justify-end")}>
+                <span
+                  className={cn(
+                    "h-3.5 w-3.5 shrink-0 rounded-full",
+                    done && "bg-moss",
+                    current && !bad && (status === "aprovado" ? "bg-moss ring-4 ring-moss/30" : "bg-primary ring-4 ring-primary/25"),
+                    bad && "bg-destructive ring-4 ring-destructive/25",
+                    !done && !current && "bg-neutral-tag",
+                  )}
+                />
+                {i < steps.length - 1 && <span className={cn("h-0.5 flex-1", i < idx ? "bg-moss" : "bg-neutral-tag")} />}
+              </div>
+              <span className={cn("mt-1.5 whitespace-nowrap text-xs", current ? (bad ? "font-bold text-destructive" : "font-bold text-deep-space") : done ? "text-deep-space" : "text-muted-foreground")}>
+                {s}
+                {current && <span className="sr-only"> (etapa atual)</span>}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
 }

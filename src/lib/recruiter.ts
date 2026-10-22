@@ -33,9 +33,13 @@ export function advanceCandidate(id: string, stage?: Stage) {
         const { result: _oldResult, ...application } = a;
         const step =
           next === "Recebido" ? 0 : next === "Triagem" ? 1 : next === "Entrevista" ? 2 : 3;
+        const stepDates = [...(application.stepDates ?? [application.appliedAt])].slice(0, step);
+        while (stepDates.length < step) stepDates.push(new Date().toISOString());
+        stepDates[step] = new Date().toISOString();
         return {
           ...application,
           step,
+          stepDates,
           ...(next === "Aprovado"
             ? { result: "aprovado" as const }
             : next === "Recusado"
@@ -50,6 +54,7 @@ export function advanceCandidate(id: string, stage?: Stage) {
               text: `Sua candidatura foi atualizada para ${next}.`,
               at: new Date().toISOString(),
               read: false,
+              kind: (next === "Aprovado" || next === "Recusado" ? "retorno" : "etapa") as "retorno" | "etapa",
             },
             ...s.notifications,
           ]
@@ -92,6 +97,7 @@ export function sendCandidateMessage(id: string, text: string) {
               text: `Nova mensagem de ${s.company.name}.`,
               at: message.at,
               read: false,
+              kind: "mensagem" as const,
             },
             ...s.notifications,
           ]
@@ -125,7 +131,7 @@ export function setJobStatus(id: string, status: "filled" | "deleted") {
       applications: s.applications.map((a) => (a.jobId === id ? { ...a, feedback } : a)),
       notifications: s.applications.some((a) => a.jobId === id)
         ? [
-            { id: crypto.randomUUID(), text: feedback, at: new Date().toISOString(), read: false },
+            { id: crypto.randomUUID(), text: feedback, at: new Date().toISOString(), read: false, kind: "retorno" as const },
             ...s.notifications,
           ]
         : s.notifications,
