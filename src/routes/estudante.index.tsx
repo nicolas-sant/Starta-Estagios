@@ -23,9 +23,17 @@ function Feed() {
   const apps = useStore((s) => s.applications);
   const extra = useStore((s) => s.recruiterJobs);
   const jobs = allJobs({ ...getState(), recruiterJobs: extra });
+  const mySkills = (st.skills ?? []).map((x) => x.toLowerCase());
+  const matchOf = (j: (typeof jobs)[number]) => {
+    const reasons: string[] = [];
+    if (st.city && j.city === st.city) reasons.push("Na sua cidade");
+    const hits = j.skills.filter((k) => mySkills.includes(k.name.toLowerCase())).map((k) => k.name);
+    if (hits.length) reasons.push(`Você tem: ${hits.join(", ")}`);
+    return hits.length ? reasons : [];
+  };
   const sorted = [...jobs].sort((a, b) => {
-    const ia = st.interests.includes(a.area) ? 30 : 0;
-    const ib = st.interests.includes(b.area) ? 30 : 0;
+    const ia = (st.interests.includes(a.area) ? 30 : 0) + (matchOf(a).length ? 50 : 0);
+    const ib = (st.interests.includes(b.area) ? 30 : 0) + (matchOf(b).length ? 50 : 0);
     return rankScore(b) + ib - (rankScore(a) + ia);
   });
   const d = daysUntil(st.validUntil);
@@ -68,7 +76,7 @@ function Feed() {
         <SectionTitle action={<span className="label-mono text-muted-foreground">{sorted.length} vagas</span>}>Para você</SectionTitle>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
           {sorted.map((j) => (
-            <JobCard key={j.id} job={j} applied={apps.some((a) => a.jobId === j.id)} />
+            <JobCard key={j.id} job={j} match={matchOf(j)} applied={apps.some((a) => a.jobId === j.id)} />
           ))}
         </div>
       </section>
