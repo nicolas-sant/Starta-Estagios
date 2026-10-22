@@ -332,7 +332,7 @@ export function VerificationProgress({ status }: { status: VerificationStatus })
           const bad = current && status === "recusado";
           return (
             <li key={s} aria-current={current ? "step" : undefined} className="flex flex-1 flex-col items-start last:w-24 last:flex-none last:items-end">
-              <div className="flex w-full items-center">
+              <div className={cn("flex w-full items-center", i === steps.length - 1 && "justify-end")}>
                 <span
                   className={cn(
                     "h-3.5 w-3.5 shrink-0 rounded-full",
