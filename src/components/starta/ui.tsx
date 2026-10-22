@@ -331,7 +331,7 @@ export function VerificationProgress({ status }: { status: VerificationStatus })
           const current = i === idx;
           const bad = current && status === "recusado";
           return (
-            <li key={s} aria-current={current ? "step" : undefined} className="flex flex-1 flex-col items-center text-center last:flex-none">
+            <li key={s} aria-current={current ? "step" : undefined} className="flex flex-1 flex-col items-start last:w-24 last:flex-none last:items-end">
               <div className="flex w-full items-center">
                 <span
                   className={cn(
@@ -344,7 +344,7 @@ export function VerificationProgress({ status }: { status: VerificationStatus })
                 />
                 {i < steps.length - 1 && <span className={cn("h-0.5 flex-1", i < idx ? "bg-moss" : "bg-neutral-tag")} />}
               </div>
-              <span className={cn("mt-1.5 -ml-2 w-20 text-left text-xs", current ? (bad ? "font-bold text-destructive" : "font-bold text-deep-space") : done ? "text-deep-space" : "text-muted-foreground")}>
+              <span className={cn("mt-1.5 whitespace-nowrap text-xs", current ? (bad ? "font-bold text-destructive" : "font-bold text-deep-space") : done ? "text-deep-space" : "text-muted-foreground")}>
                 {s}
                 {current && <span className="sr-only"> (etapa atual)</span>}
               </span>

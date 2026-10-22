@@ -29,7 +29,8 @@ function Feed() {
     if (st.city && j.city === st.city) reasons.push("Na sua cidade");
     const hits = j.skills.filter((k) => mySkills.includes(k.name.toLowerCase())).map((k) => k.name);
     if (hits.length) reasons.push(`Você tem: ${hits.join(", ")}`);
-    return hits.length ? reasons : [];
+    const essentialHit = j.skills.some((k) => k.level === "essencial" && mySkills.includes(k.name.toLowerCase()));
+    return essentialHit ? reasons : [];
   };
   const sorted = [...jobs].sort((a, b) => {
     const ia = (st.interests.includes(a.area) ? 30 : 0) + (matchOf(a).length ? 50 : 0);
