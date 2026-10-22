@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Accessibility, Lock, Settings, User, FileText, Link2, Pencil, ShieldCheck } from "lucide-react";
 import { Card, DocChip, Field, GhostButton, PrimaryButton, VerificationProgress, ValiditySeal, VerifiedSeal, UploadArea } from "@/components/starta/ui";
@@ -47,6 +47,10 @@ function Perfil() {
   const links = st.links ?? { github: "", portfolio: "", linkedin: "" };
   const [linkForm, setLinkForm] = useState(links);
   const [skillsText, setSkillsText] = useState((st.skills ?? []).join(", "));
+  const linksKey = JSON.stringify(st.links ?? {});
+  const skillsKey = (st.skills ?? []).join(", ");
+  useEffect(() => { setLinkForm(JSON.parse(linksKey).github !== undefined ? JSON.parse(linksKey) : { github: "", portfolio: "", linkedin: "" }); }, [linksKey]);
+  useEffect(() => { setSkillsText(skillsKey); }, [skillsKey]);
   const startEdit = () => { setForm({ name: st.name, course: st.course, institution: st.institution, semester: st.semester }); setEditing(true); };
   const saveProfile = () => {
     if (!form.name.trim()) { toast.error("Informe seu nome."); return; }

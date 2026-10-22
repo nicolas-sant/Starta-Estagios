@@ -133,6 +133,15 @@ export function CandidateDetails({
                 <div>
                   <p className="mb-1 text-sm text-muted-foreground">Currículo anexado</p>
                   <p className="break-words text-sm">{c.docTitle}</p>
+                  {c.links && (c.links.github || c.links.portfolio || c.links.linkedin) && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {(["github", "portfolio", "linkedin"] as const).filter((k) => c.links?.[k]).map((k) => (
+                        <a key={k} href={c.links![k]} target="_blank" rel="noopener noreferrer" className="rounded-full bg-essential px-3 py-1 text-xs font-semibold text-essential-foreground hover:underline">
+                          {k === "github" ? "GitHub" : k === "portfolio" ? "Portfólio" : "LinkedIn"} ↗
+                        </a>
+                      ))}
+                    </div>
+                  )}
                   <p className="mt-2 text-xs text-muted-foreground">
                     Arquivo de exemplo, sem PDF disponível.
                   </p>
