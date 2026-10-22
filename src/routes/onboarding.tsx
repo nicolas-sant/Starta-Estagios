@@ -38,9 +38,9 @@ function Onboarding() {
     <SetupShell step={step} total={4} label={step === 1 ? "Tipo de vaga" : "Cidade"}>
       {step === 1 ? (
         <>
-          <h1 className="text-2xl text-deep-space">Que tipo de vaga te interessa?</h1>
+          <h1 className="min-h-[2lh] text-2xl text-deep-space">Que tipo de vaga te interessa?</h1>
           <p className="mt-1 text-muted-foreground">Escolha uma ou mais áreas.</p>
-          <div className="mt-6 grid min-h-[364px] grid-cols-2 content-start gap-2">
+          <div className="mt-6 grid min-h-[372px] grid-cols-2 content-start gap-2">
             {AREAS.map((a) => {
               const on = interests.includes(a);
               return (
@@ -64,7 +64,7 @@ function Onboarding() {
         </>
       ) : (
         <>
-          <h1 className="text-2xl text-deep-space">Qual sua cidade?</h1>
+          <h1 className="min-h-[2lh] text-2xl text-deep-space">Qual sua cidade?</h1>
           <p className="mt-1 text-muted-foreground">Mostramos primeiro as vagas perto de você.</p>
           <div className="relative mt-6">
             <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
