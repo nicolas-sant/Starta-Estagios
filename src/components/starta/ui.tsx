@@ -287,18 +287,7 @@ export function UploadArea({
         <span className="text-sm text-muted-foreground">{status === "vazio" ? "Apenas PDF · até 5 MB" : status === "recusado" ? "Toque para enviar outro arquivo" : fileName ? "PDF" : ""}</span>
       </button>
       <input ref={ref} type="file" accept="application/pdf,.pdf" className="hidden" onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])} />
-      <div className="mt-4 grid grid-cols-4 gap-2">
-        {(["enviado", "analise", "aprovado"] as const).map((k, i) => {
-          const order = ["vazio", "enviado", "analise", "aprovado", "recusado"];
-          const reached = status === "recusado" ? i < 2 : order.indexOf(status) >= i + 1;
-          return (
-            <div key={k} className={cn("rounded-lg px-2 py-2 text-center label-mono", reached ? "bg-recommended text-recommended-foreground" : "bg-neutral-tag text-muted-foreground")}>
-              {states[k].label}
-            </div>
-          );
-        })}
-        <div className={cn("rounded-lg px-2 py-2 text-center label-mono", status === "recusado" ? "bg-destructive/10 text-destructive" : "bg-neutral-tag text-muted-foreground")}>Recusado</div>
-      </div>
+      <VerificationProgress status={status} />
       {status === "recusado" && refuseReason && (
         <p className="mt-3 rounded-xl bg-destructive/10 p-3 text-sm text-destructive">
           <strong>Motivo:</strong> {refuseReason}
