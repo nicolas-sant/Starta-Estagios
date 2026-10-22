@@ -150,11 +150,18 @@ export function CompanyAvatar({ initials, size = 40 }: { initials: string; size?
   );
 }
 
-export function JobCard({ job, applied }: { job: Job; applied?: boolean }) {
+export function JobCard({ job, applied, match }: { job: Job; applied?: boolean; match?: string[] }) {
   const c = getCompany(job.companyId);
   const seal = hasTrustSeal(job);
+  const matched = !!match?.length;
   return (
-    <article className="relative rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] transition hover:border-primary/40">
+    <article className={cn("relative rounded-2xl border bg-card p-4 shadow-[var(--shadow-card)] transition hover:border-primary/40", matched ? "border-2 border-moss" : "border-border")}>
+      {matched && (
+        <p className="-mx-4 -mt-4 mb-3 flex flex-wrap items-center gap-x-2 rounded-t-[14px] bg-recommended px-4 py-2 text-xs font-bold text-recommended-foreground">
+          <CheckCircle2 className="h-4 w-4" /> Combina com você
+          <span className="font-medium">· {match!.join(" · ")}</span>
+        </p>
+      )}
       <div className="flex items-start gap-3">
         <CompanyAvatar initials={c?.initials ?? "?"} />
         <div className="min-w-0 flex-1 pr-20">
@@ -167,7 +174,7 @@ export function JobCard({ job, applied }: { job: Job; applied?: boolean }) {
             </Link>
           )}
         </div>
-        <div className="absolute right-4 top-4">{seal ? <VerifiedSeal small label="Confiável" /> : <NeutralTag>Sem selo</NeutralTag>}</div>
+        <div className={cn("absolute right-4", matched ? "top-14" : "top-4")}>{seal ? <VerifiedSeal small label="Confiável" /> : <NeutralTag>Sem selo</NeutralTag>}</div>
       </div>
       <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{job.summary}</p>
       <div className="mt-3 flex flex-wrap gap-2">
