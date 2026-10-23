@@ -1,11 +1,14 @@
 import { STAGES, type Stage } from "./data";
-import { getState, setState, type Candidate, type RecruiterJob } from "./store";
+import { getState, initialState, setState, type Candidate, type Interview, type RecruiterJob } from "./store";
+import type { Job } from "./data";
 
 export function candidateProfile(candidate: Candidate) {
+  const seed = initialState.candidates.find((c) => c.id === candidate.id);
   return {
     ...candidate,
+    links: candidate.links || seed?.links,
     experience: candidate.experience || "Experiência profissional não informada.",
-    skills: candidate.skills || [],
+    skills: candidate.skills?.length ? candidate.skills : seed?.skills || [],
     bio: candidate.bio || "Resumo profissional não informado.",
   };
 }
@@ -150,4 +153,82 @@ export function saveJob(job: RecruiterJob) {
 
 export function findManagedJob(id: string) {
   return getState().recruiterJobs.find((j) => j.id === id);
+}
+
+/** Compara as habilidades do candidato com cada requisito da vaga. */
+export function matchRequirements(skills: string[], job: Job | undefined) {
+  const own = new Set(skills.map((s) => s.trim().toLowerCase()));
+  const items = (job?.skills || []).map((r) => ({ ...r, met: own.has(r.name.trim().toLowerCase()) }));
+  const essentials = items.filter((i) => i.level === "essencial");
+  return {
+    items,
+    met: items.filter((i) => i.met).length,
+    total: items.length,
+    essentialMet: essentials.filter((i) => i.met).length,
+    essentialTotal: essentials.length,
+  };
+}
+
+export function nextStage(stage: Stage): Stage {
+  return stage === "Recebido" ? "Triagem" : stage === "Triagem" ? "Entrevista" : stage === "Entrevista" ? "Aprovado" : stage;
+}
+
+export function setCandidateNotes(id: string, notes: { strengths?: string[]; toDevelop?: string[] }) {
+  setState((s) => ({ ...s, candidates: s.candidates.map((c) => (c.id === id ? { ...c, ...notes } : c)) }));
+}
+
+/** Agenda, remarca (interview) ou cancela (undefined) a entrevista; reflete na candidatura do estudante. */
+export function scheduleInterview(id: string, interview: Interview | undefined) {
+  setState((s) => {
+    const candidate = s.candidates.find((c) => c.id === id);
+    if (!candidate) return s;
+    const linked = candidate.studentLinked;
+    const text = interview
+      ? `Entrevista marcada para ${interview.date.split("-").reverse().join("/")} às ${interview.time} · ${interview.place}`
+      : "A entrevista agendada foi cancelada.";
+    return {
+      ...s,
+      candidates: s.candidates.map((c) => {
+        if (c.id !== id) return c;
+        const { interview: _old, ...rest } = c;
+        return interview ? { ...rest, interview } : rest;
+      }),
+      applications: s.applications.map((a) => {
+        if (!linked || a.jobId !== candidate.jobId || a.candidateId) return a;
+        const { interview: _old, ...rest } = a;
+        return interview ? { ...rest, interview } : rest;
+      }),
+      notifications: linked
+        ? [{ id: crypto.randomUUID(), text, at: new Date().toISOString(), read: false, kind: "etapa" as const }, ...s.notifications]
+        : s.notifications,
+    };
+  });
+}
+
+export type TemplateId = "convite" | "aprovado" | "nao" | "documento";
+export const TEMPLATE_LABELS: Record<TemplateId, string> = {
+  convite: "Convite para entrevista",
+  aprovado: "Aprovado para a próxima etapa",
+  nao: "Não selecionado desta vez",
+  documento: "Pedido de documento/portfólio",
+};
+
+export function messageTemplate(
+  id: TemplateId,
+  v: { name: string; job: string; company: string; strengths?: string[]; toDevelop?: string[] },
+) {
+  const first = v.name.split(" ")[0];
+  switch (id) {
+    case "convite":
+      return `Olá, ${first}! Gostamos do seu perfil para a vaga ${v.job} na ${v.company} e queremos convidar você para uma entrevista. Qual o melhor dia e horário para você esta semana?`;
+    case "aprovado":
+      return `Olá, ${first}! Boa notícia: você foi aprovado(a) para a próxima etapa da vaga ${v.job} na ${v.company}. Em breve enviaremos os próximos passos.`;
+    case "nao": {
+      const fortes = v.strengths?.length ? v.strengths.join(", ") : "seu interesse e dedicação";
+      const dev = v.toDevelop?.length ? ` Para as próximas oportunidades, recomendamos desenvolver: ${v.toDevelop.join(", ")}.` : "";
+      return `Olá, ${first}. Agradecemos sua candidatura para a vaga ${v.job} na ${v.company}. Desta vez seguimos com outro perfil, mas destacamos seus pontos fortes: ${fortes}.${dev} Esperamos ver você em novos processos!`;
+    }
+    case "documento":
+      return `Olá, ${first}! Para continuarmos sua candidatura à vaga ${v.job} na ${v.company}, poderia nos enviar seu portfólio ou o documento solicitado? Obrigado!`;
+  }
 }

@@ -27,6 +27,9 @@ export type ChatMessage = { from: "me" | "them"; text: string; at: string };
 export type Thread = { id: string; jobId: string; with: string; messages: ChatMessage[]; readAt?: string };
 
 export type Candidate = {
+  strengths?: string[];
+  toDevelop?: string[];
+  interview?: Interview;
   experience?: string;
   skills?: string[];
   bio?: string;
@@ -96,6 +99,17 @@ function defaultValidUntil() {
   return end.toISOString();
 }
 
+const slug = (n: string) => n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "-");
+const SEED_SKILLS: string[][] = [
+  ["HTML e CSS", "Comunicação", "Excel intermediário"],
+  ["HTML e CSS", "JavaScript", "React", "Git"],
+  ["Comunicação", "Organização"],
+  ["JavaScript", "Git", "HTML e CSS"],
+  ["HTML e CSS", "React"],
+  ["Comunicação", "Pacote Office", "Organização"],
+  ["JavaScript"],
+  ["HTML e CSS", "JavaScript", "Git"],
+];
 const seedCandidates: Candidate[] = [
   ["Beatriz Ramos", "Administração", "UFPE", 6, "Recife, PE", "Recebido", 92],
   ["João Victor Lima", "Ciência da Computação", "UFPE", 5, "Recife, PE", "Triagem", 88],
@@ -118,6 +132,12 @@ const seedCandidates: Candidate[] = [
   match: match as number,
   docTitle: i % 2 ? "Dev Front-end.pdf" : "Currículo Geral.pdf",
   chat: [],
+  skills: SEED_SKILLS[i],
+  links: {
+    github: `https://github.com/${slug(name as string)}`,
+    portfolio: i % 2 ? `https://${slug(name as string)}.dev` : "",
+    linkedin: `https://www.linkedin.com/in/${slug(name as string)}`,
+  },
 }));
 
 export const initialState: State = {
