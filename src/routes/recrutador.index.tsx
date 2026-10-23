@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Plus,
   Pencil,
   Trash2,
+  MoreHorizontal,
   CheckCircle2,
   Users,
   Search,
@@ -14,12 +15,18 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { CandidateDetails, CandidateComparison } from "@/components/starta/recruiter-candidate";
 import { StageTag } from "@/components/starta/ui";
 import { STAGES, brl, type Stage } from "@/lib/data";
 import { useStore } from "@/lib/store";
-import { advanceCandidate, setJobStatus } from "@/lib/recruiter";
+import { advanceCandidate, nextStage, setJobStatus } from "@/lib/recruiter";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -50,13 +57,23 @@ function RecruiterCRM() {
   const [candidateId, setCandidateId] = useState("");
   const [compare, setCompare] = useState(false);
   const [confirm, setConfirm] = useState<"filled" | "deleted" | null>(null);
+  const [highlight, setHighlight] = useState("");
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const onMoved = (id: string) => {
+    setHighlight(id);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setHighlight(""), 4000);
+  };
   const visibleJobs = jobs.filter((j) => j.status !== "deleted");
   const job =
     visibleJobs.find((j) => j.id === jobId) ||
     visibleJobs.find((j) => j.published) ||
     visibleJobs[0];
   const pool = candidates.filter((c) => c.jobId === job?.id);
-  const filtered = pool.filter(
+  const filtered = [...pool]
+    .sort((a, b) => a.name.localeCompare(b.name, "pt-BR"))
+    .filter(
     (c) =>
       (!stage || c.stage === stage) &&
       `${c.name} ${c.course} ${c.institution}`.toLowerCase().includes(query.toLowerCase()),
@@ -154,32 +171,37 @@ function RecruiterCRM() {
                 {job.city} · {job.hours} · {brl(job.stipend)}
               </p>
             </div>
-            <div className="flex gap-2">
-              <Button asChild variant="outline" size="sm">
-                <Link to="/recrutador/vagas/$id" params={{ id: job.id }}>
-                  <Pencil />
-                  Editar
-                </Link>
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={!job.published}
-                onClick={() => setConfirm("filled")}
-              >
-                <CheckCircle2 />
-                Vaga preenchida
-              </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                title="Excluir vaga"
-                aria-label="Excluir vaga"
-                onClick={() => setConfirm("deleted")}
-              >
-                <Trash2 className="text-destructive" />
-              </Button>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="lg" aria-label="Mais ações da vaga">
+                  <MoreHorizontal />
+                  Mais ações
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem asChild className="h-11 text-sm">
+                  <Link to="/recrutador/vagas/$id" params={{ id: job.id }}>
+                    <Pencil />
+                    Editar vaga
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="h-11 text-sm"
+                  disabled={!job.published}
+                  onSelect={() => setConfirm("filled")}
+                >
+                  <CheckCircle2 />
+                  Marcar como preenchida
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="h-11 text-sm text-destructive"
+                  onSelect={() => setConfirm("deleted")}
+                >
+                  <Trash2 />
+                  Excluir vaga
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </section>
           <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
             {stats.map((stat) => (
@@ -215,7 +237,7 @@ function RecruiterCRM() {
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <Button
-                  variant="outline"
+                  size="lg"
                   disabled={selected.length < 2}
                   onClick={() => setCompare(true)}
                 >
@@ -262,7 +284,10 @@ function RecruiterCRM() {
                         .map((c) => (
                           <article
                             key={c.id}
-                            className="rounded-lg border border-border bg-card p-3 shadow-[var(--shadow-card)]"
+                            className={cn(
+                              "rounded-lg border border-border bg-card p-3 shadow-[var(--shadow-card)] transition-all",
+                              highlight === c.id && "border-primary ring-4 ring-lemon",
+                            )}
                           >
                             <div className="mb-3 flex items-center justify-between">
                               <span className="flex size-9 items-center justify-center rounded-full bg-essential text-xs font-bold text-primary">
@@ -307,17 +332,23 @@ function RecruiterCRM() {
                               <span className="text-[10px] text-muted-foreground">
                                 {c.verified ? "Verificado" : "Não verificado"}
                               </span>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="size-7"
-                                title="Avançar etapa"
-                                aria-label={`Avançar ${c.name}`}
-                                disabled={c.stage === "Aprovado" || c.stage === "Recusado"}
-                                onClick={() => advanceCandidate(c.id)}
-                              >
-                                <ArrowRight />
-                              </Button>
+                              {c.stage !== "Aprovado" && c.stage !== "Recusado" && (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="h-9"
+                                  aria-label={`Avançar ${c.name}`}
+                                  onClick={() => {
+                                    const to = nextStage(c.stage);
+                                    advanceCandidate(c.id);
+                                    toast.success(`${c.name} foi movida para ${to}.`);
+                                    onMoved(c.id);
+                                  }}
+                                >
+                                  Avançar
+                                  <ArrowRight />
+                                </Button>
+                              )}
                             </div>
                           </article>
                         ))}
@@ -339,11 +370,14 @@ function RecruiterCRM() {
         candidate={candidates.find((c) => c.id === candidateId)}
         job={job}
         onClose={() => setCandidateId("")}
+        onMoved={onMoved}
       />
       {compare && (
         <CandidateComparison
           candidates={pool.filter((c) => selected.includes(c.id))}
+          job={job}
           onClose={() => setCompare(false)}
+          onMoved={onMoved}
         />
       )}
       <Dialog

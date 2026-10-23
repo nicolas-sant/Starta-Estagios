@@ -1,7 +1,8 @@
 import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
 import { Logo, VerifiedSeal } from "@/components/starta/ui";
 import { useStore } from "@/lib/store";
-import { Briefcase, LayoutDashboard, MessageSquare, LogOut, ChevronRight } from "lucide-react";
+import { LayoutDashboard, MessageSquare, LogOut, ChevronRight, Home, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { RecruiterCloud } from "@/components/starta/recruiter-cloud";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +19,9 @@ export const Route = createFileRoute("/recrutador")({
   }),
   component: Recrutador,
 });
+
+const ACTIVE = "border-lemon bg-primary text-primary-foreground font-bold";
+const IDLE = "border-transparent text-muted-foreground hover:bg-muted";
 
 function Recrutador() {
   const company = useStore((s) => s.company);
@@ -40,8 +44,8 @@ function Recrutador() {
           <Link
             to="/recrutador"
             className={cn(
-              "flex items-center gap-3 rounded-md px-3 py-3 text-sm font-semibold",
-              !path.includes("mensagens") ? "bg-essential text-primary" : "text-muted-foreground",
+              "flex min-h-12 items-center gap-3 rounded-md border-l-4 px-3 py-3 text-sm font-semibold",
+              !path.includes("mensagens") ? ACTIVE : IDLE,
             )}
           >
             <LayoutDashboard className="size-4" />
@@ -50,8 +54,8 @@ function Recrutador() {
           <Link
             to="/recrutador/mensagens"
             className={cn(
-              "flex items-center gap-3 rounded-md px-3 py-3 text-sm font-semibold",
-              path.includes("mensagens") ? "bg-essential text-primary" : "text-muted-foreground",
+              "flex min-h-12 items-center gap-3 rounded-md border-l-4 px-3 py-3 text-sm font-semibold",
+              path.includes("mensagens") ? ACTIVE : IDLE,
             )}
           >
             <MessageSquare className="size-4" />
@@ -69,12 +73,32 @@ function Recrutador() {
       </aside>
       <div className="min-w-0">
         <header className="flex min-h-20 flex-wrap items-center justify-between gap-3 border-b border-border bg-card px-5 py-4 lg:px-8">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Briefcase className="size-4" />
-            Empresa
-            <ChevronRight className="size-3" />
-            <span className="text-foreground">
-              {path.includes("mensagens") ? "Mensagens" : "Recrutamento"}
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <Button asChild variant="outline" size="lg">
+              <Link to="/recrutador">
+                <Home />
+                Início
+              </Link>
+            </Button>
+            {path.replace(/\/$/, "") !== "/recrutador" && (
+              <Button
+                variant="ghost"
+                size="lg"
+                onClick={() => (window.history.length > 1 ? window.history.back() : undefined)}
+              >
+                <ArrowLeft />
+                Voltar
+              </Button>
+            )}
+            <ChevronRight className="size-4 text-muted-foreground" />
+            <span className="font-semibold">
+              {path.includes("mensagens")
+                ? "Mensagens"
+                : path.includes("nova")
+                  ? "Publicar vaga"
+                  : path.includes("vagas")
+                    ? "Editar vaga"
+                    : "Recrutamento"}
             </span>
           </div>
           <div className="flex items-center gap-3">

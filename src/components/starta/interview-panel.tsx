@@ -64,11 +64,9 @@ export function InterviewPanel({
   };
   return (
     <section className="space-y-4">
-      <div className="flex items-center gap-2">
-        <Sparkles className="size-5 text-primary" />
-        <h3>Perguntas de entrevista</h3>
-      </div>
-      <div className="grid gap-4 md:grid-cols-2">
+      <details className="rounded-md border border-border p-3">
+        <summary className="cursor-pointer text-sm font-semibold">Ver detalhes usados pela IA (opcional)</summary>
+      <div className="mt-3 grid gap-4 md:grid-cols-2">
         <label className="space-y-2 text-sm font-medium">
           Requisitos da vaga
           <Textarea
@@ -90,8 +88,9 @@ export function InterviewPanel({
           />
         </label>
       </div>
+      </details>
       <div className="flex gap-2">
-        <Button onClick={generate} disabled={loading || !requirements.trim() || !profile.trim()}>
+        <Button size="lg" onClick={generate} disabled={loading || !requirements.trim() || !profile.trim()}>
           {loading ? <Loader2 className="animate-spin" /> : <Sparkles />}{" "}
           {loading ? "Gerando perguntas…" : "Gerar perguntas com IA"}
         </Button>
