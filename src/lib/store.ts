@@ -132,7 +132,7 @@ const seedCandidates: Candidate[] = [
   match: match as number,
   docTitle: i % 2 ? "Dev Front-end.pdf" : "Currículo Geral.pdf",
   chat: [],
-  skills: SEED_SKILLS[i],
+  skills: SEED_SKILLS[i] ?? [],
   links: {
     github: `https://github.com/${slug(name as string)}`,
     portfolio: i % 2 ? `https://${slug(name as string)}.dev` : "",
