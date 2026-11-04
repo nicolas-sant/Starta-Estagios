@@ -71,7 +71,7 @@ function Candidatura() {
         <section className={cn("rounded-2xl border-2 p-5 shadow-[var(--shadow-card)]", a.result === "recusado" ? "border-destructive bg-card" : a.result === "aprovado" ? "border-moss bg-recommended" : "border-primary bg-essential")}>
           <p className="flex items-center gap-2 font-display text-lg font-extrabold text-deep-space">
             <Megaphone className={cn("h-6 w-6", a.result === "recusado" ? "text-destructive" : "text-primary")} />
-            {resultOut ? (a.result === "aprovado" ? "Você foi aprovado! Retorno do recrutador" : "Resultado: retorno do recrutador") : "Retorno do recrutador"}
+            {resultOut ? (a.result === "aprovado" ? "Candidatura aprovada! Retorno do recrutador" : "Resultado: retorno do recrutador") : "Retorno do recrutador"}
           </p>
           <p className="mt-3 text-[17px] leading-relaxed text-deep-space">"{feedback}"</p>
         </section>

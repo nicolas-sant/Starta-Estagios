@@ -341,7 +341,7 @@ function RecruiterCRM() {
                                   onClick={() => {
                                     const to = nextStage(c.stage);
                                     advanceCandidate(c.id);
-                                    toast.success(`${c.name} foi movida para ${to}.`);
+                                    toast.success(`${c.name} mudou para ${to}.`);
                                     onMoved(c.id);
                                   }}
                                 >
