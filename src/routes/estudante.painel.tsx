@@ -55,7 +55,7 @@ function Painel() {
                     <Stepper steps={STUDENT_STEPS} current={a.step} failed={a.result === "recusado"} />
                   </div>
                   <p className={cn("mt-3 inline-flex rounded-full px-3 py-1 text-sm font-bold", a.result === "recusado" ? "bg-destructive/10 text-destructive" : a.result === "aprovado" ? "bg-recommended text-recommended-foreground" : a.step === 2 ? "bg-lemon text-deep-space" : "bg-essential text-essential-foreground")}>
-                    {a.result === "recusado" ? "Não selecionado · retorno disponível" : a.result === "aprovado" ? "Aprovado!" : `Etapa atual: ${STUDENT_STEPS[a.step]}`}
+                    {a.result === "recusado" ? "Não selecionado · retorno disponível" : a.result === "aprovado" ? "Candidatura aprovada!" : `Etapa atual: ${STUDENT_STEPS[a.step]}`}
                   </p>
                 </Card>
               </Link>

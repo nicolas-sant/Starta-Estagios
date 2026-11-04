@@ -41,7 +41,7 @@ function move(c: { id: string; name: string; stage: Stage }, onMoved?: OnMoved, 
   const target = to ?? nextStage(c.stage);
   if (target === c.stage) return;
   advanceCandidate(c.id, target);
-  toast.success(`${c.name} foi movida para ${target}.`);
+  toast.success(`${c.name} mudou para ${target}.`);
   onMoved?.(c.id, c.name, target);
 }
 
