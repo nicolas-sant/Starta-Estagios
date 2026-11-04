@@ -88,22 +88,29 @@ export function RequirementMatch({ skills, job }: { skills: string[]; job: Job |
   );
 }
 
-function Links({ links }: { links: Candidate["links"] }) {
+function Links({ links, example }: { links: Candidate["links"]; example?: boolean }) {
   const keys = (["github", "portfolio", "linkedin"] as const).filter((k) => links?.[k]);
   if (!keys.length) return <p className="mt-2 text-xs text-muted-foreground">Sem links informados.</p>;
   return (
-    <div className="mt-2 flex flex-wrap gap-2">
-      {keys.map((k) => (
-        <a
-          key={k}
-          href={links![k]}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="rounded-full bg-essential px-3 py-1 text-xs font-semibold text-essential-foreground hover:underline"
-        >
-          {k === "github" ? "GitHub" : k === "portfolio" ? "Portfólio" : "LinkedIn"} ↗
-        </a>
-      ))}
+    <div className="mt-2 flex flex-wrap items-center gap-2">
+      {keys.map((k) => {
+        const label = `${k === "github" ? "GitHub" : k === "portfolio" ? "Portfólio" : "LinkedIn"} ↗`;
+        const cls = "rounded-full bg-essential px-3 py-1 text-xs font-semibold text-essential-foreground";
+        return example ? (
+          <span key={k} title="Link de exemplo — sem destino real" className={cn(cls, "cursor-default")}>
+            {label}
+          </span>
+        ) : (
+          <a key={k} href={links![k]} target="_blank" rel="noopener noreferrer" className={cn(cls, "hover:underline")}>
+            {label}
+          </a>
+        );
+      })}
+      {example && (
+        <span className="text-xs text-muted-foreground" title="Link de exemplo — sem destino real">
+          Links de exemplo, sem destino real.
+        </span>
+      )}
     </div>
   );
 }
