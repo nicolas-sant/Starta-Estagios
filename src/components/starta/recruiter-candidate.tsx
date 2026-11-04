@@ -265,7 +265,7 @@ export function CandidateDetails({
                     Currículo e links
                   </p>
                   <p className="break-words text-sm">{c.docTitle}</p>
-                  <Links links={c.links} />
+                  <Links links={c.links} example={!c.studentLinked} />
                   <p className="mt-2 text-xs text-muted-foreground">Arquivo de exemplo, sem PDF disponível.</p>
                 </div>
                 <label className="block text-sm">
@@ -484,7 +484,7 @@ export function CandidateComparison({
                         : row === "Instituição" ? c.institution
                         : row === "Semestre" ? `${c.semester}º`
                         : row === "Requisitos da vaga" ? <RequirementMatch skills={c.skills} job={job} />
-                        : row === "Currículo e links" ? (<><p>{c.docTitle}</p><Links links={c.links} /></>)
+                        : row === "Currículo e links" ? (<><p>{c.docTitle}</p><Links links={c.links} example={!c.studentLinked} /></>)
                         : <StageTag stage={c.stage} />}
                     </td>
                   ))}
