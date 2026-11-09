@@ -18,6 +18,6 @@ export const listPublicJobs = createServerFn({ method: "GET" }).handler(async ()
     },
   });
   const { data, error } = await client.from("recruiter_public_jobs").select("job,status");
-  if (error) throw new Error("Não foi possível carregar as vagas publicadas.");
+  if (error) { console.error("listPublicJobs", error.message); return []; }
   return data || [];
 });

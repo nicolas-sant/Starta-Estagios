@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { AlertTriangle, ShieldCheck } from "lucide-react";
 import { JobCard, SectionTitle } from "@/components/starta/ui";
 import { JOBS, rankScore } from "@/lib/data";
+import { cn } from "@/lib/utils";
 import { allJobs, getState, daysUntil, useStore } from "@/lib/store";
 
 export const Route = createFileRoute("/estudante/")({
@@ -41,33 +42,33 @@ function Feed() {
   const expiring = st.verification === "aprovado" && d <= 15;
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-[640px] space-y-8">
       <div>
         <p className="label-mono text-muted-foreground">{st.city || "Brasil"}</p>
         <h1 className="text-2xl text-deep-space lg:text-3xl">Olá{st.name ? `, ${st.name.split(" ")[0]}` : ""}!</h1>
       </div>
 
       {(!st.profileDone || st.verification !== "aprovado") && (
-        <Link to={st.onboardingDone ? "/verificacao" : "/onboarding"} className="flex items-center gap-3 rounded-2xl bg-lemon p-4 text-deep-space">
+        <Link to={st.onboardingDone ? "/verificacao" : "/onboarding"} className="flex items-center gap-3 rounded-2xl bg-lemon p-5 text-lemon-ink ring-1 ring-lemon-ink/20">
           <ShieldCheck className="h-6 w-6 shrink-0" />
           <span className="text-sm"><strong>Conclua seu cadastro</strong> para se candidatar com selo de estudante verificado.</span>
         </Link>
       )}
       {expiring && (
-        <Link to="/estudante/perfil" className="flex items-center gap-3 rounded-2xl border border-destructive/40 bg-neutral-tag p-4 text-deep-space">
+        <Link to="/estudante/perfil" className="flex items-center gap-3 rounded-2xl border border-destructive/40 bg-neutral-tag p-5 text-deep-space">
           <AlertTriangle className="h-6 w-6 shrink-0 text-destructive" />
           <span className="text-sm">{d < 0 ? "Sua verificação venceu. Reenvie o comprovante." : `Sua verificação vence em ${d} dias. Reenvie o comprovante.`}</span>
         </Link>
       )}
 
-      <div className="grid grid-cols-3 gap-2 lg:gap-4">
+      <div className="flex rounded-xl border border-border bg-card px-5 py-3">
         {[
           [apps.length, "candidaturas"],
           [apps.filter((a) => !a.result).length, "em andamento"],
           [apps.filter((a) => a.feedback || a.step > 0).length, "com retorno"],
-        ].map(([n, l]) => (
-          <div key={l as string} className="rounded-2xl bg-card p-3 text-center lg:p-5 shadow-[var(--shadow-card)]">
-            <p className="font-display text-2xl font-extrabold text-primary">{n}</p>
+        ].map(([n, l], i) => (
+          <div key={l as string} className={cn("flex-1 text-center", i > 0 && "border-l border-divider")}>
+            <p className="text-xl font-extrabold text-deep-space">{n}</p>
             <p className="label-mono text-muted-foreground">{l}</p>
           </div>
         ))}
@@ -75,7 +76,7 @@ function Feed() {
 
       <section>
         <SectionTitle action={<span className="label-mono text-muted-foreground">{sorted.length} vagas</span>}>Para você</SectionTitle>
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
+        <div className="space-y-3">
           {sorted.map((j) => (
             <JobCard key={j.id} job={j} match={matchOf(j)} applied={apps.some((a) => a.jobId === j.id)} />
           ))}

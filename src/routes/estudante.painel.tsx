@@ -30,7 +30,7 @@ function Painel() {
   const findJob = (id: string) => extra.find((j) => j?.id === id) ?? JOBS.find((j) => j.id === id);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <h1 className="text-2xl text-deep-space lg:text-3xl">Painel</h1>
 
       <section>
@@ -51,10 +51,10 @@ function Painel() {
                     </div>
                     <ChevronRight className="h-5 w-5 text-muted-foreground" />
                   </div>
-                  <div className="mt-4">
+                  <div className="mt-3">
                     <Stepper steps={STUDENT_STEPS} current={a.step} failed={a.result === "recusado"} />
                   </div>
-                  <p className={cn("mt-3 inline-flex rounded-full px-3 py-1 text-sm font-bold", a.result === "recusado" ? "bg-destructive/10 text-destructive" : a.result === "aprovado" ? "bg-recommended text-recommended-foreground" : a.step === 2 ? "bg-lemon text-deep-space" : "bg-essential text-essential-foreground")}>
+                  <p className={cn("mt-3 inline-flex rounded-full px-3 py-1 text-sm font-bold", a.result === "recusado" ? "bg-destructive/10 text-destructive" : a.result === "aprovado" ? "bg-recommended text-recommended-foreground" : a.step === 2 ? "bg-lemon text-lemon-ink ring-1 ring-lemon-ink/20" : "bg-essential text-essential-foreground")}>
                     {a.result === "recusado" ? "Não selecionado · retorno disponível" : a.result === "aprovado" ? "Candidatura aprovada!" : `Etapa atual: ${STUDENT_STEPS[a.step]}`}
                   </p>
                 </Card>
@@ -80,12 +80,12 @@ function Painel() {
         </SectionTitle>
         <ul className="space-y-2">
           {notifs.map((n) => (
-            <li key={n.id} className={cn("relative flex items-start gap-3 overflow-hidden rounded-2xl border p-3 pl-4", n.read ? "border-border bg-card" : "border-primary/40 bg-essential shadow-[var(--shadow-card)]")}>
+            <li key={n.id} className={cn("relative flex items-start gap-3 overflow-hidden rounded-2xl border p-5", n.read ? "border-border bg-card" : "border-primary/40 bg-essential shadow-[var(--shadow-card)]")}>
               {!n.read && <span aria-hidden className="absolute inset-y-0 left-0 w-1.5 bg-primary" />}
               <Bell className={cn("mt-0.5 h-5 w-5 shrink-0", n.read ? "text-muted-foreground" : "text-primary")} />
               <div className="flex-1">
                 <p className="flex flex-wrap items-center gap-2">
-                  <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide", n.read ? "bg-neutral-tag text-muted-foreground" : notificationKind(n) === "retorno" ? "bg-lemon text-deep-space" : "bg-primary text-primary-foreground")}>{NOTIFICATION_LABEL[notificationKind(n)]}</span>
+                  <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide", n.read ? "bg-neutral-tag text-muted-foreground" : notificationKind(n) === "retorno" ? "bg-lemon text-lemon-ink ring-1 ring-lemon-ink/20" : "bg-primary text-primary-foreground")}>{NOTIFICATION_LABEL[notificationKind(n)]}</span>
                   {!n.read && <span className="text-[11px] font-bold text-primary">● Não lida</span>}
                 </p>
                 <p className={cn("mt-1 text-sm text-deep-space", !n.read && "font-semibold")}>{n.text}</p>
