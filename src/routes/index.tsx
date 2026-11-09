@@ -49,7 +49,7 @@ function AuthPage() {
       <aside className="relative hidden flex-col justify-between overflow-hidden bg-deep-space p-12 lg:flex">
         <Logo light />
         <div>
-          <p className="label-mono text-moss">5,5% dos estudantes conseguem estágio</p>
+          <p className="label-mono text-moss-light">5,5% dos estudantes conseguem estágio</p>
           <h1 className="mt-3 max-w-md text-4xl leading-tight text-primary-foreground">Nada desaparece. Toda candidatura tem resposta.</h1>
           <ul className="mt-8 space-y-4 text-primary-foreground/80">
             {[

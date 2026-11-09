@@ -85,7 +85,7 @@ function StudentLayout() {
             <Settings className="h-5 w-5" /> Configurações
           </Link>
           <div className="flex items-center gap-3 rounded-xl bg-sidebar-accent px-3 py-3">
-            <Eye className="h-5 w-5 shrink-0 text-primary-foreground" />
+            <Eye className="h-5 w-5 shrink-0 text-moss-light" />
             <span className="text-sm">
               Currículo visualizado <strong className="text-lemon">{views} vezes</strong> nos últimos 7 dias
             </span>
