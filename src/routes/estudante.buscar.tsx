@@ -69,9 +69,9 @@ function Buscar() {
       <div className="flex gap-2">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Cargo, habilidade (ex.: React, Excel)…" className="h-12 w-full rounded-[10px] border border-border bg-card pl-12 pr-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Cargo, habilidade (ex.: React, Excel)…" className="h-12 w-full rounded-lg border border-border bg-card pl-12 pr-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
         </div>
-        <button onClick={() => setShow(!showFilters)} aria-label="Filtros" className={cn("flex h-12 w-12 items-center justify-center rounded-[10px] border", showFilters ? "border-primary bg-essential text-primary" : "border-border bg-card")}>
+        <button onClick={() => setShow(!showFilters)} aria-label="Filtros" className={cn("flex h-12 w-12 items-center justify-center rounded-lg border", showFilters ? "border-primary bg-essential text-primary" : "border-border bg-card")}>
           <SlidersHorizontal className="h-5 w-5" />
         </button>
       </div>
@@ -97,7 +97,7 @@ function Buscar() {
           </div>
           <label className="block">
             <span className="label-mono mb-2 block text-muted-foreground">Cidade</span>
-            <select value={city} onChange={(e) => setCity(e.target.value)} className="h-11 w-full rounded-[10px] border border-border bg-card px-3 text-sm">
+            <select value={city} onChange={(e) => setCity(e.target.value)} className="h-11 w-full rounded-lg border border-border bg-card px-3 text-sm">
               <option value="">Todas as cidades</option>
               {CITIES.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
@@ -132,7 +132,7 @@ function Buscar() {
                 </ul>
               </>
             )}
-            <button onClick={clear} className="mt-4 h-12 rounded-[10px] bg-primary px-5 font-semibold text-primary-foreground">Limpar filtros</button>
+            <button onClick={clear} className="mt-4 h-12 rounded-lg bg-primary px-5 font-semibold text-primary-foreground">Limpar filtros</button>
           </div>
         )}
       </div>

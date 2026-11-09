@@ -92,7 +92,7 @@ function Perfil() {
             </div>
           </div>
           {!editing && (
-            <button onClick={startEdit} className="ml-auto flex h-11 shrink-0 items-center gap-1.5 rounded-[10px] border border-border px-3 text-sm font-semibold text-primary hover:bg-mint">
+            <button onClick={startEdit} className="ml-auto flex h-11 shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 text-sm font-semibold text-primary hover:bg-mint">
               <Pencil className="h-4 w-4" /> Editar
             </button>
           )}
@@ -104,7 +104,7 @@ function Perfil() {
             <Field label="Instituição" value={form.institution} maxLength={80} onChange={(e) => setForm({ ...form, institution: e.target.value })} />
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-deep-space">Semestre</span>
-              <select value={form.semester} onChange={(e) => setForm({ ...form, semester: e.target.value })} className="h-12 w-full rounded-[10px] border border-border bg-card px-3">
+              <select value={form.semester} onChange={(e) => setForm({ ...form, semester: e.target.value })} className="h-12 w-full rounded-lg border border-border bg-card px-3">
                 <option value="">Selecione</option>
                 {Array.from({ length: 12 }, (_, i) => String(i + 1)).map((n) => <option key={n} value={n}>{n}º semestre</option>)}
               </select>
@@ -124,7 +124,7 @@ function Perfil() {
             {st.verification === "vazio" ? "Você ainda não enviou o comprovante. Sem ele não é possível se candidatar." : st.verification === "recusado" ? `Documento recusado${st.refuseReason ? `: ${st.refuseReason}` : "."} Você pode reenviar.` : "Seu comprovante está em análise (até 2 dias úteis)."}
           </p>
           {st.verification !== "vazio" && <VerificationProgress status={st.verification} />}
-          <Link to="/verificacao" className="mt-3 flex h-12 items-center justify-center rounded-[10px] bg-primary font-semibold text-primary-foreground">
+          <Link to="/verificacao" className="mt-3 flex h-12 items-center justify-center rounded-lg bg-primary font-semibold text-primary-foreground">
             {st.verification === "recusado" ? "Reenviar comprovante" : st.verification === "vazio" ? "Verificar matrícula" : "Ver verificação"}
           </Link>
         </Card>
@@ -159,11 +159,11 @@ function Perfil() {
           ))}
         </div>
         <div className="mt-4 grid gap-2 sm:grid-cols-[1fr_auto_auto]">
-          <input value={title} maxLength={60} onChange={(e) => setTitle(e.target.value)} placeholder='Título, ex.: "Dev Front-end"' className="h-12 rounded-[10px] border border-border px-4 outline-none focus:border-primary" />
-          <select value={area} onChange={(e) => setArea(e.target.value)} className="h-12 rounded-[10px] border border-border bg-card px-3">
+          <input value={title} maxLength={60} onChange={(e) => setTitle(e.target.value)} placeholder='Título, ex.: "Dev Front-end"' className="h-12 rounded-lg border border-border px-4 outline-none focus:border-primary" />
+          <select value={area} onChange={(e) => setArea(e.target.value)} className="h-12 rounded-lg border border-border bg-card px-3">
             {["Geral", ...AREAS].map((a) => <option key={a}>{a}</option>)}
           </select>
-          <label className="flex h-12 cursor-pointer items-center justify-center rounded-[10px] bg-primary px-4 font-semibold text-primary-foreground">
+          <label className="flex h-12 cursor-pointer items-center justify-center rounded-lg bg-primary px-4 font-semibold text-primary-foreground">
             Anexar PDF
             <input
               type="file"
@@ -220,7 +220,7 @@ function Perfil() {
         <p className="mb-3 text-sm text-deep-space">Simule estados do selo de validade.</p>
         <div className="flex flex-wrap gap-2">
           {[["Válido", 120], ["Vence em 10 dias", 10], ["Vencido", -2]].map(([l, days]) => (
-            <button key={l as string} className="h-11 rounded-[10px] border border-border bg-card px-3 text-sm font-semibold" onClick={() => setState((s) => ({ ...s, student: { ...s.student, verification: "aprovado", validUntil: new Date(Date.now() + (days as number) * 864e5).toISOString() } }))}>
+            <button key={l as string} className="h-11 rounded-lg border border-border bg-card px-3 text-sm font-semibold" onClick={() => setState((s) => ({ ...s, student: { ...s.student, verification: "aprovado", validUntil: new Date(Date.now() + (days as number) * 864e5).toISOString() } }))}>
               {l}
             </button>
           ))}

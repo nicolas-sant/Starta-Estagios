@@ -89,7 +89,7 @@ function Candidatura() {
                 <li className="flex items-center gap-2">{interview.link ? <Video className="h-5 w-5" /> : <MapPin className="h-5 w-5" />} {interview.place}</li>
               </ul>
               {interview.link && (
-                <a href={interview.link} target="_blank" rel="noopener noreferrer" className="mt-4 flex h-12 items-center justify-center rounded-[10px] bg-deep-space font-semibold text-primary-foreground">Abrir link da entrevista</a>
+                <a href={interview.link} target="_blank" rel="noopener noreferrer" className="mt-4 flex h-12 items-center justify-center rounded-lg bg-deep-space font-semibold text-primary-foreground">Abrir link da entrevista</a>
               )}
             </>
           ) : (
@@ -128,7 +128,7 @@ function Candidatura() {
         {a.message && <p className="mt-2 text-sm text-muted-foreground">"{a.message}"</p>}
       </Card>
 
-      <Link to="/estudante/mensagens" search={{ t: thread?.id ?? `new-${j.id}` }} className="flex h-12 items-center justify-center gap-2 rounded-[10px] bg-primary font-semibold text-primary-foreground">
+      <Link to="/estudante/mensagens" search={{ t: thread?.id ?? `new-${j.id}` }} className="flex h-12 items-center justify-center gap-2 rounded-lg bg-primary font-semibold text-primary-foreground">
         <MessageCircle className="h-5 w-5" /> Chat com recrutador
       </Link>
     </div>

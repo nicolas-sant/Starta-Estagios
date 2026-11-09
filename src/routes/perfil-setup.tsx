@@ -62,7 +62,7 @@ function PerfilSetup() {
         <Field label="Curso" value={f.course} maxLength={100} onChange={(e) => setF({ ...f, course: e.target.value })} placeholder="Administração" />
         <label className="block">
           <span className="mb-1.5 block text-sm font-medium text-deep-space">Semestre em andamento</span>
-          <select value={f.semester} onChange={(e) => setF({ ...f, semester: e.target.value })} className="h-12 w-full rounded-[10px] border border-border bg-card px-4 outline-none focus:border-primary">
+          <select value={f.semester} onChange={(e) => setF({ ...f, semester: e.target.value })} className="h-12 w-full rounded-lg border border-border bg-card px-4 outline-none focus:border-primary">
             <option value="">Selecione</option>
             {Array.from({ length: 12 }, (_, i) => (
               <option key={i} value={String(i + 1)}>{i + 1}º semestre</option>

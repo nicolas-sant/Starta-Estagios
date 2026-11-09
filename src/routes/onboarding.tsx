@@ -75,7 +75,7 @@ function Onboarding() {
                 setCity("");
               }}
               placeholder="Buscar cidade"
-              className="h-12 w-full rounded-[10px] border border-border bg-card pl-12 pr-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="h-12 w-full rounded-lg border border-border bg-card pl-12 pr-4 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <p className="mt-3 h-5 text-sm font-semibold text-primary">{city ? `Selecionada: ${city}` : ""}</p>

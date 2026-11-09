@@ -86,8 +86,8 @@ function Mensagens() {
           ))}
         </div>
         <form onSubmit={(e) => { e.preventDefault(); send(); }} className="sticky bottom-20 flex gap-2 bg-background pt-2">
-          <input value={text} maxLength={1000} onChange={(e) => setText(e.target.value)} placeholder="Escreva uma mensagem" className="h-12 flex-1 rounded-[10px] border border-border bg-card px-4 outline-none focus:border-primary" />
-          <button aria-label="Enviar" className="flex h-12 w-12 items-center justify-center rounded-[10px] bg-primary text-primary-foreground"><Send className="h-5 w-5" /></button>
+          <input value={text} maxLength={1000} onChange={(e) => setText(e.target.value)} placeholder="Escreva uma mensagem" className="h-12 flex-1 rounded-lg border border-border bg-card px-4 outline-none focus:border-primary" />
+          <button aria-label="Enviar" className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground"><Send className="h-5 w-5" /></button>
         </form>
       </div>
     );

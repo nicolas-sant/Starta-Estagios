@@ -19,7 +19,7 @@ export function PrimaryButton({ className, ...p }: React.ButtonHTMLAttributes<HT
     <button
       {...p}
       className={cn(
-        "inline-flex h-12 items-center justify-center gap-2 rounded-[10px] bg-primary px-5 font-semibold text-primary-foreground transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40",
+        "inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-primary px-5 font-semibold text-primary-foreground transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40",
         className,
       )}
     />
@@ -31,7 +31,7 @@ export function GhostButton({ className, ...p }: React.ButtonHTMLAttributes<HTML
     <button
       {...p}
       className={cn(
-        "inline-flex h-12 items-center justify-center gap-2 rounded-[10px] border border-border bg-card px-5 font-semibold text-deep-space transition hover:bg-mint disabled:opacity-40",
+        "inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-border bg-card px-5 font-semibold text-deep-space transition hover:bg-mint disabled:opacity-40",
         className,
       )}
     />
@@ -45,7 +45,7 @@ export function Field({ label, className, ...p }: React.InputHTMLAttributes<HTML
       <input
         {...p}
         className={cn(
-          "h-12 w-full rounded-[10px] border border-border bg-card px-4 text-[15px] text-deep-space outline-none transition placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20",
+          "h-12 w-full rounded-lg border border-border bg-card px-4 text-[15px] text-deep-space outline-none transition placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20",
           className,
         )}
       />

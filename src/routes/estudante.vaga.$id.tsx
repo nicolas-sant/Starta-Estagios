@@ -140,7 +140,7 @@ function VagaPage() {
       <div className="fixed inset-x-0 bottom-16 z-20 border-t border-border bg-card p-3 lg:bottom-0 lg:left-[240px]">
         <div className="mx-auto max-w-2xl">
           {closed ? <p className="text-center font-semibold text-muted-foreground">Vaga encerrada · novas candidaturas indisponíveis</p> : applied ? (
-            <Link to="/estudante/candidatura/$id" params={{ id: job.id }} className="flex h-12 items-center justify-center rounded-[10px] bg-recommended font-semibold text-recommended-foreground">
+            <Link to="/estudante/candidatura/$id" params={{ id: job.id }} className="flex h-12 items-center justify-center rounded-lg bg-recommended font-semibold text-recommended-foreground">
               ✓ Candidatado · ver progresso
             </Link>
           ) : verified ? (
@@ -180,7 +180,7 @@ function VagaPage() {
         </div>
         <label className="mt-4 block">
           <span className="text-sm font-medium text-deep-space">Mensagem ao recrutador (opcional)</span>
-          <textarea value={msg} maxLength={500} onChange={(e) => setMsg(e.target.value)} rows={3} className="mt-1.5 w-full rounded-[10px] border border-border p-3 outline-none focus:border-primary" placeholder="Por que você se interessa por essa vaga?" />
+          <textarea value={msg} maxLength={500} onChange={(e) => setMsg(e.target.value)} rows={3} className="mt-1.5 w-full rounded-lg border border-border p-3 outline-none focus:border-primary" placeholder="Por que você se interessa por essa vaga?" />
           <span className="label-mono text-muted-foreground">{msg.length}/500</span>
         </label>
         <PrimaryButton className="mt-3 w-full" onClick={send}>Enviar candidatura</PrimaryButton>
