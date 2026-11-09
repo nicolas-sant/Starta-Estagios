@@ -193,7 +193,7 @@ export function JobCard({ job, applied, match }: { job: Job; applied?: boolean; 
 
 export function DocChip({ title, onRemove }: { title: string; onRemove?: () => void }) {
   return (
-    <span className="inline-flex h-10 items-center gap-2 rounded-xl bg-neutral-tag px-3 text-sm font-medium text-deep-space">
+    <span className="inline-flex h-11 items-center gap-2 rounded-xl bg-neutral-tag px-3 ring-1 ring-border text-sm font-medium text-deep-space">
       <FileText className="h-4 w-4" />
       {title}
       {onRemove && (

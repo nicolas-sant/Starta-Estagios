@@ -177,7 +177,7 @@ function VagaPage() {
               <DocChip title={d.title} />
             </button>
           ))}
-          <Link to="/estudante/perfil" className="flex h-10 items-center rounded-xl border border-dashed border-border px-3 text-sm font-medium text-primary">+ Novo</Link>
+          <Link to="/estudante/perfil" className="flex h-11 items-center rounded-xl border border-dashed border-border px-3 text-sm font-medium text-primary">+ Novo</Link>
         </div>
         <label className="mt-3 block">
           <span className="text-sm font-medium text-deep-space">Mensagem ao recrutador (opcional)</span>
