@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Check, FileText, ShieldCheck, Upload, Loader2, XCircle, CheckCircle2, AlertTriangle, MapPin, Wallet, Laptop } from "lucide-react";
+import { Check, FileText, ShieldCheck, Upload, Loader2, XCircle, CheckCircle2, AlertTriangle, } from "lucide-react";
 import { useRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { brl, getCompany, hasTrustSeal, hasReachPenalty, type Job, type Skill, type Stage } from "@/lib/data";
@@ -57,7 +57,7 @@ export function VerifiedSeal({ label = "Verificada", small }: { label?: string; 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full bg-lemon font-semibold text-deep-space ring-1 ring-deep-space/10",
+        "inline-flex items-center gap-1 rounded-full bg-essential font-semibold text-essential-foreground ring-1 ring-essential-foreground/20",
         small ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs",
       )}
     >
@@ -75,7 +75,7 @@ export function SkillTag({ skill }: { skill: Skill }) {
       <span
         className={cn(
           "rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
-          ess ? "bg-essential text-essential-foreground" : "bg-recommended text-recommended-foreground",
+          ess ? "bg-deep-space text-white" : "border border-border bg-card text-muted-foreground",
         )}
       >
         {ess ? "Essencial" : "Recomendado"}
@@ -97,10 +97,10 @@ export function Stepper({ steps, current, failed }: { steps: readonly string[]; 
   return (
     <ol className="flex w-full items-start">
       {steps.map((s, i) => {
-        const done = i < current || (i === current && i === steps.length - 1 && !failed && current === steps.length - 1 && false);
+        const done = i < current;
         const isCurrent = i === current;
         return (
-          <li key={s} className="flex flex-1 flex-col items-center text-center last:flex-none last:basis-16">
+          <li key={s} aria-current={isCurrent ? "step" : undefined} className="flex flex-1 flex-col items-center text-center last:flex-none last:basis-16">
             <div className="flex w-full items-center">
               <span
                 className={cn(
@@ -115,7 +115,7 @@ export function Stepper({ steps, current, failed }: { steps: readonly string[]; 
               </span>
               {i < steps.length - 1 && <span className={cn("mx-1 h-0.5 flex-1 rounded", i < current ? "bg-moss" : "bg-neutral-tag")} />}
             </div>
-            <span className={cn("mt-1.5 w-16 text-[11px] font-semibold", isCurrent ? "text-deep-space" : "text-muted-foreground")}>{s}</span>
+            <span className={cn("mt-2 w-16 text-[11px] font-semibold", isCurrent ? "text-deep-space" : "text-muted-foreground")}>{s}</span>
           </li>
         );
       })}
@@ -155,48 +155,36 @@ export function JobCard({ job, applied, match }: { job: Job; applied?: boolean; 
   const seal = hasTrustSeal(job);
   const matched = !!match?.length;
   return (
-    <article className={cn("relative rounded-2xl border bg-card p-4 shadow-[var(--shadow-card)] transition hover:border-primary/40", matched ? "border-2 border-moss" : "border-border")}>
+    <article className={cn("relative overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)] transition hover:border-primary/40", matched && "ring-1 ring-moss/30")}>
       {matched && (
-        <p className="-mx-4 -mt-4 mb-3 flex flex-wrap items-center gap-x-2 rounded-t-[14px] bg-recommended px-4 py-2 text-xs font-bold text-recommended-foreground">
+        <p className="-mx-5 -mt-5 mb-3 flex flex-wrap items-center gap-x-2 bg-recommended px-5 py-2 text-xs font-semibold text-recommended-foreground">
           <CheckCircle2 className="h-4 w-4" /> Combina com você
           <span className="font-medium">· {match!.join(" · ")}</span>
         </p>
       )}
-      <div className="flex items-start gap-3">
+      <div className="flex items-center gap-3">
         <CompanyAvatar initials={c?.initials ?? "?"} />
-        <div className="min-w-0 flex-1 pr-20">
-          <Link to="/estudante/vaga/$id" params={{ id: job.id }} className="block font-display text-[17px] font-bold leading-snug text-deep-space after:absolute after:inset-0">
-            {job.title}
-          </Link>
+        <div className="min-w-0 flex-1">
           {c && (
-            <Link to="/estudante/empresa/$id" params={{ id: c.id }} className="relative z-10 text-sm font-medium text-primary hover:underline">
+            <Link to="/estudante/empresa/$id" params={{ id: c.id }} className="relative z-10 inline-flex min-h-8 items-center text-sm font-medium text-primary hover:underline">
               {c.name}
             </Link>
           )}
         </div>
-        <div className={cn("absolute right-4", matched ? "top-14" : "top-4")}>{seal ? <VerifiedSeal small label="Confiável" /> : <NeutralTag>Sem selo</NeutralTag>}</div>
+        {seal && <VerifiedSeal small label="Confiável" />}
       </div>
+      <Link to="/estudante/vaga/$id" params={{ id: job.id }} className="mt-3 block font-display text-[17px] font-bold leading-snug text-deep-space after:absolute after:inset-0">
+        {job.title}
+      </Link>
       <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{job.summary}</p>
-      <div className="mt-3 flex flex-wrap gap-2">
-        <NeutralTag icon={<Wallet className="h-3.5 w-3.5" />}>{brl(job.stipend)}</NeutralTag>
-        <NeutralTag icon={<Laptop className="h-3.5 w-3.5" />}>{job.modality}</NeutralTag>
-        <NeutralTag icon={<MapPin className="h-3.5 w-3.5" />}>{job.city}</NeutralTag>
-      </div>
-      <div className="mt-3 flex flex-wrap gap-1.5 border-t border-border pt-3">
-        {job.skills.slice(0, 3).map((s) => (
-          <SkillTag key={s.name} skill={s} />
-        ))}
-      </div>
-      <div className="mt-3 flex items-center justify-between">
-        <span className="label-mono text-muted-foreground">
-          {job.applicants} candidatos · há {job.postedDaysAgo}d
-        </span>
+      <p className="mt-3 text-sm text-muted-foreground">{brl(job.stipend)} · {job.modality} · {job.city}</p>
+      <div className="mt-3 text-sm font-semibold">
         {applied ? (
-          <span className="label-mono text-recommended-foreground">✓ Candidatado</span>
+          <span className="text-moss">✓ Candidatado</span>
         ) : hasReachPenalty(job.companyId) ? (
-          <span className="label-mono text-destructive">Baixo retorno · {c?.responseRate}%</span>
+          <span className="text-destructive">Baixo retorno · {c?.responseRate}%</span>
         ) : (
-          <span className="label-mono text-recommended-foreground">Retorno {c?.responseRate}%</span>
+          <span className="text-moss">Retorno {c?.responseRate}%</span>
         )}
       </div>
     </article>
@@ -220,7 +208,7 @@ export function DocChip({ title, onRemove }: { title: string; onRemove?: () => v
 const stageStyles: Record<Stage, string> = {
   Recebido: "bg-neutral-tag text-deep-space",
   Triagem: "bg-essential text-essential-foreground",
-  Entrevista: "bg-lemon text-deep-space",
+  Entrevista: "bg-lemon text-lemon-ink ring-1 ring-lemon-ink/20",
   Aprovado: "bg-recommended text-recommended-foreground",
   Recusado: "bg-destructive/10 text-destructive",
 };
@@ -306,7 +294,7 @@ export function UploadArea({
 
 export function SectionTitle({ children, action }: { children: ReactNode; action?: ReactNode }) {
   return (
-    <div className="mb-3 flex items-center justify-between">
+    <div className="mb-4 flex items-center justify-between">
       <h2 className="text-lg font-extrabold text-deep-space">{children}</h2>
       {action}
     </div>
@@ -314,7 +302,7 @@ export function SectionTitle({ children, action }: { children: ReactNode; action
 }
 
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
-  return <div className={cn("rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)]", className)}>{children}</div>;
+  return <div className={cn("rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)]", className)}>{children}</div>;
 }
 
 /** Indicador de progresso (não clicável) da verificação de matrícula */

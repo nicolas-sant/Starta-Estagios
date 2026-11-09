@@ -47,14 +47,13 @@ function Candidatura() {
     : a.feedback;
   const resultOut = a.step >= 3 && !!a.result;
   const interview = a.step === 2 && !a.result ? a.interview : undefined;
-  const LevelTag = ({ name }: { name: string }) => {
+  const SkillChip = ({ name }: { name: string }) => {
     const lv = levelOf(name);
-    if (!lv) return null;
-    return <span className={cn("rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide", lv === "essencial" ? "bg-essential-foreground text-essential" : "bg-recommended-foreground text-recommended")}>{lv === "essencial" ? "Essencial" : "Recomendado"}</span>;
+    return lv ? <SkillTag skill={{ name, level: lv }} /> : <span className="inline-flex items-center rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-deep-space">{name}</span>;
   };
 
   return (
-    <div className="mx-auto max-w-3xl space-y-4">
+    <div className="mx-auto max-w-3xl space-y-8">
       <Link to="/estudante/painel" className="flex h-11 items-center gap-1 text-sm font-semibold text-primary"><ArrowLeft className="h-5 w-5" /> Painel</Link>
       <Card>
         <div className="flex items-center gap-3">
@@ -64,7 +63,7 @@ function Candidatura() {
             <p className="text-sm text-muted-foreground">{c?.name} · enviada em {new Date(a.appliedAt).toLocaleDateString("pt-BR")}</p>
           </div>
         </div>
-        <div className="mt-5"><Stepper steps={STUDENT_STEPS} current={a.step} failed={a.result === "recusado"} /></div>
+        <div className="mt-3"><Stepper steps={STUDENT_STEPS} current={a.step} failed={a.result === "recusado"} /></div>
       </Card>
 
       {feedback && (
@@ -78,7 +77,7 @@ function Candidatura() {
       )}
 
       {a.step === 2 && !a.result && (
-        <section className="rounded-2xl border-2 border-deep-space bg-lemon p-5 text-deep-space shadow-[var(--shadow-card)]">
+        <section className="rounded-2xl bg-lemon p-5 text-lemon-ink ring-1 ring-lemon-ink/20 shadow-[var(--shadow-card)]">
           <p className="label-mono">Sua entrevista</p>
           {interview ? (
             <>
@@ -89,7 +88,7 @@ function Candidatura() {
                 <li className="flex items-center gap-2">{interview.link ? <Video className="h-5 w-5" /> : <MapPin className="h-5 w-5" />} {interview.place}</li>
               </ul>
               {interview.link && (
-                <a href={interview.link} target="_blank" rel="noopener noreferrer" className="mt-4 flex h-12 items-center justify-center rounded-lg bg-deep-space font-semibold text-primary-foreground">Abrir link da entrevista</a>
+                <a href={interview.link} target="_blank" rel="noopener noreferrer" className="mt-3 flex h-12 items-center justify-center rounded-lg bg-deep-space font-semibold text-primary-foreground">Abrir link da entrevista</a>
               )}
             </>
           ) : (
@@ -101,11 +100,11 @@ function Candidatura() {
       <div className="grid gap-3 sm:grid-cols-2">
         <Card>
           <p className="flex items-center gap-2 font-display font-bold text-deep-space"><Sparkles className="h-5 w-5 text-recommended-foreground" /> Pontos fortes</p>
-          <div className="mt-2 flex flex-wrap gap-2">{a.strengths.map((s) => <span key={s} className="inline-flex items-center gap-1.5 rounded-full bg-recommended py-1 pl-3 pr-1 text-xs font-semibold text-recommended-foreground">{s}<LevelTag name={s} /></span>)}</div>
+          <div className="mt-3 flex flex-wrap gap-2">{a.strengths.map((s) => <SkillChip key={s} name={s} />)}</div>
         </Card>
         <Card>
           <p className="flex items-center gap-2 font-display font-bold text-deep-space"><TrendingUp className="h-5 w-5 text-primary" /> A desenvolver</p>
-          <div className="mt-2 flex flex-wrap gap-2">{a.toDevelop.map((s) => <span key={s} className="inline-flex items-center gap-1.5 rounded-full bg-essential py-1 pl-3 pr-1 text-xs font-semibold text-essential-foreground">{s}<LevelTag name={s} /></span>)}</div>
+          <div className="mt-3 flex flex-wrap gap-2">{a.toDevelop.map((s) => <SkillChip key={s} name={s} />)}</div>
         </Card>
       </div>
 

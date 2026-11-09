@@ -34,6 +34,14 @@ function StudentLayout() {
     setState((s) => ({ ...s, recruiterJobs: [...s.recruiterJobs.filter((j) => !loaded.some((r) => r.id === j.id)), ...loaded] }));
   }, [publicJobs]);
   const [open, setOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(true);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const on = () => setIsDesktop(mq.matches);
+    on();
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
   const nav = useNavigate();
   const views = useStore((s) => s.student.cvViews7d);
   const notifs = useStore((s) => s.notifications);
@@ -57,8 +65,8 @@ function StudentLayout() {
       </header>
 
       {/* Drawer */}
-      <div className={cn("fixed inset-0 z-40 bg-deep-space/40 transition-opacity lg:hidden", open ? "opacity-100" : "pointer-events-none opacity-0")} onClick={() => setOpen(false)} />
-      <aside className={cn("fixed inset-y-0 left-0 z-50 flex w-80 max-w-[85vw] flex-col bg-sidebar p-4 text-sidebar-foreground transition-transform lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:w-auto lg:max-w-none lg:translate-x-0 lg:border-r lg:border-border lg:transition-none", open ? "translate-x-0" : "-translate-x-full")}>
+      {open && <div className="fixed inset-0 z-40 bg-deep-space/40 lg:hidden" onClick={() => setOpen(false)} />}
+      <aside inert={!open && !isDesktop ? true : undefined} className={cn("fixed inset-y-0 left-0 z-50 flex w-80 max-w-[85vw] flex-col bg-sidebar p-4 text-sidebar-foreground transition-transform lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:w-auto lg:max-w-none lg:translate-x-0 lg:border-r lg:border-border lg:transition-none", open ? "translate-x-0" : "-translate-x-full")}>
         <div className="flex h-12 items-center justify-between">
           <Logo light />
           <button onClick={() => setOpen(false)} aria-label="Fechar menu" className="lg:hidden flex h-12 w-12 items-center justify-center rounded-xl hover:bg-sidebar-accent">
@@ -69,7 +77,7 @@ function StudentLayout() {
           {NAV.map((n) => (
             <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="flex h-12 items-center gap-3 rounded-xl px-3 hover:bg-sidebar-accent">
               <n.icon className="h-5 w-5" /> {n.label}
-              {badge(n.to) > 0 && <span className="ml-auto flex h-6 min-w-6 items-center justify-center rounded-full bg-lemon px-1.5 text-xs font-bold text-deep-space" aria-label={`${badge(n.to)} novidades`}>{badge(n.to)}</span>}
+              {badge(n.to) > 0 && <span className="ml-auto flex h-6 min-w-6 items-center justify-center rounded-full bg-lemon px-1.5 text-xs font-bold text-lemon-ink ring-1 ring-lemon-ink/20" aria-label={`${badge(n.to)} novidades`}>{badge(n.to)}</span>}
             </Link>
           ))}
           <div className="mt-auto" />

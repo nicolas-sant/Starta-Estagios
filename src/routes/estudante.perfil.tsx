@@ -77,7 +77,7 @@ function Perfil() {
   const setSetting = (k: keyof typeof settings, v: boolean) => setState((s) => ({ ...s, settings: { ...s.settings, [k]: v } }));
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-8">
       <Card>
         <div className="flex items-center gap-4">
           <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-neutral-tag">
@@ -98,7 +98,7 @@ function Perfil() {
           )}
         </div>
         {editing && (
-          <form className="mt-4 grid gap-3 border-t border-border pt-4 sm:grid-cols-2" onSubmit={(e) => { e.preventDefault(); saveProfile(); }}>
+          <form className="mt-3 grid gap-3 border-t border-border pt-3 sm:grid-cols-2" onSubmit={(e) => { e.preventDefault(); saveProfile(); }}>
             <Field label="Nome" value={form.name} maxLength={80} onChange={(e) => setForm({ ...form, name: e.target.value })} />
             <Field label="Curso" value={form.course} maxLength={80} onChange={(e) => setForm({ ...form, course: e.target.value })} />
             <Field label="Instituição" value={form.institution} maxLength={80} onChange={(e) => setForm({ ...form, institution: e.target.value })} />
@@ -158,7 +158,7 @@ function Perfil() {
             </div>
           ))}
         </div>
-        <div className="mt-4 grid gap-2 sm:grid-cols-[1fr_auto_auto]">
+        <div className="mt-3 grid gap-2 sm:grid-cols-[1fr_auto_auto]">
           <input value={title} maxLength={60} onChange={(e) => setTitle(e.target.value)} placeholder='Título, ex.: "Dev Front-end"' className="h-12 rounded-lg border border-border px-4 outline-none focus:border-primary" />
           <select value={area} onChange={(e) => setArea(e.target.value)} className="h-12 rounded-lg border border-border bg-card px-3">
             {["Geral", ...AREAS].map((a) => <option key={a}>{a}</option>)}
@@ -199,7 +199,7 @@ function Perfil() {
           <Field label="LinkedIn" placeholder="linkedin.com/in/voce" value={linkForm.linkedin} maxLength={200} onChange={(e) => setLinkForm({ ...linkForm, linkedin: e.target.value })} />
           <PrimaryButton type="submit" className="sm:col-span-3">Salvar links</PrimaryButton>
         </form>
-        <form className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-end" onSubmit={(e) => { e.preventDefault(); saveSkills(); }}>
+        <form className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-end" onSubmit={(e) => { e.preventDefault(); saveSkills(); }}>
           <div className="flex-1"><Field label="Suas habilidades (separe por vírgula)" value={skillsText} maxLength={400} onChange={(e) => setSkillsText(e.target.value)} /></div>
           <GhostButton type="submit">Salvar</GhostButton>
         </form>

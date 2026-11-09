@@ -64,7 +64,7 @@ function Buscar() {
     .sort((a, b) => rankScore(b) - rankScore(a));
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-8">
       <h1 className="text-2xl text-deep-space lg:text-3xl">Buscar</h1>
       <div className="flex gap-2">
         <div className="relative flex-1">
@@ -77,7 +77,7 @@ function Buscar() {
       </div>
 
       {showFilters && (
-        <div className="space-y-4 rounded-2xl border border-border bg-card p-4">
+        <div className="space-y-4 rounded-2xl border border-border bg-card p-5">
           <div>
             <p className="label-mono mb-2 text-muted-foreground">Área</p>
             <div className="flex gap-2 overflow-x-auto pb-1">
@@ -122,7 +122,7 @@ function Buscar() {
           <JobCard key={j.id} job={j} applied={apps.some((a) => a.jobId === j.id)} />
         ))}
         {!jobs.length && (
-          <div className="rounded-2xl border border-border bg-card p-6 text-center">
+          <div className="rounded-2xl border border-border bg-card p-5 text-center">
             <p className="font-display text-lg font-bold text-deep-space">Nenhuma vaga com esses filtros</p>
             {active.length > 0 && (
               <>
@@ -132,7 +132,7 @@ function Buscar() {
                 </ul>
               </>
             )}
-            <button onClick={clear} className="mt-4 h-12 rounded-lg bg-primary px-5 font-semibold text-primary-foreground">Limpar filtros</button>
+            <button onClick={clear} className="mt-3 h-12 rounded-lg bg-primary px-5 font-semibold text-primary-foreground">Limpar filtros</button>
           </div>
         )}
       </div>

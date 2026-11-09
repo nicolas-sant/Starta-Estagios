@@ -58,7 +58,7 @@ function VagaPage() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl space-y-4 pb-40">
+    <div className="mx-auto max-w-3xl space-y-8 pb-40">
       <button onClick={() => history.back()} className="flex h-11 items-center gap-1 text-sm font-semibold text-primary"><ArrowLeft className="h-5 w-5" /> Voltar</button>
 
       <Card>
@@ -66,13 +66,13 @@ function VagaPage() {
           <CompanyAvatar initials={c?.initials ?? "?"} size={56} />
           {seal ? <VerifiedSeal label="Vaga confiável" /> : <NeutralTag>Sem selo de confiança</NeutralTag>}
         </div>
-        <h1 className="mt-4 text-2xl text-deep-space lg:text-3xl">{job.title}</h1>
+        <h1 className="mt-3 text-2xl text-deep-space lg:text-3xl">{job.title}</h1>
         {c && (
           <Link to="/estudante/empresa/$id" params={{ id: c.id }} className="mt-1 inline-flex items-center gap-2 font-semibold text-primary hover:underline">
             {c.name} {c.verified && <VerifiedSeal small />}
           </Link>
         )}
-        <div className="mt-4 grid grid-cols-2 gap-2">
+        <div className="mt-3 grid grid-cols-2 gap-3">
           {[
             [Wallet, "Bolsa", brl(job.stipend)],
             [Laptop, "Modalidade", job.modality],
@@ -81,7 +81,7 @@ function VagaPage() {
           ].map(([I, l, v]) => {
             const Icon = I as typeof Wallet;
             return (
-              <div key={l as string} className="rounded-xl bg-mint p-3">
+              <div key={l as string} className="rounded-xl bg-mint p-5">
                 <p className="label-mono flex items-center gap-1 text-muted-foreground"><Icon className="h-3.5 w-3.5" />{l as string}</p>
                 <p className="mt-1 font-semibold text-deep-space">{v as string}</p>
               </div>
@@ -90,10 +90,11 @@ function VagaPage() {
         </div>
         <div className="mt-3 flex flex-wrap gap-3 label-mono text-muted-foreground">
           <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5" /> {job.applicants} candidatos</span>
+          <span>Publicada há {job.postedDaysAgo}d</span>
           <span>Retorno médio: {c?.avgResponseDays} dias</span>
           <span>{c?.responseRate}% recebem resposta</span>
         </div>
-        <p className="mt-1.5 flex items-start gap-1.5 text-xs text-muted-foreground">
+        <p className="mt-3 flex items-start gap-1.5 text-xs text-muted-foreground">
           <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" /> "{c?.responseRate}% recebem resposta" é a proporção de candidatos que receberam algum retorno desta empresa no Starta, aprovados ou não.
         </p>
         {hasReachPenalty(job.companyId) && (
@@ -108,7 +109,7 @@ function VagaPage() {
         <p className="text-sm text-muted-foreground">{process.steps.length} etapas · {process.technicalTest ? "inclui teste técnico" : "sem teste técnico"}</p>
         <ol className="mt-3 grid gap-2 sm:grid-cols-4">
           {process.steps.map((p, i) => (
-            <li key={p} className="flex items-center gap-2 rounded-xl bg-mint p-3 text-sm font-semibold text-deep-space">
+            <li key={p} className="flex items-center gap-2 rounded-xl bg-mint p-5 text-sm font-semibold text-deep-space">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">{i + 1}</span>{p}
             </li>
           ))}
@@ -127,11 +128,11 @@ function VagaPage() {
       <Card>
         <h2 className="text-lg text-deep-space">Sobre a vaga</h2>
         <p className="mt-2 text-[15px] text-deep-space/80">{job.description}</p>
-        <h3 className="mt-4 font-display font-bold text-deep-space">Responsabilidades</h3>
+        <h3 className="mt-3 font-display font-bold text-deep-space">Responsabilidades</h3>
         <ul className="mt-2 list-disc space-y-1 pl-5 text-[15px] text-deep-space/80">{job.responsibilities.map((r) => <li key={r}>{r}</li>)}</ul>
         {job.benefits.length > 0 && (
           <>
-            <h3 className="mt-4 font-display font-bold text-deep-space">Benefícios</h3>
+            <h3 className="mt-3 font-display font-bold text-deep-space">Benefícios</h3>
             <div className="mt-2 flex flex-wrap gap-2">{job.benefits.map((b) => <NeutralTag key={b}>{b}</NeutralTag>)}</div>
           </>
         )}
@@ -149,7 +150,7 @@ function VagaPage() {
             </PrimaryButton>
           ) : (
             <div className="space-y-2">
-              <p className="flex items-start gap-2 rounded-xl bg-lemon p-3 text-sm font-medium text-deep-space">
+              <p className="flex items-start gap-2 rounded-xl bg-lemon p-3 text-sm font-medium text-lemon-ink ring-1 ring-lemon-ink/20">
                 <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" /> Você precisa verificar sua matrícula antes de se candidatar. Leva menos de 2 minutos.
               </p>
               <PrimaryButton className="w-full" onClick={() => nav({ to: "/verificacao" })}>
@@ -161,8 +162,8 @@ function VagaPage() {
       </div>
 
       {/* Bottom sheet de inscrição */}
-      <div className={cn("fixed inset-0 z-40 bg-deep-space/40 transition-opacity", sheet ? "opacity-100" : "pointer-events-none opacity-0")} onClick={() => setSheet(false)} />
-      <div className={cn("fixed inset-x-0 bottom-0 z-50 mx-auto max-w-2xl rounded-t-[24px] bg-card p-5 transition-transform", sheet ? "translate-y-0" : "translate-y-full")}>
+      {sheet && <div className="fixed inset-0 z-40 bg-deep-space/40" onClick={() => setSheet(false)} />}
+      <div inert={!sheet ? true : undefined} aria-hidden={!sheet} className={cn("fixed inset-x-0 bottom-0 z-50 mx-auto max-w-2xl rounded-t-[24px] bg-card p-5 transition-transform", sheet ? "translate-y-0" : "translate-y-full")}>
         <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-neutral-tag" />
         <div className="flex items-center justify-between">
           <h2 className="text-xl text-deep-space">Inscrição</h2>
@@ -178,9 +179,9 @@ function VagaPage() {
           ))}
           <Link to="/estudante/perfil" className="flex h-10 items-center rounded-xl border border-dashed border-border px-3 text-sm font-medium text-primary">+ Novo</Link>
         </div>
-        <label className="mt-4 block">
+        <label className="mt-3 block">
           <span className="text-sm font-medium text-deep-space">Mensagem ao recrutador (opcional)</span>
-          <textarea value={msg} maxLength={500} onChange={(e) => setMsg(e.target.value)} rows={3} className="mt-1.5 w-full rounded-lg border border-border p-3 outline-none focus:border-primary" placeholder="Por que você se interessa por essa vaga?" />
+          <textarea value={msg} maxLength={500} onChange={(e) => setMsg(e.target.value)} rows={3} className="mt-2 w-full rounded-lg border border-border p-3 outline-none focus:border-primary" placeholder="Por que você se interessa por essa vaga?" />
           <span className="label-mono text-muted-foreground">{msg.length}/500</span>
         </label>
         <PrimaryButton className="mt-3 w-full" onClick={send}>Enviar candidatura</PrimaryButton>
