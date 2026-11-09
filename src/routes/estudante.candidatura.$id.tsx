@@ -63,7 +63,7 @@ function Candidatura() {
             <p className="text-sm text-muted-foreground">{c?.name} · enviada em {new Date(a.appliedAt).toLocaleDateString("pt-BR")}</p>
           </div>
         </div>
-        <div className="mt-3"><Stepper steps={STUDENT_STEPS} current={a.step} failed={a.result === "recusado"} /></div>
+        <div className="mt-3"><Stepper steps={STUDENT_STEPS} current={a.step} failed={a.result === "recusado"} complete={a.result === "aprovado"} /></div>
       </Card>
 
       {feedback && (

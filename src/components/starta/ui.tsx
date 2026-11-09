@@ -93,12 +93,12 @@ export function NeutralTag({ children, icon }: { children: ReactNode; icon?: Rea
   );
 }
 
-export function Stepper({ steps, current, failed }: { steps: readonly string[]; current: number; failed?: boolean }) {
+export function Stepper({ steps, current, failed, complete }: { steps: readonly string[]; current: number; failed?: boolean; complete?: boolean }) {
   return (
     <ol className="flex w-full items-start">
       {steps.map((s, i) => {
-        const done = i < current;
-        const isCurrent = i === current;
+        const done = i < current || (!!complete && !failed && i === current && i === steps.length - 1);
+        const isCurrent = i === current && !done;
         return (
           <li key={s} aria-current={isCurrent ? "step" : undefined} className="flex flex-1 flex-col items-center text-center last:flex-none last:basis-16">
             <div className="flex w-full items-center">
