@@ -9,7 +9,7 @@ import { daysUntil, fmtDate } from "@/lib/store";
 export function Logo({ light }: { light?: boolean }) {
   return (
     <span className={cn("font-display text-xl font-extrabold tracking-tight", light ? "text-primary-foreground" : "text-deep-space")}>
-      start<span className={light ? "text-recommended" : "text-moss"}>a</span>
+      start<span className={light ? "text-moss-light" : "text-moss"}>a</span>
     </span>
   );
 }

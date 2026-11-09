@@ -63,6 +63,7 @@
   --color-dusk: var(--dusk);
   --color-lemon: var(--lemon);
   --color-moss: var(--moss);
+  --color-moss-light: var(--moss-light);
   --color-mint: var(--mint);
   --color-essential: var(--essential-bg);
   --color-essential-foreground: var(--essential-fg);
@@ -95,6 +96,7 @@
   --lemon: oklch(0.967 0.028 84.6);
   --lemon-ink: oklch(0.508 0.108 73.3);
   --moss: oklch(0.474 0.094 155.1);
+  --moss-light: oklch(0.730 0.126 154.7);  /* #5FBF84 — verde para uso sobre fundo escuro, 7.27:1 em #16202B */
   --mint: oklch(0.963 0.003 247.9);
   --essential-bg: oklch(0.956 0.016 274.8);
   --essential-fg: oklch(0.408 0.153 269.5);
