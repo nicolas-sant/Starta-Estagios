@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, MessageCircle, TrendingUp, Sparkles, CalendarDays, Clock, MapPin, Video, Megaphone } from "lucide-react";
-import { Card, CompanyAvatar, DocChip, Stepper } from "@/components/starta/ui";
+import { Card, CompanyAvatar, DocChip, SkillTag, Stepper } from "@/components/starta/ui";
 import { JOBS, STUDENT_STEPS, getCompany } from "@/lib/data";
 import { stepDatesFor, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";

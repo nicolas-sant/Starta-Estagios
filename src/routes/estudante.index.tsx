@@ -55,7 +55,7 @@ function Feed() {
         </Link>
       )}
       {expiring && (
-        <Link to="/estudante/perfil" className="flex items-center gap-3 rounded-2xl border border-destructive/40 bg-neutral-tag p-4 text-deep-space">
+        <Link to="/estudante/perfil" className="flex items-center gap-3 rounded-2xl border border-destructive/40 bg-neutral-tag p-5 text-deep-space">
           <AlertTriangle className="h-6 w-6 shrink-0 text-destructive" />
           <span className="text-sm">{d < 0 ? "Sua verificação venceu. Reenvie o comprovante." : `Sua verificação vence em ${d} dias. Reenvie o comprovante.`}</span>
         </Link>

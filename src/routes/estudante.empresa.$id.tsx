@@ -40,9 +40,9 @@ function EmpresaPage() {
           </div>
           <p className="mt-3 text-[15px] text-deep-space/80">{c.about}</p>
           <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-            <div className="rounded-xl bg-mint p-3"><p className="font-display text-xl font-extrabold text-deep-space">{jobs.length}</p><p className="label-mono text-muted-foreground">vagas</p></div>
-            <div className="rounded-xl bg-mint p-3"><p className="font-display text-xl font-extrabold text-deep-space">{c.responseRate}%</p><p className="label-mono text-muted-foreground">retorno</p></div>
-            <div className="rounded-xl bg-mint p-3"><p className="font-display text-xl font-extrabold text-deep-space">{c.avgResponseDays}d</p><p className="label-mono text-muted-foreground">resposta</p></div>
+            <div className="rounded-xl bg-mint p-5"><p className="font-display text-xl font-extrabold text-deep-space">{jobs.length}</p><p className="label-mono text-muted-foreground">vagas</p></div>
+            <div className="rounded-xl bg-mint p-5"><p className="font-display text-xl font-extrabold text-deep-space">{c.responseRate}%</p><p className="label-mono text-muted-foreground">retorno</p></div>
+            <div className="rounded-xl bg-mint p-5"><p className="font-display text-xl font-extrabold text-deep-space">{c.avgResponseDays}d</p><p className="label-mono text-muted-foreground">resposta</p></div>
           </div>
           {hasReachPenalty(c.id) && (
             <p className="mt-3 flex items-start gap-2 rounded-xl bg-destructive/10 p-3 text-sm text-destructive"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" /> Penalidade de alcance: baixa taxa de retorno aos candidatos.</p>
