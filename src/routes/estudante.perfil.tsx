@@ -82,7 +82,7 @@ function Perfil() {
     <div className="space-y-8">
       <Card>
         <div className="flex items-center gap-4">
-          <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-neutral-tag">
+          <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full bg-neutral-tag">
             {st.photo ? <img src={st.photo} alt="" className="h-full w-full object-cover" /> : <User className="h-8 w-8 text-muted-foreground" />}
           </div>
           <div className="min-w-0">

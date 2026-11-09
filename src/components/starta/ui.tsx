@@ -132,7 +132,7 @@ export function OnboardingProgress({ label, step, total }: { label: string; step
           {step}/{total}
         </span>
       </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-tag">
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-border">
         <div className="h-full rounded-full bg-primary transition-all duration-500" style={{ width: `${(step / total) * 100}%` }} />
       </div>
     </div>
@@ -311,7 +311,7 @@ export function VerificationProgress({ status }: { status: VerificationStatus })
   const steps = ["Enviado", "Em análise", last];
   const idx = status === "vazio" ? -1 : status === "enviado" ? 0 : status === "analise" ? 1 : 2;
   return (
-    <div className="mt-4" role="group" aria-label="Andamento da verificação">
+    <div className="mt-3" role="group" aria-label="Andamento da verificação">
       <p className="label-mono mb-2 text-muted-foreground">Andamento</p>
       <ol className="flex items-start">
         {steps.map((s, i) => {
@@ -327,12 +327,12 @@ export function VerificationProgress({ status }: { status: VerificationStatus })
                     done && "bg-deep-space",
                     current && !bad && (status === "aprovado" ? "bg-moss ring-4 ring-moss/30" : "bg-primary ring-4 ring-primary/25"),
                     bad && "bg-destructive ring-4 ring-destructive/25",
-                    !done && !current && "bg-neutral-tag",
+                    !done && !current && "bg-border",
                   )}
                 />
                 {i < steps.length - 1 && <span className={cn("h-0.5 flex-1", i < idx ? "bg-deep-space" : "bg-border")} />}
               </div>
-              <span className={cn("mt-1.5 whitespace-nowrap text-xs", current ? (bad ? "font-bold text-destructive" : "font-bold text-deep-space") : done ? "text-deep-space" : "text-muted-foreground")}>
+              <span className={cn("mt-2 whitespace-nowrap text-xs", current ? (bad ? "font-bold text-destructive" : "font-bold text-deep-space") : done ? "text-deep-space" : "text-muted-foreground")}>
                 {s}
                 {current && <span className="sr-only"> (etapa atual)</span>}
               </span>
