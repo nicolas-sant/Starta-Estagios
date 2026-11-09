@@ -9,7 +9,7 @@ import { daysUntil, fmtDate } from "@/lib/store";
 export function Logo({ light }: { light?: boolean }) {
   return (
     <span className={cn("font-display text-xl font-extrabold tracking-tight", light ? "text-primary-foreground" : "text-deep-space")}>
-      start<span className="text-moss">a</span>
+      start<span className={light ? "text-recommended" : "text-moss"}>a</span>
     </span>
   );
 }
@@ -105,15 +105,15 @@ export function Stepper({ steps, current, failed }: { steps: readonly string[]; 
               <span
                 className={cn(
                   "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold",
-                  done && "border-moss bg-moss text-deep-space",
+                  done && "border-deep-space bg-deep-space text-primary-foreground",
                   isCurrent && !failed && "border-primary bg-primary text-primary-foreground",
                   isCurrent && failed && "border-destructive bg-destructive text-destructive-foreground",
-                  !done && !isCurrent && "border-neutral-tag bg-card text-muted-foreground",
+                  !done && !isCurrent && "border-border bg-card text-muted-foreground",
                 )}
               >
                 {done ? <Check className="h-4 w-4" strokeWidth={3} /> : i + 1}
               </span>
-              {i < steps.length - 1 && <span className={cn("mx-1 h-0.5 flex-1 rounded", i < current ? "bg-moss" : "bg-neutral-tag")} />}
+              {i < steps.length - 1 && <span className={cn("mx-1 h-0.5 flex-1 rounded", i < current ? "bg-deep-space" : "bg-border")} />}
             </div>
             <span className={cn("mt-2 w-16 text-[11px] font-semibold", isCurrent ? "text-deep-space" : "text-muted-foreground")}>{s}</span>
           </li>
@@ -166,7 +166,7 @@ export function JobCard({ job, applied, match }: { job: Job; applied?: boolean; 
         <CompanyAvatar initials={c?.initials ?? "?"} />
         <div className="min-w-0 flex-1">
           {c && (
-            <Link to="/estudante/empresa/$id" params={{ id: c.id }} className="relative z-10 inline-flex min-h-8 items-center text-sm font-medium text-primary hover:underline">
+            <Link to="/estudante/empresa/$id" params={{ id: c.id }} className="relative z-10 inline-flex min-h-11 items-center text-sm font-medium text-primary hover:underline">
               {c.name}
             </Link>
           )}
@@ -197,7 +197,7 @@ export function DocChip({ title, onRemove }: { title: string; onRemove?: () => v
       <FileText className="h-4 w-4" />
       {title}
       {onRemove && (
-        <button onClick={onRemove} aria-label="Remover" className="-mr-1 flex h-8 w-8 items-center justify-center rounded-lg hover:bg-card">
+        <button onClick={onRemove} aria-label="Remover" className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg hover:bg-card">
           <XCircle className="h-4 w-4 text-muted-foreground" />
         </button>
       )}
@@ -324,13 +324,13 @@ export function VerificationProgress({ status }: { status: VerificationStatus })
                 <span
                   className={cn(
                     "h-3.5 w-3.5 shrink-0 rounded-full",
-                    done && "bg-moss",
+                    done && "bg-deep-space",
                     current && !bad && (status === "aprovado" ? "bg-moss ring-4 ring-moss/30" : "bg-primary ring-4 ring-primary/25"),
                     bad && "bg-destructive ring-4 ring-destructive/25",
                     !done && !current && "bg-neutral-tag",
                   )}
                 />
-                {i < steps.length - 1 && <span className={cn("h-0.5 flex-1", i < idx ? "bg-moss" : "bg-neutral-tag")} />}
+                {i < steps.length - 1 && <span className={cn("h-0.5 flex-1", i < idx ? "bg-deep-space" : "bg-border")} />}
               </div>
               <span className={cn("mt-1.5 whitespace-nowrap text-xs", current ? (bad ? "font-bold text-destructive" : "font-bold text-deep-space") : done ? "text-deep-space" : "text-muted-foreground")}>
                 {s}

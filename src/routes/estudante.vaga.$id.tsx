@@ -68,7 +68,7 @@ function VagaPage() {
         </div>
         <h1 className="mt-3 text-2xl text-deep-space lg:text-3xl">{job.title}</h1>
         {c && (
-          <Link to="/estudante/empresa/$id" params={{ id: c.id }} className="mt-1 inline-flex items-center gap-2 font-semibold text-primary hover:underline">
+          <Link to="/estudante/empresa/$id" params={{ id: c.id }} className="inline-flex min-h-11 items-center gap-2 font-semibold text-primary hover:underline">
             {c.name} {c.verified && <VerifiedSeal small />}
           </Link>
         )}

@@ -25,8 +25,10 @@ function Toggle({ label, checked, onChange }: { label: string; checked: boolean;
   return (
     <label className="flex min-h-12 items-center justify-between gap-3 text-sm text-deep-space">
       {label}
-      <button type="button" role="switch" aria-checked={checked} onClick={() => onChange(!checked)} className={`relative h-7 w-12 rounded-full transition ${checked ? "bg-primary" : "bg-neutral-tag"}`}>
-        <span className={`absolute top-1 h-5 w-5 rounded-full bg-card transition ${checked ? "left-6" : "left-1"}`} />
+      <button type="button" role="switch" aria-checked={checked} onClick={() => onChange(!checked)} className="flex h-11 w-14 shrink-0 items-center justify-center">
+        <span className={`relative h-7 w-12 rounded-full ring-1 transition ${checked ? "bg-primary ring-primary" : "bg-neutral-tag ring-border"}`}>
+          <span className={`absolute top-1 h-5 w-5 rounded-full bg-card shadow-sm transition ${checked ? "left-6" : "left-1"}`} />
+        </span>
       </button>
     </label>
   );
