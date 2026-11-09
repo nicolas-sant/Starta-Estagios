@@ -52,7 +52,7 @@ function Painel() {
                     <ChevronRight className="h-5 w-5 text-muted-foreground" />
                   </div>
                   <div className="mt-3">
-                    <Stepper steps={STUDENT_STEPS} current={a.step} failed={a.result === "recusado"} />
+                    <Stepper steps={STUDENT_STEPS} current={a.step} failed={a.result === "recusado"} complete={a.result === "aprovado"} />
                   </div>
                   <p className={cn("mt-3 inline-flex rounded-full px-3 py-1 text-sm font-bold", a.result === "recusado" ? "bg-destructive/10 text-destructive" : a.result === "aprovado" ? "bg-recommended text-recommended-foreground" : a.step === 2 ? "bg-lemon text-lemon-ink ring-1 ring-lemon-ink/20" : "bg-essential text-essential-foreground")}>
                     {a.result === "recusado" ? "Não selecionado · retorno disponível" : a.result === "aprovado" ? "Candidatura aprovada!" : `Etapa atual: ${STUDENT_STEPS[a.step]}`}

@@ -59,11 +59,11 @@ function Candidatura() {
         <div className="flex items-center gap-3">
           <CompanyAvatar initials={c?.initials ?? "?"} size={48} />
           <div>
-            <Link to="/estudante/vaga/$id" params={{ id: j.id }} className="font-display text-lg font-bold text-deep-space hover:underline">{j.title}</Link>
+            <Link to="/estudante/vaga/$id" params={{ id: j.id }} className="inline-flex min-h-11 items-center font-display text-lg font-bold text-deep-space hover:underline">{j.title}</Link>
             <p className="text-sm text-muted-foreground">{c?.name} · enviada em {new Date(a.appliedAt).toLocaleDateString("pt-BR")}</p>
           </div>
         </div>
-        <div className="mt-3"><Stepper steps={STUDENT_STEPS} current={a.step} failed={a.result === "recusado"} /></div>
+        <div className="mt-3"><Stepper steps={STUDENT_STEPS} current={a.step} failed={a.result === "recusado"} complete={a.result === "aprovado"} /></div>
       </Card>
 
       {feedback && (
@@ -113,7 +113,7 @@ function Candidatura() {
         <ol className="mt-3 space-y-3 border-l-2 border-neutral-tag pl-4">
           {timeline.map((t) => (
             <li key={t.t} className="relative">
-              <span className={`absolute -left-[23px] top-1 h-3 w-3 rounded-full ${t.done ? "bg-moss" : "bg-neutral-tag"}`} />
+              <span className={`absolute -left-[23px] top-1 h-3 w-3 rounded-full ${t.done ? "bg-deep-space" : "bg-border"}`} />
               <p className={t.done ? "font-medium text-deep-space" : "text-muted-foreground"}>{t.t}</p>
               {t.done && t.d && <p className="label-mono text-muted-foreground">{new Date(t.d).toLocaleDateString("pt-BR")}</p>}
             </li>

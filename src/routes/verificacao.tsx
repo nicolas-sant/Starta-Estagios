@@ -46,12 +46,12 @@ function Verificacao() {
       <span className="label-mono text-primary">Etapa obrigatória</span>
       <h1 className="mt-1 text-2xl text-deep-space">Verifique sua matrícula</h1>
       <p className="mt-1 text-muted-foreground">Envie o comprovante de matrícula do semestre atual. Recrutadores veem o selo de estudante verificado nas suas candidaturas.</p>
-      <div className="mt-4 grid gap-2 text-sm">
-        <div className="rounded-xl bg-mint p-3 text-deep-space">
+      <div className="mt-3 grid gap-3 text-sm">
+        <div className="rounded-xl bg-mint p-5 text-deep-space">
           <p className="font-semibold">Documentos aceitos</p>
           <p className="text-muted-foreground">Comprovante ou declaração de matrícula do <strong className="text-deep-space">semestre atual</strong>, em <strong className="text-deep-space">PDF</strong> (até 5 MB), com seu nome, instituição e período.</p>
         </div>
-        <div className="rounded-xl bg-mint p-3 text-deep-space">
+        <div className="rounded-xl bg-mint p-5 text-deep-space">
           <p className="font-semibold">Análise em até 2 dias úteis.</p>
           <ul className="mt-1 space-y-1 text-muted-foreground">
             <li><strong className="text-recommended-foreground">Se aprovado:</strong> o selo de estudante verificado aparece nas suas candidaturas.</li>

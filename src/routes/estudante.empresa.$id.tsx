@@ -24,7 +24,7 @@ function EmpresaPage() {
   const jobs = allJobs({ ...getState(), recruiterJobs: extra }).filter((j) => j.companyId === c.id);
 
   return (
-    <div className="mx-auto max-w-3xl space-y-4">
+    <div className="mx-auto max-w-3xl space-y-8">
       <button onClick={() => history.back()} className="flex h-11 items-center gap-1 text-sm font-semibold text-primary"><ArrowLeft className="h-5 w-5" /> Voltar</button>
       <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
         <div className="h-28 bg-deep-space" style={{ backgroundImage: "radial-gradient(circle at 80% 20%, var(--dusk), transparent 60%), radial-gradient(circle at 10% 90%, var(--moss), transparent 45%)" }} />
@@ -39,7 +39,7 @@ function EmpresaPage() {
             <NeutralTag icon={<MapPin className="h-3.5 w-3.5" />}>{c.city}</NeutralTag>
           </div>
           <p className="mt-3 text-[15px] text-deep-space/80">{c.about}</p>
-          <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+          <div className="mt-3 grid grid-cols-3 gap-3 text-center">
             <div className="rounded-xl bg-mint p-5"><p className="font-display text-xl font-extrabold text-deep-space">{jobs.length}</p><p className="label-mono text-muted-foreground">vagas</p></div>
             <div className="rounded-xl bg-mint p-5"><p className="font-display text-xl font-extrabold text-deep-space">{c.responseRate}%</p><p className="label-mono text-muted-foreground">retorno</p></div>
             <div className="rounded-xl bg-mint p-5"><p className="font-display text-xl font-extrabold text-deep-space">{c.avgResponseDays}d</p><p className="label-mono text-muted-foreground">resposta</p></div>

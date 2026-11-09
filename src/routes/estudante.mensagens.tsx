@@ -94,7 +94,7 @@ function Mensagens() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-8">
       <h1 className="text-2xl text-deep-space lg:text-3xl">Mensagens</h1>
       <ul className="space-y-2">
         {ordered.map((th) => {
@@ -104,7 +104,7 @@ function Mensagens() {
           const unread = threadUnread(th);
           return (
             <li key={th.id}>
-              <Link to="/estudante/mensagens" search={{ t: th.id }} className={cn("relative flex items-center gap-3 overflow-hidden rounded-2xl border p-3 shadow-[var(--shadow-card)]", unread ? "border-primary/40 bg-essential" : "border-border bg-card")}>
+              <Link to="/estudante/mensagens" search={{ t: th.id }} className={cn("relative flex items-center gap-3 overflow-hidden rounded-2xl border p-5 shadow-[var(--shadow-card)]", unread ? "border-primary/40 bg-essential" : "border-border bg-card")}>
                 {unread && <span aria-hidden className="absolute inset-y-0 left-0 w-1.5 bg-primary" />}
                 <CompanyAvatar initials={c?.initials ?? "?"} size={44} />
                 <div className="min-w-0 flex-1">
