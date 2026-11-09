@@ -27,7 +27,7 @@ function EmpresaPage() {
     <div className="mx-auto max-w-3xl space-y-8">
       <button onClick={() => history.back()} className="flex h-11 items-center gap-1 text-sm font-semibold text-primary"><ArrowLeft className="h-5 w-5" /> Voltar</button>
       <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
-        <div className="h-28 bg-deep-space" style={{ backgroundImage: "radial-gradient(circle at 80% 20%, var(--dusk), transparent 60%), radial-gradient(circle at 10% 90%, var(--moss), transparent 45%)" }} />
+        <div className="h-28 bg-deep-space" style={{ backgroundImage: "radial-gradient(circle at 80% 20%, var(--dusk), transparent 60%), radial-gradient(circle at 10% 90%, var(--moss-light), transparent 45%)" }} />
         <div className="p-4">
           <div className="-mt-12 rounded-2xl border-4 border-card inline-block"><CompanyAvatar initials={c.initials} size={72} /></div>
           <div className="mt-2 flex flex-wrap items-center gap-2">
