@@ -82,7 +82,7 @@ bun install        # ou npm install
 bun run dev        # ou npm run dev
 ```
 
-Para os recursos de nuvem e IA, configure no `.env` as variáveis `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` e `LOVABLE_API_KEY`. Sem elas, o app funciona em modo demonstração com dados locais.
+Para os recursos de nuvem e IA, copie o `.env.example` para `.env` e preencha os valores (o `.env` não é versionado). Chaves secretas, como `SUPABASE_SERVICE_ROLE_KEY` e `LOVABLE_API_KEY`, ficam só no servidor. Sem elas, o app funciona em modo demonstração com dados locais.
 
 ### Testes
 
