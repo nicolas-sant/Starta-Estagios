@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { ArrowLeft, Clock, Laptop, MapPin, Wallet, X, Users, AlertTriangle, ShieldAlert, ListChecks, Info } from "lucide-react";
 import { Card, CompanyAvatar, DocChip, NeutralTag, PrimaryButton, SkillTag, VerifiedSeal } from "@/components/starta/ui";
 import { DEFAULT_PROCESS, JOBS, brl, getCompany, hasReachPenalty, hasTrustSeal, type Job } from "@/lib/data";
-import { getState, setState, useStore } from "@/lib/store";
+import { setState, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/estudante/vaga/$id")({
@@ -36,7 +36,7 @@ function VagaPage() {
   const sorted = [...job.skills].sort((a) => (a.level === "essencial" ? -1 : 1));
 
   const process = job.process ?? DEFAULT_PROCESS;
-  const verified = student.verification === "aprovado" || getState().student.verification === "aprovado";
+  const verified = student.verification === "aprovado";
   const closed = recruiterJobs.some((j) => j.id === id && (!j.published || j.status === "filled" || j.status === "deleted"));
   const send = () => {
     if (closed) { toast.error("Esta vaga foi encerrada."); return; }
