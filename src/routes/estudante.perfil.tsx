@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Accessibility, Lock, Settings, User, FileText, Link2, Pencil, ShieldCheck } from "lucide-react";
+import { Accessibility, Eye, Lock, Settings, User, FileText, Link2, Pencil, ShieldCheck } from "lucide-react";
 import { Card, DocChip, Field, GhostButton, PrimaryButton, VerificationProgress, ValiditySeal, VerifiedSeal, UploadArea } from "@/components/starta/ui";
 import { AREAS } from "@/lib/data";
 import { daysUntil, resetState, setState, useStore } from "@/lib/store";
@@ -208,6 +208,8 @@ function Perfil() {
         <p className="mt-1 text-xs text-muted-foreground">Usadas para destacar no feed as vagas que combinam com você.</p>
       </Card>
 
+      <CvViewsCard />
+
       <Card>
         <p id="configuracoes" className="flex scroll-mt-20 items-center gap-2 font-display font-bold text-deep-space"><Settings className="h-5 w-5" /> Configurações</p>
         <Toggle label="Notificações de vagas e etapas" checked={settings.notifications} onChange={(v) => setSetting("notifications", v)} />
@@ -230,5 +232,17 @@ function Perfil() {
         <PrimaryButton className="mt-3 h-11 bg-deep-space" onClick={() => { resetState(); location.href = "/"; }}>Reiniciar protótipo</PrimaryButton>
       </Card>
     </div>
+  );
+}
+
+function CvViewsCard() {
+  const views = useStore((s) => s.student.cvViews7d);
+  return (
+    <Card>
+      <p className="flex items-center gap-3 text-sm text-deep-space">
+        <Eye className="h-5 w-5 shrink-0 text-moss" />
+        <span>Currículo visualizado <strong className="text-primary">{views} vezes</strong> nos últimos 7 dias</span>
+      </p>
+    </Card>
   );
 }
