@@ -65,7 +65,7 @@ function Painel() {
         </div>
       </section>
 
-      <section>
+      <section className="w-full max-w-3xl">
         <SectionTitle
           action={
             <button className="h-11 text-sm font-semibold text-primary" onClick={() => setState((s) => ({ ...s, notifications: s.notifications.map((n) => ({ ...n, read: true })) }))}>
