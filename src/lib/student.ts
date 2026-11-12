@@ -13,7 +13,7 @@ export function canWithdrawApplication(application: Pick<Application, "result"> 
 export function withdrawApplication(jobId: string, jobTitle: string) {
   setState((state) => {
     const application = state.applications.find((item) => item.jobId === jobId);
-    if (!canWithdrawApplication(application)) return state;
+    if (!application || application.result) return state;
     return {
       ...state,
       applications: state.applications.filter((item) => item.jobId !== jobId),
