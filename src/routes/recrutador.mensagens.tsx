@@ -12,7 +12,7 @@ export const Route = createFileRoute("/recrutador/mensagens")({
     ],
   }),
   component: () => (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <h1 className="text-3xl">Mensagens</h1>
       <RecruiterMessages />
     </div>
