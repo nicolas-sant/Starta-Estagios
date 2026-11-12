@@ -67,7 +67,7 @@ function Recrutador() {
         <div className="mt-auto hidden border-t border-border pt-5 lg:block">
           <p className="text-sm font-semibold">Rafael Nogueira</p>
           <p className="mb-3 mt-1 text-xs text-muted-foreground">Analista de R&S</p>
-          <Link to="/" className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Link to="/" className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm text-muted-foreground hover:bg-muted">
             <LogOut className="size-4" />
             Sair
           </Link>

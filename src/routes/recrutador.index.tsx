@@ -226,13 +226,13 @@ function RecruiterCRM() {
                   Comparar ({selected.length}/3)
                 </Button>
                 <div className="relative">
-                  <Search className="absolute left-3 top-3 size-4 text-muted-foreground" />
+                  <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     aria-label="Buscar candidatos"
                     placeholder="Buscar candidato…"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    className="w-52 pl-9"
+                    className="h-11 w-52 rounded-lg pl-9"
                   />
                 </div>
                 <label className="flex h-11 items-center gap-2 rounded-lg border border-border bg-card px-3">

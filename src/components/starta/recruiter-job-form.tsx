@@ -182,6 +182,7 @@ export function RecruiterJobForm({ id }: { id?: string }) {
                 <Input
                   required
                   aria-label={`Habilidade ${i + 1}`}
+                  className="h-11 rounded-lg"
                   value={skill.name}
                   onChange={(e) =>
                     setSkills(skills.map((s, n) => (n === i ? { ...s, name: e.target.value } : s)))

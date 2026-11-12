@@ -347,10 +347,10 @@ export function CandidateDetails({
                   </h3>
                   <p className="mb-4 text-sm text-muted-foreground">Ao salvar, a entrevista aparece na candidatura do estudante.</p>
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <label className="text-sm font-medium">Dia<Input type="date" className="mt-2 h-11" value={date} onChange={(e) => setDate(e.target.value)} /></label>
-                    <label className="text-sm font-medium">Horário<Input type="time" className="mt-2 h-11" value={time} onChange={(e) => setTime(e.target.value)} /></label>
-                    <label className="text-sm font-medium">Local ou formato<Input className="mt-2 h-11" placeholder="Ex.: Online · Google Meet" value={place} onChange={(e) => setPlace(e.target.value)} /></label>
-                    <label className="text-sm font-medium">Link (opcional)<Input className="mt-2 h-11" placeholder="https://" value={link} onChange={(e) => setLink(e.target.value)} /></label>
+                    <label className="text-sm font-medium">Dia<Input type="date" className="mt-3 h-11 rounded-lg" value={date} onChange={(e) => setDate(e.target.value)} /></label>
+                    <label className="text-sm font-medium">Horário<Input type="time" className="mt-3 h-11 rounded-lg" value={time} onChange={(e) => setTime(e.target.value)} /></label>
+                    <label className="text-sm font-medium">Local ou formato<Input className="mt-3 h-11 rounded-lg" placeholder="Ex.: Online · Google Meet" value={place} onChange={(e) => setPlace(e.target.value)} /></label>
+                    <label className="text-sm font-medium">Link (opcional)<Input className="mt-3 h-11 rounded-lg" placeholder="https://" value={link} onChange={(e) => setLink(e.target.value)} /></label>
                   </div>
                   <div className="mt-3 flex flex-wrap gap-3">
                     <Button
@@ -372,7 +372,7 @@ export function CandidateDetails({
                   </div>
                 </section>
               )}
-              <section className="rounded-lg border border-border p-5">
+              <section className="rounded-xl border border-border p-5">
                 <h3 className="mb-1 flex items-center gap-2">
                   <ListChecks className="size-5 text-primary" />
                   Roteiro de perguntas
