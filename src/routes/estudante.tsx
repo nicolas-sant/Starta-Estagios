@@ -1,10 +1,15 @@
 import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Bell, Eye, Home, LayoutList, LogOut, Menu, MessageCircle, Search, Settings, User, X } from "lucide-react";
+import { Bell, Home, LayoutList, LogOut, Menu, MessageCircle, Search, Settings, User, X } from "lucide-react";
 import { Logo } from "@/components/starta/ui";
 import { setState, threadUnread, useStore, type RecruiterJob } from "@/lib/store";
 import { listPublicJobs } from "@/lib/public-jobs.functions";
 import { cn } from "@/lib/utils";
+import { readNavMode, writeNavMode, type NavMode } from "@/lib/nav-mode";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+
+const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+const ACTIVE = "border-primary font-semibold";
 
 export const Route = createFileRoute("/estudante")({
   loader: () => listPublicJobs(),
@@ -35,6 +40,15 @@ function StudentLayout() {
   }, [publicJobs]);
   const [open, setOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(true);
+  const [navMode, setNavMode] = useState<NavMode>("top");
+  useEffect(() => {
+    setNavMode(readNavMode());
+  }, []);
+  const toggleMode = () => {
+    const next: NavMode = navMode === "top" ? "side" : "top";
+    setNavMode(next);
+    writeNavMode(next);
+  };
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
     const on = () => setIsDesktop(mq.matches);
@@ -43,66 +57,106 @@ function StudentLayout() {
     return () => mq.removeEventListener("change", on);
   }, []);
   const nav = useNavigate();
-  const views = useStore((s) => s.student.cvViews7d);
+  const name = useStore((s) => s.student.name);
   const notifs = useStore((s) => s.notifications);
   const settings = useStore((s) => s.settings);
   const unread = notifs.filter((n) => !n.read).length;
   const threads = useStore((s) => s.threads);
   const unreadMsgs = threads.filter(threadUnread).length;
   const badge = (to: string) => (to === "/estudante/painel" ? unread : to === "/estudante/mensagens" ? unreadMsgs : 0);
+  const logoff = () => {
+    setState((s) => ({ ...s, role: null }));
+    nav({ to: "/" });
+  };
+  const initials = (name || "Estudante").split(" ").filter(Boolean).slice(0, 2).map((w) => w[0]!.toUpperCase()).join("");
+  const side = navMode === "side";
+  const toggleLabel = side ? "Mover navegação para o topo" : "Mover navegação para a lateral";
+  const ToggleButton = (
+    <button type="button" onClick={toggleMode} aria-label={toggleLabel} title={toggleLabel} aria-pressed={side} className={cn("hidden h-11 w-11 shrink-0 items-center justify-center rounded-lg text-primary hover:bg-muted lg:flex", FOCUS)}>
+      <Menu className="h-6 w-6" />
+    </button>
+  );
+  const Bell_ = (
+    <Link to="/estudante/painel" aria-label="Notificações" className={cn("relative flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-deep-space hover:bg-muted", FOCUS)}>
+      <Bell className="h-6 w-6" />
+      {unread > 0 && <span className="absolute right-1 top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">{unread}</span>}
+    </Link>
+  );
+  const Chip = ({ n }: { n: number }) => n > 0 ? <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[11px] font-bold text-primary-foreground" aria-label={`${n} novidades`}>{n}</span> : null;
 
   return (
-    <div className={cn("min-h-screen bg-background pb-20 lg:grid lg:grid-cols-[240px_1fr] lg:pb-0", settings.largeText && "text-[17px]")}>
-      <header className="sticky top-0 z-30 flex h-16 lg:hidden items-center justify-between border-b border-border bg-card/95 px-2 backdrop-blur">
-        <button onClick={() => setOpen(true)} aria-label="Abrir menu" className="flex h-12 w-12 items-center justify-center rounded-xl hover:bg-mint">
-          <Menu className="h-6 w-6 text-deep-space" />
+    <div className={cn("min-h-screen bg-background pb-20 lg:pb-0", side && "lg:grid lg:grid-cols-[240px_1fr]", settings.largeText && "text-[17px]")}>
+      {/* Mobile header */}
+      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card px-2 lg:hidden">
+        <button onClick={() => setOpen(true)} aria-label="Abrir menu" className={cn("flex h-12 w-12 items-center justify-center rounded-xl text-primary hover:bg-muted", FOCUS)}>
+          <Menu className="h-6 w-6" />
         </button>
         <Logo />
-        <Link to="/estudante/painel" aria-label="Notificações" className="relative flex h-12 w-12 items-center justify-center rounded-xl hover:bg-mint">
-          <Bell className="h-6 w-6 text-deep-space" />
-          {unread > 0 && <span className="absolute right-2 top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">{unread}</span>}
-        </Link>
+        {Bell_}
       </header>
 
-      {/* Drawer */}
-      {open && <div className="fixed inset-0 z-40 bg-deep-space/40 lg:hidden" onClick={() => setOpen(false)} />}
-      <aside inert={!open && !isDesktop ? true : undefined} className={cn("fixed inset-y-0 left-0 z-50 flex w-80 max-w-[85vw] flex-col bg-sidebar p-4 text-sidebar-foreground transition-transform lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:w-auto lg:max-w-none lg:translate-x-0 lg:border-r lg:border-border lg:transition-none", open ? "translate-x-0" : "-translate-x-full")}>
-        <div className="flex h-12 items-center justify-between">
-          <Logo light />
-          <button onClick={() => setOpen(false)} aria-label="Fechar menu" className="lg:hidden flex h-12 w-12 items-center justify-center rounded-xl hover:bg-sidebar-accent">
-            <X className="h-6 w-6" />
-          </button>
-        </div>
-        <nav className="mt-6 flex flex-1 flex-col gap-2">
-          {NAV.map((n) => (
-            <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="flex h-12 items-center gap-3 rounded-xl px-3 hover:bg-sidebar-accent">
-              <n.icon className="h-5 w-5" /> {n.label}
-              {badge(n.to) > 0 && <span className="ml-auto flex h-6 min-w-6 items-center justify-center rounded-full bg-lemon px-1.5 text-xs font-bold text-lemon-ink ring-1 ring-lemon-ink/20" aria-label={`${badge(n.to)} novidades`}>{badge(n.to)}</span>}
-            </Link>
-          ))}
-          <div className="mt-auto" />
-          <Link to="/estudante/perfil" hash="configuracoes" onClick={() => setOpen(false)} className="flex h-12 items-center gap-3 rounded-xl px-3 hover:bg-sidebar-accent">
-            <Settings className="h-5 w-5" /> Configurações
-          </Link>
-          <div className="flex items-center gap-3 rounded-xl bg-sidebar-accent px-3 py-3">
-            <Eye className="h-5 w-5 shrink-0 text-moss-light" />
-            <span className="text-sm">
-              Currículo visualizado <strong className="text-lemon">{views} vezes</strong> nos últimos 7 dias
-            </span>
+      {/* Desktop top bar */}
+      {!side && (
+        <header className="sticky top-0 z-30 hidden h-16 border-b border-border bg-card lg:block">
+          <div key="top" className="nav-fade mx-auto flex h-full w-full max-w-[1200px] items-center gap-3 px-4">
+            {ToggleButton}
+            <Logo />
+            <nav aria-label="Principal" className="mx-auto flex items-center gap-1">
+              {NAV.map((n) => (
+                <Link key={n.to} to={n.to} activeOptions={{ exact: "exact" in n }} activeProps={{ className: ACTIVE, "aria-current": "page" }} inactiveProps={{ className: "border-transparent font-medium" }} className={cn("flex h-11 items-center gap-2 whitespace-nowrap rounded-lg border px-3 text-primary hover:bg-muted", FOCUS)}>
+                  <n.icon className="h-5 w-5" /> {n.label}
+                  <Chip n={badge(n.to)} />
+                </Link>
+              ))}
+            </nav>
+            {Bell_}
+            <DropdownMenu>
+              <DropdownMenuTrigger aria-label="Menu da conta" className={cn("flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-secondary text-sm font-bold text-secondary-foreground", FOCUS)}>
+                {initials}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem asChild className="h-11 rounded-lg">
+                  <Link to="/estudante/perfil" hash="configuracoes"><Settings className="h-4 w-4" /> Configurações</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={logoff} className="h-11 rounded-lg">
+                  <LogOut className="h-4 w-4" /> Logoff
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-          <button
-            onClick={() => {
-              setState((s) => ({ ...s, role: null }));
-              nav({ to: "/" });
-            }}
-            className="flex h-12 w-full items-center gap-3 rounded-xl px-3 text-left hover:bg-sidebar-accent"
-          >
-            <LogOut className="h-5 w-5" /> Logoff
-          </button>
-        </nav>
+        </header>
+      )}
+
+      {/* Drawer (mobile) / side column (desktop side mode) */}
+      {open && <div className="fixed inset-0 z-40 bg-deep-space/40 lg:hidden" onClick={() => setOpen(false)} />}
+      <aside inert={(!open && !isDesktop) || (isDesktop && !side) ? true : undefined} className={cn("fixed inset-y-0 left-0 z-50 flex w-80 max-w-[85vw] flex-col border-r border-border bg-card p-4 text-deep-space transition-transform", side ? "lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:w-auto lg:max-w-none lg:translate-x-0 lg:transition-none" : "lg:hidden", open ? "translate-x-0" : "-translate-x-full")}>
+        <div key={side ? "side" : "drawer"} className="nav-fade flex flex-1 flex-col">
+          <div className="flex h-12 items-center gap-2">
+            {side && ToggleButton}
+            <Logo />
+            <button onClick={() => setOpen(false)} aria-label="Fechar menu" className={cn("ml-auto flex h-12 w-12 items-center justify-center rounded-xl text-primary hover:bg-muted lg:hidden", FOCUS)}>
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+          <nav aria-label="Principal" className="mt-8 flex flex-1 flex-col gap-2">
+            {NAV.map((n) => (
+              <Link key={n.to} to={n.to} onClick={() => setOpen(false)} activeOptions={{ exact: "exact" in n }} activeProps={{ className: ACTIVE, "aria-current": "page" }} inactiveProps={{ className: "border-transparent font-medium" }} className={cn("flex h-12 items-center gap-3 rounded-lg border px-3 text-primary hover:bg-muted", FOCUS)}>
+                <n.icon className="h-5 w-5" /> {n.label}
+                <span className="ml-auto"><Chip n={badge(n.to)} /></span>
+              </Link>
+            ))}
+            <div className="mt-auto" />
+            <Link to="/estudante/perfil" hash="configuracoes" onClick={() => setOpen(false)} className={cn("flex h-12 items-center gap-3 rounded-lg border border-transparent px-3 font-medium text-primary hover:bg-muted", FOCUS)}>
+              <Settings className="h-5 w-5" /> Configurações
+            </Link>
+            <button onClick={logoff} className={cn("flex h-12 w-full items-center gap-3 rounded-lg border border-transparent px-3 text-left font-medium text-primary hover:bg-muted", FOCUS)}>
+              <LogOut className="h-5 w-5" /> Logoff
+            </button>
+          </nav>
+        </div>
       </aside>
 
-      <main className="mx-auto w-full min-w-0 max-w-2xl px-4 py-6 lg:max-w-none lg:px-8 lg:py-8">
+      <main className="mx-auto w-full min-w-0 px-4 py-6 lg:px-8 lg:py-8">
         <Outlet />
       </main>
 
