@@ -53,7 +53,6 @@ function VagaPage() {
       notifications: [{ id: crypto.randomUUID(), text: `Candidatura enviada: ${job.title}. Você verá cada etapa aqui.`, at: new Date().toISOString(), read: false, kind: "candidatura" as const }, ...s.notifications],
     }));
     setSheet(false);
-    toast.success("Candidatura enviada!");
     nav({ to: "/estudante/candidatura/$id", params: { id: job.id } });
   };
 
