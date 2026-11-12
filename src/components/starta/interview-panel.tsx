@@ -65,7 +65,7 @@ export function InterviewPanel({
   return (
     <section className="space-y-3">
       <details className="rounded-xl border border-border p-5">
-        <summary className="cursor-pointer text-sm font-semibold">Ver detalhes usados pela IA (opcional)</summary>
+        <summary className="flex min-h-11 cursor-pointer items-center rounded-lg text-sm font-semibold">Ver detalhes usados pela IA (opcional)</summary>
       <div className="mt-3 grid gap-3 md:grid-cols-2">
         <label className="space-y-2 text-sm font-medium">
           Requisitos da vaga
