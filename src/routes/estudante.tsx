@@ -103,7 +103,7 @@ function StudentLayout() {
             <Logo />
             <nav aria-label="Principal" className="mx-auto flex items-center gap-1">
               {NAV.map((n) => (
-                <Link key={n.to} to={n.to} activeOptions={{ exact: "exact" in n }} activeProps={{ className: ACTIVE, "aria-current": "page" }} inactiveProps={{ className: "font-medium" }} className={cn("flex h-11 items-center gap-2 whitespace-nowrap rounded-lg border border-transparent px-3 text-primary hover:bg-muted", FOCUS)}>
+                <Link key={n.to} to={n.to} activeOptions={{ exact: "exact" in n }} activeProps={{ className: ACTIVE, "aria-current": "page" }} inactiveProps={{ className: "border-transparent font-medium" }} className={cn("flex h-11 items-center gap-2 whitespace-nowrap rounded-lg border px-3 text-primary hover:bg-muted", FOCUS)}>
                   <n.icon className="h-5 w-5" /> {n.label}
                   <Chip n={badge(n.to)} />
                 </Link>
@@ -140,7 +140,7 @@ function StudentLayout() {
           </div>
           <nav aria-label="Principal" className="mt-8 flex flex-1 flex-col gap-2">
             {NAV.map((n) => (
-              <Link key={n.to} to={n.to} onClick={() => setOpen(false)} activeOptions={{ exact: "exact" in n }} activeProps={{ className: ACTIVE, "aria-current": "page" }} inactiveProps={{ className: "font-medium" }} className={cn("flex h-12 items-center gap-3 rounded-lg border border-transparent px-3 text-primary hover:bg-muted", FOCUS)}>
+              <Link key={n.to} to={n.to} onClick={() => setOpen(false)} activeOptions={{ exact: "exact" in n }} activeProps={{ className: ACTIVE, "aria-current": "page" }} inactiveProps={{ className: "border-transparent font-medium" }} className={cn("flex h-12 items-center gap-3 rounded-lg border px-3 text-primary hover:bg-muted", FOCUS)}>
                 <n.icon className="h-5 w-5" /> {n.label}
                 <span className="ml-auto"><Chip n={badge(n.to)} /></span>
               </Link>
