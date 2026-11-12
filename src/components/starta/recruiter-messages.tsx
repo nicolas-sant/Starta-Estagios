@@ -15,13 +15,13 @@ export function RecruiterMessages() {
   const [text, setText] = useState("");
   const active = candidates.find((c) => c.id === activeId);
   return (
-    <div className="grid min-h-[650px] overflow-hidden rounded-lg border border-border bg-card md:grid-cols-[300px_1fr]">
+    <div className="grid min-h-[650px] overflow-hidden rounded-2xl border border-border bg-card md:grid-cols-[300px_1fr]">
       <aside className="border-b border-border md:border-b-0 md:border-r">
-        <div className="relative p-4">
-          <Search className="absolute left-7 top-7 size-4 text-muted-foreground" />
+        <div className="relative p-5">
+          <Search className="absolute left-8 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             aria-label="Buscar conversa"
-            className="pl-9"
+            className="h-11 rounded-lg pl-9"
             placeholder="Buscar candidato…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -39,7 +39,7 @@ export function RecruiterMessages() {
                 key={c.id}
                 variant="ghost"
                 className={cn(
-                  "h-auto w-full justify-start rounded-none border-b border-border px-4 py-4 text-left",
+                  "h-auto w-full justify-start rounded-lg border-b border-border px-4 py-4 text-left",
                   activeId === c.id && "bg-essential",
                 )}
                 onClick={() => setActive(c.id)}
@@ -69,7 +69,7 @@ export function RecruiterMessages() {
           <>
             <header className="border-b border-border p-5">
               <h2 className="text-lg">{active.name}</h2>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-3 text-xs text-muted-foreground">
                 {jobs.find((j) => j.id === active.jobId)?.title}
               </p>
             </header>
@@ -84,7 +84,7 @@ export function RecruiterMessages() {
                 <div
                   key={i}
                   className={cn(
-                    "max-w-[85%] rounded-lg p-3 text-sm",
+                    "max-w-[85%] rounded-xl p-3 text-sm",
                     m.from === "me" ? "ml-auto bg-primary text-primary-foreground" : "bg-muted",
                   )}
                 >
@@ -101,7 +101,7 @@ export function RecruiterMessages() {
               ))}
             </div>
             <form
-              className="flex items-end gap-3 border-t border-border p-4"
+              className="flex items-end gap-3 border-t border-border p-5"
               onSubmit={(e) => {
                 e.preventDefault();
                 sendCandidateMessage(active.id, text);
@@ -110,6 +110,7 @@ export function RecruiterMessages() {
             >
               <Textarea
                 aria-label="Escreva uma mensagem"
+                className="rounded-lg"
                 rows={2}
                 maxLength={2000}
                 placeholder="Escreva uma mensagem…"

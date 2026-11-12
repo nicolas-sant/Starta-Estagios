@@ -110,12 +110,12 @@ export function RecruiterCloud() {
   };
   return (
     <>
-      <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
+      <Button variant="outline" onClick={() => setOpen(true)}>
         <Cloud />
         {label}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+          <DialogContent className="rounded-2xl p-5">
           <DialogTitle>{ready ? "Sua área está conectada" : "Conta do recrutador"}</DialogTitle>
           <DialogDescription>
             {ready
@@ -146,6 +146,7 @@ export function RecruiterCloud() {
                   type="email"
                   required
                   value={email}
+                  className="mt-3 h-11 rounded-lg"
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </label>
@@ -156,6 +157,7 @@ export function RecruiterCloud() {
                   required
                   minLength={6}
                   value={password}
+                  className="mt-3 h-11 rounded-lg"
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </label>
