@@ -74,13 +74,14 @@ export function RecruiterJobForm({ id }: { id?: string }) {
         min={type === "number" ? (name === "stipend" ? 1 : 1) : undefined}
         max={name.includes("semester") ? 20 : undefined}
         step={name === "stipend" ? "0.01" : undefined}
+        className="h-11 rounded-lg"
       />
     </label>
   );
   const area = (name: string, label: string, value = "", required = true) => (
     <label className="block space-y-2 text-sm font-medium">
       {label}
-      <Textarea name={name} defaultValue={value} required={required} rows={4} />
+      <Textarea name={name} defaultValue={value} required={required} rows={4} className="rounded-lg" />
     </label>
   );
   return (
@@ -89,18 +90,18 @@ export function RecruiterJobForm({ id }: { id?: string }) {
         <ArrowLeft />
         Voltar às vagas
       </Button>
-      <h1 className="mt-5 text-3xl">{existing ? "Editar vaga" : "Publicar nova vaga"}</h1>
+      <h1 className="mt-8 text-3xl">{existing ? "Editar vaga" : "Publicar nova vaga"}</h1>
       <form onSubmit={submit} className="mt-8 space-y-8">
         <section className="space-y-5 border-b border-border pb-8">
           <h2 className="text-lg">Informações da vaga</h2>
           {field("title", "Título da vaga", existing?.title)}
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-2">
             <label className="space-y-2 text-sm font-medium">
               Área
               <select
                 name="area"
                 defaultValue={existing?.area || "Tecnologia"}
-                className="h-10 w-full rounded-md border border-border bg-card px-3"
+                className="h-11 w-full rounded-lg border border-border bg-card px-3"
               >
                 {AREAS.map((a) => (
                   <option key={a}>{a}</option>
@@ -119,14 +120,14 @@ export function RecruiterJobForm({ id }: { id?: string }) {
         </section>
         <section className="space-y-5 border-b border-border pb-8">
           <h2 className="text-lg">Bolsa e condições</h2>
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-2">
             {field("stipend", "Bolsa mensal (R$)", existing?.stipend || "", "number")}
             <label className="space-y-2 text-sm font-medium">
               Modalidade
               <select
                 name="modality"
                 defaultValue={existing?.modality || "Híbrido"}
-                className="h-10 w-full rounded-md border border-border bg-card px-3"
+                className="h-11 w-full rounded-lg border border-border bg-card px-3"
               >
                 {["Presencial", "Híbrido", "Remoto"].map((m) => (
                   <option key={m}>{m}</option>
@@ -140,6 +141,7 @@ export function RecruiterJobForm({ id }: { id?: string }) {
                 list="job-cities"
                 defaultValue={existing?.city || "Recife, PE"}
                 required
+                className="h-11 rounded-lg"
               />
               <datalist id="job-cities">
                 {CITIES.map((city) => (
@@ -154,7 +156,7 @@ export function RecruiterJobForm({ id }: { id?: string }) {
         <section className="space-y-5 border-b border-border pb-8">
           <h2 className="text-lg">Perfil e requisitos</h2>
           {field("courses", "Cursos elegíveis", existing?.courses || "")}
-          <div className="grid gap-5 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-3">
             {field("semesterMin", "Semestre mínimo", existing?.semesterMin || 1, "number")}
             {field("semesterMax", "Semestre máximo", existing?.semesterMax || 10, "number")}
             {field("deadline", "Prazo para candidaturas", existing?.deadline, "date", false)}
@@ -164,7 +166,6 @@ export function RecruiterJobForm({ id }: { id?: string }) {
             <Button
               type="button"
               variant="outline"
-              size="sm"
               onClick={() => setSkills([...skills, { name: "", level: "recomendado", weight: 1 }])}
             >
               <Plus />
@@ -174,7 +175,7 @@ export function RecruiterJobForm({ id }: { id?: string }) {
           {skills.map((skill, i) => (
             <div
               key={i}
-              className="grid grid-cols-[1fr_40px] items-end gap-3 sm:grid-cols-[1fr_160px_90px_40px]"
+              className="grid grid-cols-[1fr_44px] items-end gap-3 sm:grid-cols-[1fr_160px_90px_44px]"
             >
               <label className="space-y-2 text-sm">
                 Habilidade
@@ -191,7 +192,7 @@ export function RecruiterJobForm({ id }: { id?: string }) {
                 Classificação
                 <select
                   aria-label={`Classificação ${i + 1}`}
-                  className="h-9 w-full rounded-md border border-border bg-card px-2"
+                  className="h-11 w-full rounded-lg border border-border bg-card px-3"
                   value={skill.level}
                   onChange={(e) =>
                     setSkills(
@@ -214,6 +215,7 @@ export function RecruiterJobForm({ id }: { id?: string }) {
                   required
                   value={skill.weight || 1}
                   aria-label={`Peso ${i + 1}`}
+                  className="h-11 rounded-lg"
                   onChange={(e) =>
                     setSkills(
                       skills.map((s, n) => (n === i ? { ...s, weight: +e.target.value } : s)),
