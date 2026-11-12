@@ -16,6 +16,6 @@
 - [x] Vaga com "Como é o processo" e explicação do retorno
 - [x] Mensagens com horário e não lidas; feed com "Combina com você"
 ## Confirmação e retirada de candidatura
-- [ ] Mostrar confirmação persistente com retorno e prazo da empresa, incluindo caso de baixo retorno.
-- [ ] Permitir retirar candidatura sem resultado, removendo também o candidato do pipeline.
-- [ ] Testar regras, fluxo completo, contraste e toque nas duas larguras.
+- [x] Mostrar confirmação persistente com retorno e prazo da empresa, incluindo caso de baixo retorno.
+- [x] Permitir retirar candidatura sem resultado, removendo também o candidato do pipeline.
+- [x] Testar regras, fluxo completo, contraste e toque nas duas larguras.
