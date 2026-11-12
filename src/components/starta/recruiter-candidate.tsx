@@ -49,7 +49,7 @@ function LevelTag({ level }: { level: string }) {
   return (
     <span
       className={cn(
-        "rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide",
+        "rounded-lg px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide",
         level === "essencial"
           ? "bg-essential text-essential-foreground"
           : "bg-recommended text-recommended-foreground",
@@ -148,17 +148,17 @@ export function CandidateDetails({
     <Dialog open onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         onCloseAutoFocus={(e) => e.preventDefault()}
-        className="max-h-[90dvh] w-[calc(100%-2rem)] max-w-5xl overflow-y-auto bg-card p-0"
+        className="max-h-[90dvh] w-[calc(100%-2rem)] max-w-5xl overflow-y-auto rounded-2xl bg-card p-0"
       >
-        <header className="border-b border-border p-6 pr-28">
-          <div className="flex items-center gap-4">
+        <header className="border-b border-border p-5 pr-28">
+          <div className="flex items-center gap-3">
             <span className="flex size-16 shrink-0 items-center justify-center rounded-full bg-essential text-xl font-bold text-primary">
               {c.name.split(" ").slice(0, 2).map((n) => n[0]).join("")}
             </span>
             <div>
               <DialogTitle className="text-2xl">{c.name}</DialogTitle>
-              <DialogDescription className="mt-2">{job?.title || "Vaga não disponível"}</DialogDescription>
-              <div className="mt-2 flex flex-wrap gap-2">
+              <DialogDescription className="mt-3">{job?.title || "Vaga não disponível"}</DialogDescription>
+              <div className="mt-3 flex flex-wrap gap-2">
                 <StageTag stage={c.stage} />
                 {c.verified && (
                   <span className="flex items-center gap-1 text-xs text-recommended-foreground">
@@ -170,7 +170,7 @@ export function CandidateDetails({
             </div>
           </div>
         </header>
-        <div role="tablist" className="flex gap-2 border-b border-border px-6 py-3">
+        <div role="tablist" className="flex gap-2 overflow-x-auto border-b border-border px-5 py-3">
           {[
             ["perfil", "Perfil"],
             ["mensagens", "Mensagens"],
@@ -182,20 +182,20 @@ export function CandidateDetails({
               aria-selected={tab === id}
               onClick={() => setTab(id!)}
               className={cn(
-                "h-11 rounded-md border-b-4 px-5 text-sm font-semibold transition-colors",
+                "h-11 shrink-0 rounded-lg px-5 text-sm font-semibold transition-colors",
                 tab === id
-                  ? "border-lemon bg-primary text-primary-foreground"
-                  : "border-transparent text-muted-foreground hover:bg-muted",
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-muted",
               )}
             >
               {label}
             </button>
           ))}
         </div>
-        <div className="p-6">
+        <div className="p-5">
           {tab === "perfil" && (
             <div className="grid gap-8 md:grid-cols-[1fr_280px]">
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <section>
                   <h3 className="mb-2">Sobre o candidato</h3>
                   <p className="text-sm leading-6 text-muted-foreground">{c.bio}</p>
@@ -212,7 +212,7 @@ export function CandidateDetails({
                   <div className="flex flex-wrap gap-2">
                     {c.skills.length ? (
                       c.skills.map((skill) => (
-                        <span key={skill} className="rounded-md bg-muted px-3 py-1 text-sm">
+                        <span key={skill} className="rounded-lg bg-muted px-3 py-1 text-sm">
                           {skill}
                         </span>
                       ))
@@ -221,7 +221,7 @@ export function CandidateDetails({
                     )}
                   </div>
                 </section>
-                <section className="rounded-lg border border-border p-4">
+                <section className="rounded-xl border border-border p-5">
                   <h3 className="mb-3">Requisitos da vaga</h3>
                   <RequirementMatch skills={c.skills} job={job} />
                 </section>
@@ -229,7 +229,7 @@ export function CandidateDetails({
                   <label className="text-sm font-medium">
                     Pontos fortes (separe por vírgula)
                     <Input
-                      className="mt-2"
+                      className="mt-3 h-11 rounded-lg"
                       defaultValue={strengths.join(", ")}
                       onBlur={(e) => setCandidateNotes(c.id, { strengths: csv(e.target.value) })}
                     />
@@ -237,14 +237,14 @@ export function CandidateDetails({
                   <label className="text-sm font-medium">
                     Pontos a desenvolver
                     <Input
-                      className="mt-2"
+                      className="mt-3 h-11 rounded-lg"
                       defaultValue={toDevelop.join(", ")}
                       onBlur={(e) => setCandidateNotes(c.id, { toDevelop: csv(e.target.value) })}
                     />
                   </label>
                 </section>
               </div>
-              <aside className="space-y-5 border-t border-border pt-4 md:border-l md:border-t-0 md:pl-6 md:pt-0">
+              <aside className="space-y-8 border-t border-border pt-5 md:border-l md:border-t-0 md:pl-5 md:pt-0">
                 <div>
                   <p className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
                     <GraduationCap className="size-4" />
@@ -272,7 +272,7 @@ export function CandidateDetails({
                   Etapa da candidatura
                   <select
                     aria-label="Etapa da candidatura"
-                    className="mt-2 h-11 w-full rounded-md border border-border bg-card px-2"
+                    className="mt-3 h-11 w-full rounded-lg border border-border bg-card px-3"
                     value={c.stage}
                     onChange={(e) => move(c, onMoved, e.target.value as Stage)}
                   >
@@ -292,7 +292,7 @@ export function CandidateDetails({
                   <div
                     key={i}
                     className={
-                      msg.from === "me" ? "ml-auto max-w-[85%] rounded-md bg-essential p-3" : "max-w-[85%] rounded-md bg-muted p-3"
+                      msg.from === "me" ? "ml-auto max-w-[85%] rounded-xl bg-essential p-3" : "max-w-[85%] rounded-xl bg-muted p-3"
                     }
                   >
                     <p className="whitespace-pre-wrap text-sm">{msg.text}</p>
@@ -307,7 +307,7 @@ export function CandidateDetails({
           {tab === "entrevista" && (
             <div className="space-y-8">
               {c.interview && !editingInterview && (
-                <section className="rounded-lg border-2 border-primary bg-essential/40 p-5">
+                <section className="rounded-xl border-2 border-primary bg-essential/40 p-5">
                   <p className="text-xs font-semibold uppercase text-muted-foreground">Entrevista marcada</p>
                   <p className="mt-2 text-lg font-semibold">
                     {new Date(`${c.interview.date}T12:00`).toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" })} às {c.interview.time}
@@ -318,7 +318,7 @@ export function CandidateDetails({
                       {c.interview.link}
                     </a>
                   )}
-                  <div className="mt-4 flex flex-wrap gap-2">
+                  <div className="mt-3 flex flex-wrap gap-3">
                     <Button size="lg" variant="outline" onClick={() => setEditingInterview(true)}>
                       <CalendarDays />
                       Remarcar
@@ -340,19 +340,19 @@ export function CandidateDetails({
                 </section>
               )}
               {editingInterview && (
-                <section className="rounded-lg border border-border p-5">
+                <section className="rounded-xl border border-border p-5">
                   <h3 className="mb-1 flex items-center gap-2">
                     <CalendarDays className="size-5 text-primary" />
                     {c.interview ? "Remarcar entrevista" : "Agendar entrevista"}
                   </h3>
                   <p className="mb-4 text-sm text-muted-foreground">Ao salvar, a entrevista aparece na candidatura do estudante.</p>
                   <div className="grid gap-3 sm:grid-cols-2">
-                    <label className="text-sm font-medium">Dia<Input type="date" className="mt-2 h-11" value={date} onChange={(e) => setDate(e.target.value)} /></label>
-                    <label className="text-sm font-medium">Horário<Input type="time" className="mt-2 h-11" value={time} onChange={(e) => setTime(e.target.value)} /></label>
-                    <label className="text-sm font-medium">Local ou formato<Input className="mt-2 h-11" placeholder="Ex.: Online · Google Meet" value={place} onChange={(e) => setPlace(e.target.value)} /></label>
-                    <label className="text-sm font-medium">Link (opcional)<Input className="mt-2 h-11" placeholder="https://" value={link} onChange={(e) => setLink(e.target.value)} /></label>
+                    <label className="text-sm font-medium">Dia<Input type="date" className="mt-3 h-11 rounded-lg" value={date} onChange={(e) => setDate(e.target.value)} /></label>
+                    <label className="text-sm font-medium">Horário<Input type="time" className="mt-3 h-11 rounded-lg" value={time} onChange={(e) => setTime(e.target.value)} /></label>
+                    <label className="text-sm font-medium">Local ou formato<Input className="mt-3 h-11 rounded-lg" placeholder="Ex.: Online · Google Meet" value={place} onChange={(e) => setPlace(e.target.value)} /></label>
+                    <label className="text-sm font-medium">Link (opcional)<Input className="mt-3 h-11 rounded-lg" placeholder="https://" value={link} onChange={(e) => setLink(e.target.value)} /></label>
                   </div>
-                  <div className="mt-4 flex gap-2">
+                  <div className="mt-3 flex flex-wrap gap-3">
                     <Button
                       size="lg"
                       disabled={!date || !time || !place.trim()}
@@ -372,7 +372,7 @@ export function CandidateDetails({
                   </div>
                 </section>
               )}
-              <section className="rounded-lg border border-border p-5">
+              <section className="rounded-xl border border-border p-5">
                 <h3 className="mb-1 flex items-center gap-2">
                   <ListChecks className="size-5 text-primary" />
                   Roteiro de perguntas
@@ -386,7 +386,7 @@ export function CandidateDetails({
             </div>
           )}
         </div>
-        <footer className="border-t border-border bg-background p-6">
+        <footer className="border-t border-border bg-background p-5">
           <div className="mb-3">
             <p className="mb-2 text-sm font-medium">Usar um modelo (você pode editar antes de enviar):</p>
             <div className="flex flex-wrap gap-2">
@@ -394,7 +394,6 @@ export function CandidateDetails({
                 <Button
                   key={id}
                   variant="outline"
-                  className="h-10"
                   onClick={() =>
                     setMessage(messageTemplate(id, { name: c.name, job: job?.title || "", company, strengths, toDevelop }))
                   }
@@ -408,7 +407,7 @@ export function CandidateDetails({
             Mensagem ao candidato
             <Textarea
               aria-label="Mensagem ao candidato"
-              className="mt-2"
+              className="mt-3 rounded-lg"
               rows={3}
               maxLength={2000}
               value={message}
@@ -459,7 +458,7 @@ export function CandidateComparison({
     <Dialog open onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         onCloseAutoFocus={(e) => e.preventDefault()}
-        className="max-h-[90dvh] w-[calc(100%-2rem)] max-w-6xl overflow-y-auto bg-card"
+        className="max-h-[90dvh] w-[calc(100%-2rem)] max-w-6xl overflow-y-auto rounded-2xl bg-card p-5"
       >
         <DialogTitle className="pr-28 text-2xl">Comparar candidatos</DialogTitle>
         <DialogDescription>Perfis selecionados · {selected.length} candidatos</DialogDescription>

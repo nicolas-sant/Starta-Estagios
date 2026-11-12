@@ -155,6 +155,11 @@ export function findManagedJob(id: string) {
   return getState().recruiterJobs.find((j) => j.id === id);
 }
 
+export function backOrRecruiter(historyLength: number, back: () => void, home: () => void) {
+  if (historyLength > 1) back();
+  else home();
+}
+
 /** Compara as habilidades do candidato com cada requisito da vaga. */
 export function matchRequirements(skills: string[], job: Job | undefined) {
   const own = new Set(skills.map((s) => s.trim().toLowerCase()));

@@ -1,9 +1,10 @@
-import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { Logo, VerifiedSeal } from "@/components/starta/ui";
 import { useStore } from "@/lib/store";
 import { LayoutDashboard, MessageSquare, LogOut, ChevronRight, Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RecruiterCloud } from "@/components/starta/recruiter-cloud";
+import { backOrRecruiter } from "@/lib/recruiter";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/recrutador")({
@@ -20,18 +21,19 @@ export const Route = createFileRoute("/recrutador")({
   component: Recrutador,
 });
 
-const ACTIVE = "border-lemon bg-primary text-primary-foreground font-bold";
-const IDLE = "border-transparent text-muted-foreground hover:bg-muted";
+const ACTIVE = "rounded-lg bg-primary text-primary-foreground font-semibold";
+const IDLE = "rounded-lg text-muted-foreground hover:bg-muted";
 
 function Recrutador() {
   const company = useStore((s) => s.company);
   const path = useLocation().pathname;
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-background lg:grid lg:grid-cols-[220px_1fr]">
       <aside className="flex flex-col border-b border-border bg-card p-5 lg:sticky lg:top-0 lg:h-screen lg:border-b-0 lg:border-r">
         <Logo />
         <p className="mt-1 text-xs text-muted-foreground">Área do recrutador</p>
-        <div className="mt-7 flex items-center gap-3 border-y border-border py-5">
+        <div className="mt-8 flex items-center gap-3 border-y border-border py-3">
           <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-deep-space font-bold text-primary-foreground">
             ML
           </span>
@@ -40,11 +42,11 @@ function Recrutador() {
             <p className="mt-1 text-xs text-muted-foreground">Porto Digital · Recife</p>
           </div>
         </div>
-        <nav className="mt-5 flex gap-2 lg:flex-col">
+        <nav className="mt-8 flex gap-2 lg:flex-col">
           <Link
             to="/recrutador"
             className={cn(
-              "flex min-h-12 items-center gap-3 rounded-md border-l-4 px-3 py-3 text-sm font-semibold",
+              "flex min-h-12 items-center gap-3 px-3 py-3 text-sm",
               !path.includes("mensagens") ? ACTIVE : IDLE,
             )}
           >
@@ -54,7 +56,7 @@ function Recrutador() {
           <Link
             to="/recrutador/mensagens"
             className={cn(
-              "flex min-h-12 items-center gap-3 rounded-md border-l-4 px-3 py-3 text-sm font-semibold",
+              "flex min-h-12 items-center gap-3 px-3 py-3 text-sm",
               path.includes("mensagens") ? ACTIVE : IDLE,
             )}
           >
@@ -65,7 +67,7 @@ function Recrutador() {
         <div className="mt-auto hidden border-t border-border pt-5 lg:block">
           <p className="text-sm font-semibold">Rafael Nogueira</p>
           <p className="mb-3 mt-1 text-xs text-muted-foreground">Analista de R&S</p>
-          <Link to="/" className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Link to="/" className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm text-muted-foreground hover:bg-muted">
             <LogOut className="size-4" />
             Sair
           </Link>
@@ -84,7 +86,13 @@ function Recrutador() {
               <Button
                 variant="ghost"
                 size="lg"
-                onClick={() => (window.history.length > 1 ? window.history.back() : undefined)}
+                onClick={() =>
+                  backOrRecruiter(
+                    window.history.length,
+                    () => window.history.back(),
+                    () => void navigate({ to: "/recrutador" }),
+                  )
+                }
               >
                 <ArrowLeft />
                 Voltar

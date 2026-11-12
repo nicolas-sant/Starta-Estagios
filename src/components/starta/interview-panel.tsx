@@ -63,13 +63,14 @@ export function InterviewPanel({
     }
   };
   return (
-    <section className="space-y-4">
-      <details className="rounded-md border border-border p-3">
-        <summary className="cursor-pointer text-sm font-semibold">Ver detalhes usados pela IA (opcional)</summary>
-      <div className="mt-3 grid gap-4 md:grid-cols-2">
+    <section className="space-y-3">
+      <details className="rounded-xl border border-border p-5">
+        <summary className="flex min-h-11 cursor-pointer items-center rounded-lg text-sm font-semibold">Ver detalhes usados pela IA (opcional)</summary>
+      <div className="mt-3 grid gap-3 md:grid-cols-2">
         <label className="space-y-2 text-sm font-medium">
           Requisitos da vaga
           <Textarea
+            className="rounded-lg"
             aria-label="Requisitos da vaga"
             value={requirements}
             onChange={(e) => setRequirements(e.target.value)}
@@ -80,6 +81,7 @@ export function InterviewPanel({
         <label className="space-y-2 text-sm font-medium">
           Perfil do candidato
           <Textarea
+            className="rounded-lg"
             aria-label="Perfil do candidato"
             value={profile}
             onChange={(e) => setProfile(e.target.value)}
@@ -102,7 +104,7 @@ export function InterviewPanel({
         )}
       </div>
       {error && (
-        <p role="alert" className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+        <p role="alert" className="rounded-xl bg-destructive/10 p-3 text-sm text-destructive">
           {error}
         </p>
       )}
@@ -111,7 +113,6 @@ export function InterviewPanel({
           <div className="mb-3 flex justify-between">
             <h4>Roteiro personalizado</h4>
             <Button
-              size="sm"
               variant="ghost"
               onClick={async () => {
                 await navigator.clipboard.writeText(output);
