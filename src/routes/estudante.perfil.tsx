@@ -79,7 +79,7 @@ function Perfil() {
   const setSetting = (k: keyof typeof settings, v: boolean) => setState((s) => ({ ...s, settings: { ...s.settings, [k]: v } }));
 
   return (
-    <div className="space-y-8">
+    <div className="mx-auto w-full max-w-3xl space-y-8">
       <Card>
         <div className="flex items-center gap-4">
           <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full bg-neutral-tag">
