@@ -156,7 +156,7 @@ function StudentLayout() {
         </div>
       </aside>
 
-      <main className="mx-auto w-full min-w-0 px-4 py-6 lg:px-8 lg:py-8">
+      <main className="mx-auto w-full min-w-0 max-w-[1200px] px-4 py-6 lg:py-8">
         <Outlet />
       </main>
 

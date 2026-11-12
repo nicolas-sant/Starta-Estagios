@@ -64,7 +64,7 @@ function Buscar() {
     .sort((a, b) => rankScore(b) - rankScore(a));
 
   return (
-    <div className="space-y-8">
+    <div className="mx-auto w-full max-w-3xl space-y-8">
       <h1 className="text-2xl text-deep-space lg:text-3xl">Buscar</h1>
       <div className="flex gap-2">
         <div className="relative flex-1">

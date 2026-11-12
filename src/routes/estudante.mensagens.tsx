@@ -66,7 +66,7 @@ function Mensagens() {
   if (active) {
     const j = jobs.find((x) => x.id === active.jobId);
     return (
-      <div className="flex min-h-[calc(100vh-12rem)] flex-col">
+      <div className="mx-auto w-full max-w-3xl flex min-h-[calc(100vh-12rem)] flex-col">
         <div className="flex items-center gap-2 border-b border-border pb-3">
           <button onClick={() => nav({ to: "/estudante/mensagens", search: {} })} aria-label="Voltar" className="flex h-11 w-11 items-center justify-center rounded-xl hover:bg-mint"><ArrowLeft className="h-5 w-5" /></button>
           <div>
@@ -94,7 +94,7 @@ function Mensagens() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="mx-auto w-full max-w-3xl space-y-8">
       <h1 className="text-2xl text-deep-space lg:text-3xl">Mensagens</h1>
       <ul className="space-y-2">
         {ordered.map((th) => {
