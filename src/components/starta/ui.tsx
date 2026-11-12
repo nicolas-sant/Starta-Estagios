@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Check, FileText, ShieldCheck, Upload, Loader2, XCircle, CheckCircle2, AlertTriangle, } from "lucide-react";
+import { Check, FileText, ShieldCheck, Upload, Loader2, XCircle, CheckCircle2, AlertTriangle } from "lucide-react";
 import { useRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { brl, getCompany, hasTrustSeal, hasReachPenalty, type Job, type Skill, type Stage } from "@/lib/data";
@@ -8,7 +8,12 @@ import { daysUntil, fmtDate } from "@/lib/store";
 
 export function Logo({ light }: { light?: boolean }) {
   return (
-    <span className={cn("font-display text-xl font-extrabold tracking-tight", light ? "text-primary-foreground" : "text-deep-space")}>
+    <span
+      className={cn(
+        "font-display text-xl font-extrabold tracking-tight",
+        light ? "text-primary-foreground" : "text-deep-space",
+      )}
+    >
       start<span className={light ? "text-moss-light" : "text-moss"}>a</span>
     </span>
   );
@@ -93,14 +98,28 @@ export function NeutralTag({ children, icon }: { children: ReactNode; icon?: Rea
   );
 }
 
-export function Stepper({ steps, current, failed, complete }: { steps: readonly string[]; current: number; failed?: boolean; complete?: boolean }) {
+export function Stepper({
+  steps,
+  current,
+  failed,
+  complete,
+}: {
+  steps: readonly string[];
+  current: number;
+  failed?: boolean;
+  complete?: boolean;
+}) {
   return (
     <ol className="flex w-full items-start">
       {steps.map((s, i) => {
         const done = i < current || (!!complete && !failed && i === current && i === steps.length - 1);
         const isCurrent = i === current && !done;
         return (
-          <li key={s} aria-current={isCurrent ? "step" : undefined} className="flex flex-1 flex-col items-center text-center last:flex-none last:basis-16">
+          <li
+            key={s}
+            aria-current={isCurrent ? "step" : undefined}
+            className="flex flex-1 flex-col items-center text-center last:flex-none last:basis-16"
+          >
             <div className="flex w-full items-center">
               <span
                 className={cn(
@@ -113,9 +132,18 @@ export function Stepper({ steps, current, failed, complete }: { steps: readonly 
               >
                 {done ? <Check className="h-4 w-4" strokeWidth={3} /> : i + 1}
               </span>
-              {i < steps.length - 1 && <span className={cn("mx-1 h-0.5 flex-1 rounded", i < current ? "bg-deep-space" : "bg-border")} />}
+              {i < steps.length - 1 && (
+                <span className={cn("mx-1 h-0.5 flex-1 rounded", i < current ? "bg-deep-space" : "bg-border")} />
+              )}
             </div>
-            <span className={cn("mt-2 w-16 text-[11px] font-semibold", isCurrent ? "text-deep-space" : "text-muted-foreground")}>{s}</span>
+            <span
+              className={cn(
+                "mt-2 w-16 text-[11px] font-semibold",
+                isCurrent ? "text-deep-space" : "text-muted-foreground",
+              )}
+            >
+              {s}
+            </span>
           </li>
         );
       })}
@@ -133,7 +161,10 @@ export function OnboardingProgress({ label, step, total }: { label: string; step
         </span>
       </div>
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-border">
-        <div className="h-full rounded-full bg-primary transition-all duration-500" style={{ width: `${(step / total) * 100}%` }} />
+        <div
+          className="h-full rounded-full bg-primary transition-all duration-500"
+          style={{ width: `${(step / total) * 100}%` }}
+        />
       </div>
     </div>
   );
@@ -155,9 +186,14 @@ export function JobCard({ job, applied, match }: { job: Job; applied?: boolean; 
   const seal = hasTrustSeal(job);
   const matched = !!match?.length;
   return (
-    <article className={cn("relative overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)] transition hover:border-primary/40", matched && "ring-1 ring-moss/30")}>
+    <article
+      className={cn(
+        "relative overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)] transition hover:border-primary/40",
+        matched && "ring-1 ring-moss/30",
+      )}
+    >
       {matched && (
-        <p className="-mx-5 -mt-5 mb-3 flex flex-wrap items-center gap-x-2 bg-recommended px-5 py-2 text-xs font-semibold text-recommended-foreground">
+        <p className="mb-3 flex flex-wrap items-center gap-x-2 rounded-lg bg-recommended px-3 py-2 text-xs font-semibold text-recommended-foreground">
           <CheckCircle2 className="h-4 w-4" /> Combina com você
           <span className="font-medium">· {match!.join(" · ")}</span>
         </p>
@@ -166,18 +202,28 @@ export function JobCard({ job, applied, match }: { job: Job; applied?: boolean; 
         <CompanyAvatar initials={c?.initials ?? "?"} />
         <div className="min-w-0 flex-1">
           {c && (
-            <Link to="/estudante/empresa/$id" params={{ id: c.id }} className="relative z-10 inline-flex min-h-11 items-center text-sm font-medium text-primary hover:underline">
+            <Link
+              to="/estudante/empresa/$id"
+              params={{ id: c.id }}
+              className="relative z-10 inline-flex min-h-11 items-center text-sm font-medium text-primary hover:underline"
+            >
               {c.name}
             </Link>
           )}
         </div>
         {seal && <VerifiedSeal small label="Confiável" />}
       </div>
-      <Link to="/estudante/vaga/$id" params={{ id: job.id }} className="mt-3 block font-display text-[17px] font-bold leading-snug text-deep-space after:absolute after:inset-0">
+      <Link
+        to="/estudante/vaga/$id"
+        params={{ id: job.id }}
+        className="mt-3 block font-display text-[17px] font-bold leading-snug text-deep-space after:absolute after:inset-0"
+      >
         {job.title}
       </Link>
       <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{job.summary}</p>
-      <p className="mt-3 text-sm text-muted-foreground">{brl(job.stipend)} · {job.modality} · {job.city}</p>
+      <p className="mt-3 text-sm text-muted-foreground">
+        {brl(job.stipend)} · {job.modality} · {job.city}
+      </p>
       <div className="mt-3 text-sm font-semibold">
         {applied ? (
           <span className="text-moss">✓ Candidatado</span>
@@ -197,7 +243,11 @@ export function DocChip({ title, onRemove }: { title: string; onRemove?: () => v
       <FileText className="h-4 w-4" />
       {title}
       {onRemove && (
-        <button onClick={onRemove} aria-label="Remover" className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg hover:bg-card">
+        <button
+          onClick={onRemove}
+          aria-label="Remover"
+          className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg hover:bg-card"
+        >
           <XCircle className="h-4 w-4 text-muted-foreground" />
         </button>
       )}
@@ -218,7 +268,8 @@ export function StageTag({ stage }: { stage: Stage }) {
 }
 
 export function ValiditySeal({ validUntil, status }: { validUntil: string; status: VerificationStatus }) {
-  if (status !== "aprovado" || !validUntil) return <NeutralTag icon={<AlertTriangle className="h-3.5 w-3.5" />}>Verificação pendente</NeutralTag>;
+  if (status !== "aprovado" || !validUntil)
+    return <NeutralTag icon={<AlertTriangle className="h-3.5 w-3.5" />}>Verificação pendente</NeutralTag>;
   const d = daysUntil(validUntil);
   if (d < 0)
     return (
@@ -274,14 +325,34 @@ export function UploadArea({
         }}
         className={cn(
           "flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed bg-card px-6 py-10 text-center transition hover:border-primary",
-          status === "aprovado" ? "border-moss bg-recommended" : status === "recusado" ? "border-destructive/50" : "border-border",
+          status === "aprovado"
+            ? "border-moss bg-recommended"
+            : status === "recusado"
+              ? "border-destructive/50"
+              : "border-border",
         )}
       >
         <span className={st.cls}>{st.icon}</span>
-        <span className="font-display font-bold text-deep-space">{status === "vazio" || status === "recusado" ? title : fileName}</span>
-        <span className="text-sm text-muted-foreground">{status === "vazio" ? "Apenas PDF · até 5 MB" : status === "recusado" ? "Toque para enviar outro arquivo" : fileName ? "PDF" : ""}</span>
+        <span className="font-display font-bold text-deep-space">
+          {status === "vazio" || status === "recusado" ? title : fileName}
+        </span>
+        <span className="text-sm text-muted-foreground">
+          {status === "vazio"
+            ? "Apenas PDF · até 5 MB"
+            : status === "recusado"
+              ? "Toque para enviar outro arquivo"
+              : fileName
+                ? "PDF"
+                : ""}
+        </span>
       </button>
-      <input ref={ref} type="file" accept="application/pdf,.pdf" className="hidden" onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])} />
+      <input
+        ref={ref}
+        type="file"
+        accept="application/pdf,.pdf"
+        className="hidden"
+        onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])}
+      />
       <VerificationProgress status={status} />
       {status === "recusado" && refuseReason && (
         <p className="mt-3 rounded-xl bg-destructive/10 p-3 text-sm text-destructive">
@@ -302,7 +373,11 @@ export function SectionTitle({ children, action }: { children: ReactNode; action
 }
 
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
-  return <div className={cn("rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)]", className)}>{children}</div>;
+  return (
+    <div className={cn("rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-card)]", className)}>
+      {children}
+    </div>
+  );
 }
 
 /** Indicador de progresso (não clicável) da verificação de matrícula */
@@ -319,20 +394,39 @@ export function VerificationProgress({ status }: { status: VerificationStatus })
           const current = i === idx;
           const bad = current && status === "recusado";
           return (
-            <li key={s} aria-current={current ? "step" : undefined} className="flex flex-1 flex-col items-start last:w-24 last:flex-none last:items-end">
+            <li
+              key={s}
+              aria-current={current ? "step" : undefined}
+              className="flex flex-1 flex-col items-start last:w-24 last:flex-none last:items-end"
+            >
               <div className={cn("flex w-full items-center", i === steps.length - 1 && "justify-end")}>
                 <span
                   className={cn(
                     "h-3.5 w-3.5 shrink-0 rounded-full",
                     done && "bg-deep-space",
-                    current && !bad && (status === "aprovado" ? "bg-moss ring-4 ring-moss/30" : "bg-primary ring-4 ring-primary/25"),
+                    current &&
+                      !bad &&
+                      (status === "aprovado" ? "bg-moss ring-4 ring-moss/30" : "bg-primary ring-4 ring-primary/25"),
                     bad && "bg-destructive ring-4 ring-destructive/25",
                     !done && !current && "bg-border",
                   )}
                 />
-                {i < steps.length - 1 && <span className={cn("h-0.5 flex-1", i < idx ? "bg-deep-space" : "bg-border")} />}
+                {i < steps.length - 1 && (
+                  <span className={cn("h-0.5 flex-1", i < idx ? "bg-deep-space" : "bg-border")} />
+                )}
               </div>
-              <span className={cn("mt-2 whitespace-nowrap text-xs", current ? (bad ? "font-bold text-destructive" : "font-bold text-deep-space") : done ? "text-deep-space" : "text-muted-foreground")}>
+              <span
+                className={cn(
+                  "mt-2 whitespace-nowrap text-xs",
+                  current
+                    ? bad
+                      ? "font-bold text-destructive"
+                      : "font-bold text-deep-space"
+                    : done
+                      ? "text-deep-space"
+                      : "text-muted-foreground",
+                )}
+              >
                 {s}
                 {current && <span className="sr-only"> (etapa atual)</span>}
               </span>
