@@ -19,3 +19,6 @@
 - [x] Mostrar confirmação persistente com retorno e prazo da empresa, incluindo caso de baixo retorno.
 - [x] Permitir retirar candidatura sem resultado, removendo também o candidato do pipeline.
 - [x] Testar regras, fluxo completo, contraste e toque nas duas larguras.
+## Navegação do estudante
+- [x] Barra superior padrão e lateral branca alternável, com modo salvo.
+- [x] Estatística de currículo movida para o Perfil.
