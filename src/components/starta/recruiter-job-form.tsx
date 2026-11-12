@@ -175,9 +175,9 @@ export function RecruiterJobForm({ id }: { id?: string }) {
           {skills.map((skill, i) => (
             <div
               key={i}
-              className="grid grid-cols-[1fr_44px] items-end gap-3 sm:grid-cols-[1fr_160px_90px_44px]"
+              className="grid grid-cols-[1fr_90px_44px] items-end gap-3 sm:grid-cols-[1fr_160px_90px_44px]"
             >
-              <label className="space-y-2 text-sm">
+              <label className="col-span-3 space-y-2 text-sm sm:col-span-1">
                 Habilidade
                 <Input
                   required
