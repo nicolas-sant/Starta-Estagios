@@ -4,6 +4,7 @@ import { useStore } from "@/lib/store";
 import { LayoutDashboard, MessageSquare, LogOut, ChevronRight, Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RecruiterCloud } from "@/components/starta/recruiter-cloud";
+import { backOrRecruiter } from "@/lib/recruiter";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/recrutador")({
@@ -86,9 +87,11 @@ function Recrutador() {
                 variant="ghost"
                 size="lg"
                 onClick={() =>
-                  window.history.length > 1
-                    ? window.history.back()
-                    : void navigate({ to: "/recrutador" })
+                  backOrRecruiter(
+                    window.history.length,
+                    () => window.history.back(),
+                    () => void navigate({ to: "/recrutador" }),
+                  )
                 }
               >
                 <ArrowLeft />

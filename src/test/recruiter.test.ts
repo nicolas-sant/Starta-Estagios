@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { allJobs, getState, resetState, setState } from "@/lib/store";
-import { advanceCandidate, sendCandidateMessage, setJobStatus } from "@/lib/recruiter";
+import { advanceCandidate, backOrRecruiter, sendCandidateMessage, setJobStatus } from "@/lib/recruiter";
 
 beforeEach(() => {
   resetState();
@@ -35,6 +35,20 @@ describe("Recruiter workflows", () => {
         .candidates.find((c) => c.id === "c3")
         ?.chat.at(-1)?.text,
     ).toContain("preenchida");
+  });
+  it("returns to the previous page when recruiter history exists", () => {
+    const back = vi.fn();
+    const home = vi.fn();
+    backOrRecruiter(2, back, home);
+    expect(back).toHaveBeenCalledOnce();
+    expect(home).not.toHaveBeenCalled();
+  });
+  it("falls back to recruiter home on a direct visit", () => {
+    const back = vi.fn();
+    const home = vi.fn();
+    backOrRecruiter(1, back, home);
+    expect(back).not.toHaveBeenCalled();
+    expect(home).toHaveBeenCalledOnce();
   });
   it("uses edited values instead of seed data", () => {
     setState((s) => ({
