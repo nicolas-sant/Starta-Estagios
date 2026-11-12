@@ -21,7 +21,7 @@ export type Application = {
 };
 export type Interview = { date: string; time: string; place: string; link?: string };
 export type StudentLinks = { github: string; portfolio: string; linkedin: string };
-export type NotificationKind = "etapa" | "retorno" | "vaga" | "mensagem" | "candidatura";
+export type NotificationKind = "etapa" | "retorno" | "vaga" | "mensagem" | "candidatura" | "retirada";
 export type AppNotification = { id: string; text: string; at: string; read: boolean; kind?: NotificationKind };
 export type ChatMessage = { from: "me" | "them"; text: string; at: string };
 export type Thread = { id: string; jobId: string; with: string; messages: ChatMessage[]; readAt?: string };
@@ -311,6 +311,7 @@ export function sortNotifications<T extends { at: string }>(list: T[]): T[] {
 
 export function notificationKind(n: AppNotification): NotificationKind {
   if (n.kind) return n.kind;
+  if (/retirou sua candidatura/i.test(n.text)) return "retirada";
   if (/retorno|preenchida|encerrada/i.test(n.text)) return "retorno";
   if (/nova vaga/i.test(n.text)) return "vaga";
   if (/mensagem/i.test(n.text)) return "mensagem";
@@ -324,6 +325,7 @@ export const NOTIFICATION_LABEL: Record<NotificationKind, string> = {
   vaga: "Nova vaga",
   mensagem: "Nova mensagem",
   candidatura: "Candidatura enviada",
+  retirada: "Candidatura retirada",
 };
 
 export function threadUnread(t: Thread) {

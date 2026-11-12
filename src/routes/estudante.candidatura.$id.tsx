@@ -1,8 +1,13 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, MessageCircle, TrendingUp, Sparkles, CalendarDays, Clock, MapPin, Video, Megaphone } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+import { ArrowLeft, MessageCircle, TrendingUp, Sparkles, CalendarDays, Clock, MapPin, Video, Megaphone, CheckCircle2 } from "lucide-react";
 import { Card, CompanyAvatar, DocChip, SkillTag, Stepper } from "@/components/starta/ui";
-import { JOBS, STUDENT_STEPS, getCompany } from "@/lib/data";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { JOBS, STUDENT_STEPS, getCompany, hasReachPenalty } from "@/lib/data";
 import { stepDatesFor, useStore } from "@/lib/store";
+import { canWithdrawApplication, expectedResponseDate, withdrawApplication } from "@/lib/student";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/estudante/candidatura/$id")({
@@ -21,6 +26,8 @@ export const Route = createFileRoute("/estudante/candidatura/$id")({
 
 function Candidatura() {
   const { id } = Route.useParams();
+  const nav = useNavigate();
+  const [withdrawOpen, setWithdrawOpen] = useState(false);
   const apps = useStore((s) => s.applications);
   const docs = useStore((s) => s.docs);
   const threads = useStore((s) => s.threads);
@@ -31,6 +38,13 @@ function Candidatura() {
   const c = getCompany(j.companyId);
   const doc = docs.find((d) => d.id === a.docId);
   const thread = threads.find((t) => t.jobId === id);
+  const lowReturn = hasReachPenalty(j.companyId);
+  const responseDate = expectedResponseDate(a.appliedAt, c?.avgResponseDays ?? 0);
+  const chatLink = (
+    <Link to="/estudante/mensagens" search={{ t: thread?.id ?? `new-${j.id}` }} className="flex h-12 items-center justify-center gap-2 rounded-lg bg-primary font-semibold text-primary-foreground">
+      <MessageCircle className="h-5 w-5" /> Chat com recrutador
+    </Link>
+  );
 
   const dates = stepDatesFor(a);
   const timeline = [
@@ -55,6 +69,32 @@ function Candidatura() {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <Link to="/estudante/painel" className="flex h-11 items-center gap-1 text-sm font-semibold text-primary"><ArrowLeft className="h-5 w-5" /> Painel</Link>
+      {a.step === 0 && !a.result && (
+        <section className={cn(
+          "rounded-2xl p-5",
+          lowReturn
+            ? "bg-lemon text-lemon-ink ring-1 ring-lemon-ink/20"
+            : "bg-recommended text-recommended-foreground",
+        )}>
+          <p className="flex items-center gap-2 font-display text-lg font-extrabold">
+            <CheckCircle2 className="h-6 w-6 shrink-0" />
+            Candidatura enviada para {c?.name}
+          </p>
+          {lowReturn ? (
+            <>
+              <p className="mt-3 text-[15px]">Esta empresa respondeu {c?.responseRate}% dos candidatos no Starta.</p>
+              <p className="mt-3 font-semibold">Se não houver retorno até {responseDate.toLocaleDateString("pt-BR")}, você pode cobrar pelo chat.</p>
+              <div className="mt-3">{chatLink}</div>
+            </>
+          ) : (
+            <>
+              <p className="mt-3 text-[15px]">{c?.responseRate}% dos candidatos desta empresa recebem retorno, em média em {c?.avgResponseDays} dias.</p>
+              <p className="mt-3 font-semibold">Você deve ter uma resposta até {responseDate.toLocaleDateString("pt-BR")}.</p>
+              <p className="mt-3 text-sm">Avisamos você no Painel e em Mensagens a cada mudança de etapa.</p>
+            </>
+          )}
+        </section>
+      )}
       <Card>
         <div className="flex items-center gap-3">
           <CompanyAvatar initials={c?.initials ?? "?"} size={48} />
@@ -127,9 +167,46 @@ function Candidatura() {
         {a.message && <p className="mt-2 text-sm text-muted-foreground">"{a.message}"</p>}
       </Card>
 
-      <Link to="/estudante/mensagens" search={{ t: thread?.id ?? `new-${j.id}` }} className="flex h-12 items-center justify-center gap-2 rounded-lg bg-primary font-semibold text-primary-foreground">
-        <MessageCircle className="h-5 w-5" /> Chat com recrutador
-      </Link>
+      {chatLink}
+      {canWithdrawApplication(a) && (
+        <button
+          type="button"
+          onClick={() => setWithdrawOpen(true)}
+          className="h-12 w-full rounded-lg border border-destructive/40 bg-transparent font-semibold text-destructive"
+        >
+          Retirar candidatura
+        </button>
+      )}
+      <Dialog open={withdrawOpen} onOpenChange={setWithdrawOpen}>
+        <DialogContent hideClose className="rounded-2xl p-5">
+          <DialogTitle>Retirar candidatura?</DialogTitle>
+          <DialogDescription>
+            Sua candidatura para {j.title} na {c?.name} sai do processo, e a empresa deixa de ver seu perfil nele. Você pode se candidatar de novo enquanto a vaga estiver aberta.
+          </DialogDescription>
+          {a.interview && (
+            <p className="text-sm font-semibold text-deep-space">
+              Sua entrevista de {new Date(`${a.interview.date}T12:00:00`).toLocaleDateString("pt-BR")} será cancelada.
+            </p>
+          )}
+          <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:justify-end">
+            <Button autoFocus size="lg" variant="outline" onClick={() => setWithdrawOpen(false)}>
+              Manter candidatura
+            </Button>
+            <Button
+              size="lg"
+              variant="destructive"
+              onClick={() => {
+                withdrawApplication(j.id, j.title);
+                setWithdrawOpen(false);
+                void nav({ to: "/estudante/painel" });
+                toast.success("Candidatura retirada.");
+              }}
+            >
+              Retirar
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
